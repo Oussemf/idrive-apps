@@ -232,6 +232,7 @@ async function start() {
     handle('tv', openTv);
     handle('fullscreen', fullscreen);
     await home();
+    console.info('Browser companion ready: Chromium ' + process.versions.chrome);
     if (mgu) {
         const poll = () => {
             let snapshot;

@@ -13,6 +13,7 @@ test('OAP launches only while stationary/foreground and terminates on invalid or
     t.mock.method(Date, 'now', () => now);
     const buttons = {}, files = new Map(), spawned = [], errors = [], labels = {};
     let statFailure = null;
+    let companionAvailable = false;
     const data = path.resolve('test-app-data');
     files.set(path.join(data, 'runtime.json'), JSON.stringify({
         executable: path.resolve('fake-electron'), project: path.resolve('test-project')
@@ -26,6 +27,9 @@ test('OAP launches only while stationary/foreground and terminates on invalid or
             writeFileSync(file, text) { files.set(file, text); },
             renameSync(source, target) { files.set(target, files.get(source)); files.delete(source); },
             statSync(file) {
+                if (file.startsWith('/var/opt/oussem-browser') && !companionAvailable) {
+                    throw new Error('Companion not installed');
+                }
                 if (statFailure && statFailure(file)) throw new Error('Missing test file');
                 return { isFile: () => true };
             }
@@ -105,8 +109,8 @@ test('OAP launches only while stationary/foreground and terminates on invalid or
     files.delete(configFile);
     await buttons.BTN_GARAGE_NATIVE();
     assert.equal(spawned.length, 5);
-    assert.equal(labels.RUNTIME_STATUS, 'Setup incomplete: runtime.json is missing.');
-    assert.match(labels.RUNTIME_DETAIL, /launcher only/);
+    assert.equal(labels.RUNTIME_STATUS, 'Install YouTube browser companion in the Store.');
+    assert.match(labels.RUNTIME_DETAIL, /Releases/);
     assert.ok(errors.some(message => message.includes(configFile)));
     interval();
     assert.equal(spawned.length, 5);
@@ -128,4 +132,11 @@ test('OAP launches only while stationary/foreground and terminates on invalid or
     statFailure = null;
     await buttons.BTN_GARAGE_NATIVE();
     assert.equal(spawned.length, 6);
+    buttons.BTN_STOP();
+    files.delete(configFile);
+    companionAvailable = true;
+    await buttons.BTN_GARAGE_NATIVE();
+    assert.equal(spawned.length, 7);
+    assert.equal(spawned[6].executable, '/var/opt/oussem-browser/current/launch.sh');
+    assert.equal(spawned[6].args[0], '/var/opt/oussem-browser/current/project');
 });

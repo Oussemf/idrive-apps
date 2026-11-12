@@ -1,0 +1,49 @@
+name: Browser companion
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: npm ci
+      - run: npm run check && npm test
+      - name: Build private Linux userland and Chromium
+        run: |
+          docker build --progress=plain -f native/oussem-browser/Dockerfile -t idrive-browser .
+          container=$(docker create idrive-browser)
+          mkdir -p dist
+          docker cp "$container:/src/dist/." dist/
+          docker rm "$container"
+      - name: Build SDK-free OAP launcher
+        run: python tools/build_mgu.py oussem_youtube --sdk-free
+      - name: Validate on glibc 2.27 userland
+        run: bash native/oussem-browser/test-linux.sh
+      - run: python tools/publish_catalog.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: browser-companion-validated
+          path: |
+            dist/oussem-browser@*.tgz
+            dist/oussem_youtube@*.tgz
+            dist/oussem-browser-dependency-sources.tar.gz
+            dist/catalog.json
+      - name: Publish Store release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create browser-0.1.0 --prerelease --title "MGU browser companion 0.1.0 (experimental)" --notes-file native/oussem-browser/RELEASE.md
+          gh release upload browser-0.1.0 dist/oussem-browser@*.tgz dist/oussem_youtube@*.tgz dist/oussem-browser-dependency-sources.tar.gz
+          if ! gh release view catalog >/dev/null 2>&1; then
+            gh release create catalog --title "MGU Store catalog" --notes "MGU Store catalog. Experimental browser companion; hardware validation required."
+          fi
+          gh release upload catalog dist/catalog.json --clobber

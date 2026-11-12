@@ -1,0 +1,12 @@
+.git
+node_modules
+.tools
+dist
+test-results
+playwright-report
+idrive7-apps-reference
+oap-sdk
+.env
+**/runtime.json
+**/uplink.json
+**/*-safety.json

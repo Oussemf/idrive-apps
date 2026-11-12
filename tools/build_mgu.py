@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Adapt the pinned MIT kit without modifying its source or distributing BMW SDK."""
+"""Build OAP packages without redistributing the BMW SDK."""
 import importlib.util
 import json
 import os
@@ -20,7 +20,7 @@ builder.DIST = str(ROOT / "dist")
 builder.SDK = str(ROOT / "oap-sdk")
 
 
-def build(app_id, preview=False):
+def build(app_id, preview=False, sdk_free=False):
     source = ROOT / "apps" / "oussem_youtube"
     if not app_id.replace("_", "").isalnum() or not app_id.startswith("oussem_youtube"):
         raise SystemExit("Unsupported app id")
@@ -38,7 +38,7 @@ def build(app_id, preview=False):
         raise SystemExit("Generated safety.js already exists; refusing to overwrite it")
     try:
         shutil.copyfile(ROOT / "shared" / "safety.js", safety_target)
-        builder.build(app_id, preview_only=preview)
+        builder.build(app_id, preview_only=preview, sdk_free=sdk_free)
         stage = ROOT / "dist" / app_id
         package = stage / "source" / "package.json"
         document = json.loads(package.read_text(encoding="utf-8"))
@@ -68,4 +68,5 @@ def build(app_id, preview=False):
 
 
 if __name__ == "__main__":
-    build(sys.argv[1] if len(sys.argv) > 1 else "oussem_youtube", "--preview-only" in sys.argv)
+    build(sys.argv[1] if len(sys.argv) > 1 else "oussem_youtube", "--preview-only" in sys.argv,
+          "--sdk-free" in sys.argv)

@@ -33,12 +33,22 @@ mgu.run({
             if (child) child.kill('SIGTERM');
         }
         function launch() {
-            let config, stage = 'config-read';
+            let config, stage = 'config-read', installedCompanion = false;
             const configFile = path.join(ctx.dataDir, 'runtime.json');
             try {
-                const text = fs.readFileSync(configFile, 'utf8');
-                stage = 'config-parse';
-                config = JSON.parse(text);
+                let text;
+                try { text = fs.readFileSync(configFile, 'utf8'); } catch (error) {
+                    if (error.code !== 'ENOENT') throw error;
+                    installedCompanion = true;
+                    config = {
+                        executable: '/var/opt/oussem-browser/current/launch.sh',
+                        project: '/var/opt/oussem-browser/current/project'
+                    };
+                }
+                if (!installedCompanion) {
+                    stage = 'config-parse';
+                    config = JSON.parse(text);
+                }
                 if (!config || typeof config !== 'object' || Array.isArray(config)) {
                     throw new Error('runtime.json must contain a configuration object');
                 }
@@ -56,9 +66,9 @@ mgu.run({
             } catch (error) {
                 failed = true;
                 let message, detail;
-                if (stage === 'config-read' && error.code === 'ENOENT') {
-                    message = 'Setup incomplete: runtime.json is missing.';
-                    detail = 'Store installs the launcher only. A compatible MGU browser companion is required.';
+                if (installedCompanion) {
+                    message = 'Install YouTube browser companion in the Store.';
+                    detail = 'Source Oussemf/idrive-apps: select Releases, then install the browser tool.';
                 } else if (stage === 'config-read') {
                     message = 'Cannot read runtime.json (' + (error.code || 'read error') + ').';
                     detail = 'Check the app data configuration and its read permissions.';

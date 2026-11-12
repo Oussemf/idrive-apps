@@ -2,7 +2,7 @@
   "id": "oussem_youtube",
   "title": "YouTube (experimental)",
   "description": "Parked-only YouTube: original UI or YouTube TV. Requires a separately validated Chromium companion.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "vendor": "Oussemf",
   "loggingId": "OYTB",
   "iconGlyph": "YT",
@@ -12,7 +12,7 @@
   },
   "screens": [
     { "name": "MAIN", "kind": "menu", "title": "YouTube - parked only", "items": [
-      ["text", "STATUS", "Experimental: compatible Chromium companion required."],
+      ["text", "STATUS", "Install YouTube browser companion from this source's Releases."],
       ["button", "BTN_NATIVE", "Original interface"],
       ["button", "BTN_TV", "YouTube TV"],
       ["button", "BTN_GARAGE_NATIVE", "Garage test - original UI (vehicle parked)"],

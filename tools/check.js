@@ -5,7 +5,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const root = path.join(__dirname, '..');
 let count = 0;
-for (const directory of ['runtime', 'shared', 'apps', 'tools', 'web', 'tests']) {
+for (const directory of ['runtime', 'shared', 'apps', 'tools', 'web', 'tests', 'native']) {
     for (const entry of fs.readdirSync(path.join(root, directory), { recursive: true })) {
         if (!entry.endsWith('.js')) continue;
         const result = spawnSync(process.execPath, ['--check', path.join(root, directory, entry)], { stdio: 'inherit' });
