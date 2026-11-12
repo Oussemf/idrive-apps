@@ -38,13 +38,16 @@ def main():
     repo["tools"] = [{"id": component["id"], "path": "store/" + component["id"],
                       "uninstallable": True}]
     repo_path.write_text(json.dumps(repo, indent=2) + "\n")
+    count = sum(1 for file in target.rglob("*") if file.is_file())
+    if count > 400:
+        raise SystemExit(f"Tool exceeds Store's partial-source download limit: {count} files")
     tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT).decode().split("\0")
     total = sum((ROOT / name).stat().st_size for name in tracked if name and (ROOT / name).is_file()
                 and not name.startswith("store/"))
     total += sum(file.stat().st_size for file in target.rglob("*") if file.is_file())
     if total >= 200 * 1024**2:
         raise SystemExit(f"Branch tree exceeds Store's 200 MiB limit: {total}")
-    print(f"Branch payload validated; total source tree {total / 1024**2:.1f} MiB")
+    print(f"Branch payload validated; {count} files; total source tree {total / 1024**2:.1f} MiB")
 
 
 if __name__ == "__main__":

@@ -100,6 +100,18 @@ def main():
     packages.add("x11-xkb-utils")
     packages.add("xkb-data")
     shutil.copytree("/usr/share/X11/xkb", FILES / "xkb", symlinks=False)
+    # Xvfb uses one virtual US keyboard; keep French and shared modifiers too.
+    symbols = {"us", "fr", "pc", "inet", "group", "srvr_ctrl", "altwin", "keypad",
+               "level3", "level5", "capslock", "compose", "ctrl", "shift", "eurosign", "latin"}
+    for symbol in (FILES / "xkb" / "symbols").iterdir():
+        if symbol.name not in symbols:
+            if symbol.is_dir():
+                shutil.rmtree(symbol)
+            else:
+                symbol.unlink()
+    for geometry in (FILES / "xkb" / "geometry").iterdir():
+        if geometry.name != "pc":
+            geometry.unlink()
     # Keep every dependency under a root-owned tool prefix; never replace the system libc.
     for file in list((FILES / "electron").rglob("*")) + list((FILES / "lib").glob("*")) + list((FILES / "bin").glob("*")):
         if not file.is_file() or not is_elf(file):

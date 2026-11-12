@@ -46,6 +46,8 @@ jobs:
             dist/oussem-browser@*.tgz
             dist/oussem_youtube@*.tgz
       - run: python tools/publish_catalog.py
+      - name: Validate main-channel source payload
+        run: python tools/publish_branch.py
       - id: version
         run: |
           version=$(node -p "require('./native/oussem-browser/component.json').version")
@@ -71,7 +73,6 @@ jobs:
           gh release upload catalog dist/catalog.json --clobber
       - name: Publish tested companion on main
         run: |
-          python tools/publish_branch.py
           git config user.name "Oussemf"
           git config user.email "223556219+Copilot@users.noreply.github.com"
           git add store mgu-repo.json
