@@ -31,7 +31,8 @@ class BuildTest(unittest.TestCase):
             wrapper.builder.DIST = str(root / "dist")
             wrapper.builder.SDK = str(sdk)
             wrapper.build("oussem_youtube2")
-            archive = root / "dist" / "oussem_youtube2@0.1.0.tgz"
+            version = json.loads((root / "apps" / "oussem_youtube" / "app.json").read_text(encoding="utf-8"))["version"]
+            archive = root / "dist" / f"oussem_youtube2@{version}.tgz"
             with tarfile.open(archive, "r:gz") as package:
                 names = package.getnames()
                 self.assertFalse(any("oap-sdk" in name for name in names))

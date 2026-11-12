@@ -21,9 +21,10 @@ mgu.run({
             fs.writeFileSync(temporary, JSON.stringify(value), { mode: 0o600 });
             fs.renameSync(temporary, safetyFile);
         }
-        function report(message) {
-            log.error(message);
+        function report(message, detail, diagnostic) {
+            log.error(diagnostic || message);
             ui.text('STATUS', message); ui.text('RUNTIME_STATUS', message);
+            ui.text('RUNTIME_DETAIL', detail || 'See the app log for technical details.');
         }
         function stop() {
             garageTest = false;
@@ -32,20 +33,47 @@ mgu.run({
             if (child) child.kill('SIGTERM');
         }
         function launch() {
-            let config;
+            let config, stage = 'config-read';
+            const configFile = path.join(ctx.dataDir, 'runtime.json');
             try {
-                config = JSON.parse(fs.readFileSync(path.join(ctx.dataDir, 'runtime.json'), 'utf8'));
+                const text = fs.readFileSync(configFile, 'utf8');
+                stage = 'config-parse';
+                config = JSON.parse(text);
+                if (!config || typeof config !== 'object' || Array.isArray(config)) {
+                    throw new Error('runtime.json must contain a configuration object');
+                }
                 for (const key of ['executable', 'project']) {
                     if (typeof config[key] !== 'string' || !path.isAbsolute(config[key])) {
                         throw new Error('runtime.json: absolute ' + key + ' required');
                     }
                 }
-                if (!fs.statSync(config.executable).isFile() ||
-                    !fs.statSync(path.join(config.project, 'runtime', 'main.js')).isFile()) {
-                    throw new Error('Compatible Electron executable / project not found');
+                stage = 'executable';
+                if (!fs.statSync(config.executable).isFile()) throw new Error('Executable is not a file');
+                stage = 'project';
+                if (!fs.statSync(path.join(config.project, 'runtime', 'main.js')).isFile()) {
+                    throw new Error('Runtime entry point is not a file');
                 }
             } catch (error) {
-                failed = true; report('Runtime unavailable: ' + error.message); return;
+                failed = true;
+                let message, detail;
+                if (stage === 'config-read' && error.code === 'ENOENT') {
+                    message = 'Setup incomplete: runtime.json is missing.';
+                    detail = 'Store installs the launcher only. A compatible MGU browser companion is required.';
+                } else if (stage === 'config-read') {
+                    message = 'Cannot read runtime.json (' + (error.code || 'read error') + ').';
+                    detail = 'Check the app data configuration and its read permissions.';
+                } else if (stage === 'config-parse') {
+                    message = 'Invalid runtime.json configuration.';
+                    detail = 'Expected JSON with absolute executable and project paths.';
+                } else if (stage === 'executable') {
+                    message = 'Configured browser executable is unavailable.';
+                    detail = 'Install a validated MGU-compatible companion; a config file alone is not enough.';
+                } else {
+                    message = 'Configured browser project is unavailable.';
+                    detail = 'The project path must contain runtime/main.js and the companion sources.';
+                }
+                report(message, detail, 'Runtime setup [' + stage + '] ' + configFile + ': ' + error.message);
+                return;
             }
             const args = [config.project, '--mgu', '--safety-file', safetyFile, '--data-dir', ctx.dataDir];
             if (garageTest) args.push('--garage-test');

@@ -11,17 +11,24 @@ const safety = require('../shared/safety');
 test('OAP launches only while stationary/foreground and terminates on invalid or stale speed', async t => {
     let implementation, handlers, interval, now = 10000, visible = false, focus = true;
     t.mock.method(Date, 'now', () => now);
-    const buttons = {}, files = new Map(), spawned = [], errors = [];
+    const buttons = {}, files = new Map(), spawned = [], errors = [], labels = {};
+    let statFailure = null;
     const data = path.resolve('test-app-data');
     files.set(path.join(data, 'runtime.json'), JSON.stringify({
         executable: path.resolve('fake-electron'), project: path.resolve('test-project')
     }));
     const mocks = {
         fs: {
-            readFileSync(file) { if (!files.has(file)) throw new Error('Missing fixture'); return files.get(file); },
+            readFileSync(file) {
+                if (!files.has(file)) { const error = new Error('Missing fixture: ' + file); error.code = 'ENOENT'; throw error; }
+                return files.get(file);
+            },
             writeFileSync(file, text) { files.set(file, text); },
             renameSync(source, target) { files.set(target, files.get(source)); files.delete(source); },
-            statSync() { return { isFile: () => true }; }
+            statSync(file) {
+                if (statFailure && statFailure(file)) throw new Error('Missing test file');
+                return { isFile: () => true };
+            }
         },
         path,
         child_process: {
@@ -47,7 +54,7 @@ test('OAP launches only while stationary/foreground and terminates on invalid or
         log: { error: message => errors.push(message), warn() {}, info() {} },
         signals: { watch(_name, _instance, value) { handlers = value; return Promise.resolve({}); } },
         ui: {
-            isVisible: () => visible, hasFocus: () => focus, text() {},
+            isVisible: () => visible, hasFocus: () => focus, text(name, value) { labels[name] = value; },
             open() { visible = true; }, onVisible() {}, onFocus() {},
             onClick(name, fn) { buttons[name] = fn; }
         }
@@ -92,4 +99,33 @@ test('OAP launches only while stationary/foreground and terminates on invalid or
     assert.equal(JSON.parse(files.get(path.join(data, 'youtube-safety.json'))).mode, 'tv');
     buttons.BTN_STOP();
     assert.equal(spawned[4].child.killed, true);
+
+    const configFile = path.join(data, 'runtime.json');
+    const validConfig = files.get(configFile);
+    files.delete(configFile);
+    await buttons.BTN_GARAGE_NATIVE();
+    assert.equal(spawned.length, 5);
+    assert.equal(labels.RUNTIME_STATUS, 'Setup incomplete: runtime.json is missing.');
+    assert.match(labels.RUNTIME_DETAIL, /launcher only/);
+    assert.ok(errors.some(message => message.includes(configFile)));
+    interval();
+    assert.equal(spawned.length, 5);
+    for (const invalid of ['{', 'null', '[]', '{}']) {
+        files.set(configFile, invalid);
+        await buttons.BTN_GARAGE_TV();
+        assert.equal(labels.RUNTIME_STATUS, 'Invalid runtime.json configuration.');
+        assert.equal(spawned.length, 5);
+    }
+    files.set(configFile, validConfig);
+    statFailure = file => file === path.resolve('fake-electron');
+    await buttons.BTN_GARAGE_NATIVE();
+    assert.equal(labels.RUNTIME_STATUS, 'Configured browser executable is unavailable.');
+    assert.equal(spawned.length, 5);
+    statFailure = file => file.endsWith(path.join('runtime', 'main.js'));
+    await buttons.BTN_GARAGE_TV();
+    assert.equal(labels.RUNTIME_STATUS, 'Configured browser project is unavailable.');
+    assert.equal(spawned.length, 5);
+    statFailure = null;
+    await buttons.BTN_GARAGE_NATIVE();
+    assert.equal(spawned.length, 6);
 });

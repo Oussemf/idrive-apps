@@ -116,7 +116,21 @@ sur chaque variante avant un essai utilisateur.
 
 ## Diagnostic
 
-- `Runtime unavailable` : executable/projet non configure ou inexistant.
+- `Setup incomplete: runtime.json is missing.` : le fichier de configuration
+  manque dans le dossier data de l'app. L'ancien message `Runtime unavailable:
+  ENOENT ... open '/var/opt/public/oap/...'` correspond a ce cas.
+  Toutes les options utilisent le meme compagnon, donc echouent de la meme facon.
+  **Ce n'est pas une panne YouTube, reseau ou GPU** : le navigateur n'a pas
+  encore ete lance. Creer seulement le JSON ne suffit pas sans executable
+  et sources compatibles installes ; les chemins d'exemple ne sont pas
+  des programmes livres par ce depot.
+- `Cannot read runtime.json` : verifier les droits de lecture du fichier.
+- `Invalid runtime.json configuration.` : JSON invalide ou chemins absolus absents.
+- `Configured browser executable is unavailable.` : executable configure absent.
+- `Configured browser project is unavailable.` : sources ou runtime/main.js absents.
+- Les details techniques et le chemin complet restent dans le journal de
+  l'app (`<id>.log`, dans son dossier data). L'ecran donne deux messages
+  courts pour eviter de tronquer l'erreur avec un long chemin.
 - `No valid speed signal` : ne pas contourner ; verifier subscription/permissions.
 - `Store proxy` / bail absent : autoriser l'app et connecter l'uplink dans le Store.
 - Renderer refuse : verifier `mgu-render/1`, pixmaps et foreground gate.

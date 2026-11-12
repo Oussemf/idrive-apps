@@ -2,7 +2,7 @@
   "id": "oussem_youtube",
   "title": "YouTube (experimental)",
   "description": "Parked-only YouTube: original UI or YouTube TV. Requires a separately validated Chromium companion.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "vendor": "Oussemf",
   "loggingId": "OYTB",
   "iconGlyph": "YT",
@@ -21,6 +21,7 @@
     ] },
     { "name": "RUNTIME", "kind": "menu", "title": "YouTube", "items": [
       ["text", "RUNTIME_STATUS", "Waiting for a fresh stationary signal and the browser runtime."],
+      ["text", "RUNTIME_DETAIL", "Requires a separately installed MGU-compatible browser companion."],
       ["button", "BTN_STOP", "Stop and return"]
     ] }
   ],
