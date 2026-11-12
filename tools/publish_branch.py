@@ -44,10 +44,13 @@ def main():
     tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT).decode().split("\0")
     total = sum((ROOT / name).stat().st_size for name in tracked if name and (ROOT / name).is_file()
                 and not name.startswith("store/"))
-    total += sum(file.stat().st_size for file in target.rglob("*") if file.is_file())
-    if total >= 200 * 1024**2:
-        raise SystemExit(f"Branch tree exceeds Store's 200 MiB limit: {total}")
-    print(f"Branch payload validated; {count} files; total source tree {total / 1024**2:.1f} MiB")
+    payload = sum(file.stat().st_size for file in target.rglob("*") if file.is_file())
+    # Public branch installs read only this component's paths (sources.partPaths),
+    # not the whole repo. Include tar headers/padding in its extraction budget.
+    if payload + count * 1024 + 1024 >= 200 * 1024**2:
+        raise SystemExit(f"Component exceeds Store's 200 MiB extraction limit: {payload}")
+    print(f"Branch payload validated; {count} files; component {payload / 1024**2:.1f} MiB;"
+          f" whole repo {(total + payload) / 1024**2:.1f} MiB (partial-source reader required)")
 
 
 if __name__ == "__main__":
