@@ -5,6 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
 var cp = require('child_process');
+var prepareEngine = require('./prepare-engine');
 var root = __dirname;
 var args = process.argv.slice(2);
 var display = null, browser = null, ended = false, startupTimer = null;
@@ -43,14 +44,16 @@ function field(buffer) {
     return Buffer.concat([length, buffer]);
 }
 
-function start() {
+async function start() {
     if (typeof process.getuid !== 'function' || process.getuid() === 0) {
         throw new Error('must run as the OAP app uid, never root');
     }
     if (!data || !path.isAbsolute(data)) throw new Error('--data-dir must be an absolute app data path');
     if (!args.includes('--mgu') || !process.env.MGU_APP_ID) throw new Error('OAP launcher arguments required');
+    var executable = await prepareEngine(root, data);
+    if (ended) return;
     var interpreter = path.join(root, 'lib', 'ld-linux-x86-64.so.2');
-    var probe = cp.spawnSync(interpreter, ['--verify', path.join(root, 'electron', 'electron')], {
+    var probe = cp.spawnSync(interpreter, ['--verify', executable], {
         encoding: 'utf8', timeout: 10000
     });
     if (probe.error || probe.status !== 0) {
@@ -93,7 +96,7 @@ function start() {
         if (!/^\d+\n$/.test(number)) return finish(1, 'invalid private display number');
         clearTimeout(startupTimer);
         env.DISPLAY = ':' + number.trim();
-        browser = cp.spawn(path.join(root, 'electron', 'electron'),
+        browser = cp.spawn(executable,
             args.concat(['--disable-gpu', '--disable-dev-shm-usage', '--ozone-platform=x11',
                 '--disk-cache-size=33554432', '--media-cache-size=16777216']), {
                 env: env, stdio: ['ignore', 'inherit', 'inherit']
@@ -115,4 +118,4 @@ process.on('exit', function () {
         }
     }
 });
-try { start(); } catch (error) { finish(1, error.message); }
+start().catch(function (error) { finish(1, error.message); });

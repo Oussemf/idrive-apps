@@ -19,7 +19,7 @@ function run(uid) {
         on(name, fn) { events[name] = fn; }
     };
     const mocks = {
-        path, crypto,
+        path, crypto, './prepare-engine': async () => path.resolve('prepared-electron'),
         fs: {
             mkdtempSync: prefix => prefix + 'test', chmodSync() {},
             writeFileSync(file, value) { files.set(file, value); },
@@ -46,15 +46,17 @@ function run(uid) {
     return { spawned, files, events, errors, proc };
 }
 
-test('browser companion refuses root and does not start a display or browser', () => {
+test('browser companion refuses root and does not start a display or browser', async () => {
     const result = run(0);
+    await new Promise(resolve => setImmediate(resolve));
     assert.equal(result.proc.exitCode, 1);
     assert.equal(result.spawned.length, 0);
     assert.match(result.errors[0], /never root/);
 });
 
-test('private display uses a random cookie, no TCP, explicit sandbox and bounded caches', () => {
+test('private display uses a random cookie, no TCP, explicit sandbox and bounded caches', async () => {
     const result = run(12345);
+    await new Promise(resolve => setImmediate(resolve));
     assert.equal(result.spawned.length, 1);
     const display = result.spawned[0];
     assert.ok(display.executable.endsWith(path.join('bin', 'Xvfb')));

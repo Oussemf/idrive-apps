@@ -69,3 +69,11 @@ jobs:
             gh release create catalog --title "MGU Store catalog" --notes "MGU Store catalog. Experimental browser companion; hardware validation required."
           fi
           gh release upload catalog dist/catalog.json --clobber
+      - name: Publish tested companion on main
+        run: |
+          python tools/publish_branch.py
+          git config user.name "Oussemf"
+          git config user.email "223556219+Copilot@users.noreply.github.com"
+          git add store mgu-repo.json
+          git commit -m "Distribute tested browser companion through main Store channel" -m "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+          git push origin HEAD:main

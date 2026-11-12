@@ -10,3 +10,4 @@ oap-sdk
 **/runtime.json
 **/uplink.json
 **/*-safety.json
+store

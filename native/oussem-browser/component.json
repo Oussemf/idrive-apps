@@ -1,7 +1,7 @@
 {
   "id": "oussem-browser",
   "kind": "tool",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "title": "YouTube browser companion (experimental)",
   "description": "Chromium companion and private display for idrive-apps. Hardware validation required.",
   "mguHmi": ["ID7"],

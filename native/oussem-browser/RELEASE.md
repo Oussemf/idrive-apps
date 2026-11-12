@@ -4,8 +4,8 @@ This release supplies the missing browser tool, its private Linux libraries,
 a private authenticated X display and the YouTube runtime sources.
 The launcher detects the installed tool automatically; no runtime.json is needed.
 
-In MGU Store, select source **Oussemf/idrive-apps**, channel **Releases**
-(not main), refresh, install **YouTube browser companion**, then update
+In MGU Store, select source **Oussemf/idrive-apps**, channel **main**,
+refresh, install **YouTube browser companion**, then update
 **YouTube (experimental)**. The direct catalog URL is:
 https://github.com/Oussemf/idrive-apps/releases/download/catalog/catalog.json
 
@@ -20,6 +20,10 @@ routes or system services are replaced. Its sole setuid program is the
 upstream Chromium sandbox helper (root-owned mode 4755), which establishes
 the browser sandbox; Chromium itself runs as the app uid. No --no-sandbox.
 The tool starts no persistent service and can be removed from the Store.
+The branch contains the precompiled payload, with Chromium compressed below
+GitHub's per-file limit. The launcher streams it to its private app cache,
+checks SHA-256 before execution, and uses the root-owned sandbox helper
+installed by the Store. Allow about 250 MB of additional app data space.
 
 Audio focus integration and performance need vehicle testing.
 YouTube TV may redirect unsupported Chromium to the standard website.

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build a self-contained, pinned Electron tool kit; run inside the Dockerfile."""
 import hashlib
+import gzip
 import json
 import os
 from pathlib import Path
@@ -64,6 +65,9 @@ def main():
         raise SystemExit("Electron checksum mismatch")
     with zipfile.ZipFile(archive) as zipped:
         zipped.extractall(FILES / "electron")
+    for locale in (FILES / "electron" / "locales").glob("*.pak"):
+        if locale.name not in ("en-US.pak", "fr.pak"):
+            locale.unlink()
     elf_files = []
     for file in (FILES / "electron").rglob("*"):
         if file.is_file() and is_elf(file):
@@ -106,7 +110,16 @@ def main():
         headers = run("readelf", "-l", str(file))
         if "Requesting program interpreter" in headers:
             run("patchelf", "--set-interpreter", PREFIX + "/lib/ld-linux-x86-64.so.2", str(file))
-    for name in ("launch.sh", "launch.js"):
+    engine = {"files": []}
+    for name in ("electron", "icudtl.dat"):
+        file = FILES / "electron" / name
+        engine["files"].append({"name": name, "sha256": hashlib.sha256(file.read_bytes()).hexdigest()})
+        with file.open("rb") as source, (file.parent / (name + ".gz")).open("wb") as target:
+            with gzip.GzipFile(filename="", mode="wb", fileobj=target, mtime=0) as compressed:
+                shutil.copyfileobj(source, compressed)
+        file.unlink()
+    (FILES / "engine.json").write_text(json.dumps(engine, indent=2) + "\n")
+    for name in ("launch.sh", "launch.js", "prepare-engine.js"):
         copy(NATIVE / name, FILES / name)
     for directory in ("runtime", "shared", "web"):
         shutil.copytree(ROOT / directory, FILES / "project" / directory)

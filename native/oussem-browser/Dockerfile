@@ -17,6 +17,7 @@ RUN mkdir /xserver && cd /xserver && apt-get source xorg-server \
       -Dxkb_output_dir=/tmp \
     && ninja -C build hw/vfb/Xvfb \
     && cp build/hw/vfb/Xvfb /usr/local/bin/oussem-Xvfb
+RUN strip --strip-unneeded /usr/local/bin/oussem-Xvfb
 WORKDIR /src
 COPY . /src
 RUN python3 native/oussem-browser/build.py

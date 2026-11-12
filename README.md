@@ -71,19 +71,24 @@ Les tests remplacent seulement le contenu des sites tiers.
 
 ## Dans le MGU Store
 
-Source GitHub : **`Oussemf/idrive-apps`**, canal **`Releases`**.
-Dans le Store, modifier la source existante (actuellement `main`) ou ajouter
-la source HTTPS suivante :
+Source GitHub : **`Oussemf/idrive-apps`**, canal **`main`**.
+Actualiser la source deja ajoutee : le compagnon natif est livre dans
+la branche, sans selection d'un autre canal ni ajout d'URL.
+Le catalogue Releases reste disponible en alternative :
 
 `https://github.com/Oussemf/idrive-apps/releases/download/catalog/catalog.json`
 
 Actualiser, installer **YouTube browser companion (experimental)**, puis
-mettre a jour **YouTube (experimental)** en **0.2.1**. Le catalogue declare
+mettre a jour **YouTube (experimental)** en **0.2.2**. Le catalogue declare
 la dependance pour que le Store installe le compagnon avec le client.
 **Aucun fichier runtime.json a creer** : le lanceur trouve automatiquement
 `/var/opt/oussem-browser/current/launch.sh` et son projet.
-La branche `main` reste un canal de sources pour developpeurs ; le compagnon
-binaire est distribue exclusivement par le catalogue Releases.
+La branche `main` contient le compagnon precompile, ses licences et ses
+sommes de controle. Les fichiers les plus volumineux sont compresses
+pour respecter les limites GitHub et Store, puis decompressees sous l'UID
+de l'app au premier lancement avec verification SHA-256. Le helper sandbox
+reste installe par le Store, root-owned ; il n'est pas decompresse par l'app.
+Les ressources Chromium sont limitees aux langues francais et anglais.
 
 Le compagnon installe une copie privee d'Electron, glibc et des dependances,
 ainsi qu'un affichage virtuel Xvfb sans port TCP, authentifie par cookie

@@ -2,3 +2,4 @@
 *.png binary
 *.wasm binary
 *.pack binary
+store/** -text

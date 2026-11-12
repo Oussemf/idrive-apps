@@ -1,15 +1,15 @@
 # Integration MGU : developpement experimental
 
-**Compagnon experimental disponible via le catalogue Releases.**
+**Compagnon experimental disponible sur main et via le catalogue Releases.**
 Il contient un navigateur et ses dependances prives, avec des tests sur
 userland glibc 2.27. Il n'est pas certifie sur toutes les variantes MGU.
 
 ## Installation depuis MGU Store 0.9.39
 
-1. Dans Sources, choisir `Oussemf/idrive-apps`, canal **Releases** au lieu de main.
+1. Dans Sources, conserver `Oussemf/idrive-apps`, canal **main**.
 2. Actualiser le catalogue.
 3. Installer **YouTube browser companion (experimental)**.
-4. Mettre a jour **YouTube (experimental)** en version **0.2.1**.
+4. Mettre a jour **YouTube (experimental)** en version **0.2.2**.
 5. Ouvrir l'app, puis choisir une session de validation avec le vehicule stationne.
 
 Autre entree possible dans Sources, en HTTPS :
@@ -20,6 +20,10 @@ les telecharge et verifie les fichiers. Le lanceur utilise automatiquement
 le compagnon installe : aucun JSON, terminal ni SSH n'est necessaire.
 Le compagnon est un outil amovible sans service permanent. Son affichage
 X11 prive n'ecoute pas le reseau et ne remplace pas le compositor du MGU.
+Le moteur Chromium est decompresse dans le cache prive de l'app au premier
+lancement, avec verification SHA-256. Prevoir environ 250 Mo supplementaires
+dans les donnees de l'app, en plus du compagnon installe et des sauvegardes.
+La preparation initiale peut retarder l'ouverture de l'interface.
 
 ## Prerequis
 
