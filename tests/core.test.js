@@ -36,6 +36,19 @@ test('MGU speed signal scaling and sentinel validation', () => {
     assert.equal(decodeSpeed(null), null);
 });
 
+test('garage validation needs an explicit runtime opt-in, a session and a fresh foreground heartbeat', () => {
+    const now = 10000;
+    const value = { garageTest: true, speedKmh: null, speedUpdated: 0,
+        updated: now, foreground: true };
+    assert.equal(permit(value, now), false);
+    assert.equal(permit(value, now, true), true);
+    assert.equal(permit({ ...value, garageTest: false }, now, true), false);
+    assert.equal(permit({ ...value, garageTest: 'true' }, now, true), false);
+    assert.equal(permit({ ...value, foreground: false }, now, true), false);
+    assert.equal(permit({ ...value, updated: now - 2501 }, now, true), false);
+    assert.equal(permit({ ...value, updated: now + 1 }, now, true), false);
+});
+
 test('official YouTube URL formats and ids', () => {
     const id = 'dQw4w9WgXcQ';
     for (const input of [id, `https://youtu.be/${id}?t=1`,

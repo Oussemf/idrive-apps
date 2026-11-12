@@ -52,7 +52,7 @@ test('OAP launches only while stationary/foreground and terminates on invalid or
             onClick(name, fn) { buttons[name] = fn; }
         }
     });
-    buttons.BTN_NATIVE();
+    await buttons.BTN_NATIVE();
     assert.equal(spawned.length, 0);
     handlers.statusCarSpeed2({ speedVehicleCentreOfGravity: 0 }); interval();
     assert.equal(spawned.length, 1);
@@ -74,4 +74,22 @@ test('OAP launches only while stationary/foreground and terminates on invalid or
     assert.equal(spawned[2].child.killed, true);
     assert.equal(spawned.length, 3);
     assert.deepEqual(errors, []);
+
+    handlers.statusCarSpeed2({ speedVehicleCentreOfGravity: 65535 });
+    await buttons.BTN_GARAGE_NATIVE();
+    assert.equal(spawned.length, 4);
+    assert.ok(spawned[3].args.includes('--garage-test'));
+    assert.equal(JSON.parse(files.get(path.join(data, 'youtube-safety.json'))).garageTest, true);
+    now += 10000; interval();
+    assert.equal(spawned[3].child.killed, undefined);
+    focus = false; interval();
+    assert.equal(spawned[3].child.killed, true);
+    focus = true; interval();
+    assert.equal(spawned.length, 4);
+    assert.equal(JSON.parse(files.get(path.join(data, 'youtube-safety.json'))).garageTest, false);
+    await buttons.BTN_GARAGE_TV();
+    assert.equal(spawned.length, 5);
+    assert.equal(JSON.parse(files.get(path.join(data, 'youtube-safety.json'))).mode, 'tv');
+    buttons.BTN_STOP();
+    assert.equal(spawned[4].child.killed, true);
 });

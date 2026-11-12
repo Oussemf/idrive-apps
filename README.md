@@ -100,11 +100,18 @@ jamais un SDK BMW ni un paquet destine a l'installation.
 
 ## Securite et statut
 
-- Utilisation **uniquement a l'arret**. Aucun deverrouillage video en roulant.
-- En mode MGU, vitesse exactement nulle et recente, app au premier plan
+- Utilisation **uniquement a l'arret**. Les restrictions d'origine du vehicule
+  ne sont pas modifiees.
+- Pour les essais dans le garage, choisir **Garage test - original UI**
+  ou **Garage test - YouTube TV** dans le lanceur. Cette session ne depend
+  pas des signaux de vitesse et affiche un avertissement permanent.
+  Elle se termine a la perte de focus, a la sortie ou a l'arret du lanceur ;
+  il faut la relancer explicitement. Garder le vehicule stationne.
+- Hors de cette session de validation, vitesse exactement nulle et recente, app au premier plan
   et heartbeat recent obligatoires ; signal absent/invalide/perime = blocage.
-- Perte de focus, popup, mouvement, perte du renderer ou du lanceur :
+- Perte de focus, popup, perte du renderer ou du lanceur :
   masquage et arret du lecteur/runtime, sans lecture audio en arriere-plan.
+  Le mouvement est controle uniquement hors du mode garage.
 - Pas d'API BMW de frein de parking validee ici : vitesse nulle n'est
   **pas** une preuve de position P. Ce garde-fou logiciel experimental
   ne remplace ni les protections du vehicule ni la responsabilite de l'utilisateur.

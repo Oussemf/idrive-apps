@@ -9,6 +9,7 @@ const { permit } = require('../shared/safety');
 const { videoId, tvNavigation } = require('../shared/youtube');
 
 const mgu = process.argv.includes('--mgu');
+const garageTest = mgu && process.argv.includes('--garage-test');
 function argument(name) {
     const index = process.argv.indexOf(name);
     return index < 0 ? null : process.argv[index + 1];
@@ -238,13 +239,17 @@ async function start() {
                 if (allowed) suspend('Signal de securite indisponible : ' + error.message);
                 return;
             }
-            if (!permit(snapshot) || !gpu.info || !gpu.front) {
-                if (allowed) suspend('Lecture arretee : mouvement, signal perime ou app en arriere-plan.');
+            if (!permit(snapshot, undefined, garageTest) || !gpu.info || !gpu.front) {
+                if (allowed) suspend(garageTest ?
+                    'Test garage termine : session, signal de vie ou premier plan perdu.' :
+                    'Lecture arretee : mouvement, signal perime ou app en arriere-plan.');
                 return;
             }
             if (!allowed) {
                 allowed = true;
-                status = 'Vehicule immobile - signal recent. Utilisation a l arret uniquement.';
+                status = garageTest ?
+                    'TEST GARAGE - vitesse non verifiee. Gardez le vehicule stationne.' :
+                    'Vehicule immobile - signal recent. Utilisation a l arret uniquement.';
                 if (ui) ui.webContents.setAudioMuted(false);
                 gpu.visible(true); notify();
             }

@@ -15,7 +15,9 @@
       ["text", "STATUS", "Experimental: compatible Chromium companion required."],
       ["button", "BTN_NATIVE", "Original interface"],
       ["button", "BTN_TV", "YouTube TV"],
-      ["text", "DETAIL", "Use the Store connection. No video while moving."]
+      ["button", "BTN_GARAGE_NATIVE", "Garage test - original UI (vehicle parked)"],
+      ["button", "BTN_GARAGE_TV", "Garage test - YouTube TV (vehicle parked)"],
+      ["text", "DETAIL", "Garage test skips speed checks for this session only. Keep vehicle parked."]
     ] },
     { "name": "RUNTIME", "kind": "menu", "title": "YouTube", "items": [
       ["text", "RUNTIME_STATUS", "Waiting for a fresh stationary signal and the browser runtime."],

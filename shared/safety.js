@@ -3,11 +3,12 @@
 const MAX_AGE_MS = 2500;
 const MAX_SPEED_AGE_MS = 5000;
 
-function permit(snapshot, now) {
+function permit(snapshot, now, allowGarageTest) {
     now = now === undefined ? Date.now() : now;
     if (!snapshot || snapshot.foreground !== true) return false;
     if (!Number.isFinite(snapshot.updated) || snapshot.updated > now ||
         now - snapshot.updated > MAX_AGE_MS) return false;
+    if (allowGarageTest === true && snapshot.garageTest === true) return true;
     if (!Number.isFinite(snapshot.speedUpdated) || snapshot.speedUpdated > now ||
         now - snapshot.speedUpdated > MAX_SPEED_AGE_MS) return false;
     return snapshot.speedKmh === 0;

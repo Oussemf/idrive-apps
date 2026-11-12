@@ -94,6 +94,18 @@ profil Chromium local ; ils ne sont pas transmis au Store.
 Le site distant n'a aucun preload, acces Node, IPC privilegie ni droit
 d'ouvrir des fenetres ou de telecharger des fichiers.
 
+## Validation garage sans dependance a la vitesse
+
+Le lanceur propose deux boutons de session Garage test, pour les essais
+sur MGU dans un vehicule stationne. Le runtime doit etre lance avec
+`--garage-test` et recevoir `garageTest: true` dans un heartbeat recent.
+La politique partagee ignore alors les champs de vitesse, mais pas le focus,
+le premier plan du renderer ni le heartbeat. La perte de focus annule la
+session dans le lanceur ; aucune preference persistante n'est enregistree.
+Le mode normal conserve ses controles de vitesse pour eviter une regression.
+Les tests couvrent les deux chemins, notamment le demarrage garage sans
+aucun echantillon de vitesse et la terminaison lors d'une perte de focus.
+
 ## Etapes restant avant une premiere version voiture
 
 1. Relever architecture CPU, glibc, bibliotheques, sandbox et budget RAM.

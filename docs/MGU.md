@@ -60,6 +60,29 @@ avoir identifie un runtime effectivement compatible.
 
 ## Securite et cycle de vie
 
+### Session de validation dans le garage
+
+Pour se concentrer sur la lecture, la recherche et les performances sans
+dependre du signal de vitesse, utiliser **Garage test - original UI
+(vehicle parked)** ou **Garage test - YouTube TV (vehicle parked)** dans
+le menu du lanceur. Le vehicule doit rester stationne dans le garage.
+Ces boutons autorisent uniquement la session courante, sans reglage persistant.
+
+Le lanceur transmet `--garage-test` au compagnon et publie `garageTest: true`
+dans son heartbeat. Les deux autorisations sont necessaires ; un fichier
+seul ne desactive pas les controles du runtime normal. Le statut indique
+explicitement **TEST GARAGE - vitesse non verifiee** : il n'affirme jamais
+que le vehicule est immobile.
+
+Les limites de fraicheur du heartbeat, le premier plan HMI et la disponibilite
+du renderer restent obligatoires. Sortie, popup ou perte de focus annulent
+la session dans le lanceur et terminent le compagnon. Revenir a l'app ne
+reactive pas ce mode ; il faut choisir a nouveau un bouton Garage test.
+Les restrictions video d'origine du vehicule ne sont pas modifiees.
+Ce mode ne fournit toujours pas le binaire Chromium compatible manquant.
+
+### Fonctionnement normal (hors session garage)
+
 Le signal lu est `Vehicle2.statusCarSpeed2.speedVehicleCentreOfGravity`,
 facteur 1/64 km/h. `65535`, negatif, fractionnaire ou absent est invalide.
 Lecture autorisee seulement si :
@@ -73,7 +96,7 @@ Le lanceur publie toutes les 500 ms, relit la vitesse toutes les 1 s ;
 le compagnon controle toutes les 200 ms. Ce sont des budgets logiciels,
 pas une certification temps reel. Mouvement ou perte du signal :
 le compagnon detruit le lecteur et le lanceur termine le processus.
-Il n'existe pas d'option pour desactiver ce blocage en mode MGU.
+La session garage decrite ci-dessus est l'unique exception de developpement.
 
 Ce controle ne verifie pas le rapport P ni le frein de stationnement.
 N'utiliser qu'apres stationnement effectif, jamais dans un embouteillage.

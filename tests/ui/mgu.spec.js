@@ -13,7 +13,8 @@ function message(type, values) {
     return result;
 }
 
-test('MGU protocol pixmaps, fresh speed gating, foreground loss and stale heartbeat', async () => {
+for (const garageTest of [false, true]) {
+test('MGU protocol, focus and heartbeat in ' + (garageTest ? 'garage validation' : 'speed-gated mode'), async () => {
     const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'idrive-mgu-test-'));
     const socketPath = process.platform === 'win32' ?
         '\\\\.\\pipe\\idrive-mgu-' + process.pid :
@@ -53,7 +54,7 @@ test('MGU protocol pixmaps, fresh speed gating, foreground loss and stale heartb
     async function publish() {
         const now = Date.now();
         await fs.writeFile(safetyFile + '.tmp', JSON.stringify({
-            speedKmh: speed, speedUpdated: now, updated: now, foreground, mode: 'native'
+            speedKmh: speed, speedUpdated: now, updated: now, foreground, mode: 'native', garageTest
         }));
         await fs.rename(safetyFile + '.tmp', safetyFile);
     }
@@ -61,7 +62,8 @@ test('MGU protocol pixmaps, fresh speed gating, foreground loss and stale heartb
         await publish();
         heartbeat = setInterval(() => publish().catch(error => { throw error; }), 400);
         electron = await _electron.launch({
-            args: [path.join(__dirname, '..', '..'), '--mgu', '--safety-file', safetyFile, '--data-dir', directory],
+            args: [path.join(__dirname, '..', '..'), '--mgu', '--safety-file', safetyFile,
+                '--data-dir', directory, ...(garageTest ? ['--garage-test'] : [])],
             env: { ...process.env, MGU_APP_ID: 'oussem_youtube',
                 MGU_RENDERD_SOCKET: socketPath, YOUTUBE_API_KEY: '' }
         });
@@ -71,7 +73,11 @@ test('MGU protocol pixmaps, fresh speed gating, foreground loss and stale heartb
         const expectAllowed = value => expect(async () => {
             expect(await allowed()).toBe(value);
         }).toPass({ timeout: 5000 });
-        expect(await allowed()).toBe(false);
+        await expectAllowed(garageTest);
+        if (garageTest) {
+            await expect(page.locator('#status')).toContainText('vitesse non verifiee');
+            await expect.poll(() => pixels).toBeGreaterThan(0);
+        }
         expect(await page.evaluate(async () => (await window.idrive.confirmParked(true)).ok)).toBe(false);
         speed = 0;
         await publish();
@@ -80,7 +86,7 @@ test('MGU protocol pixmaps, fresh speed gating, foreground loss and stale heartb
         await expect.poll(() => frames).toBeGreaterThan(0);
         speed = 1 / 64;
         await publish();
-        await expectAllowed(false);
+        await expectAllowed(garageTest);
         speed = 0;
         await publish();
         await expectAllowed(true);
@@ -91,7 +97,7 @@ test('MGU protocol pixmaps, fresh speed gating, foreground loss and stale heartb
         clearInterval(heartbeat); heartbeat = null;
         await fs.writeFile(safetyFile, JSON.stringify({
             speedKmh: 0, speedUpdated: Date.now(), updated: Date.now() - 3000,
-            foreground: true, mode: 'native'
+            foreground: true, mode: 'native', garageTest
         }));
         await expectAllowed(false);
     } finally {
@@ -103,3 +109,4 @@ test('MGU protocol pixmaps, fresh speed gating, foreground loss and stale heartb
         await fs.rm(directory, { recursive: true, force: true });
     }
 });
+}

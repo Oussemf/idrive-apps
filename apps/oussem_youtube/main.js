@@ -11,9 +11,10 @@ mgu.run({
         const ui = ctx.ui, log = ctx.log;
         const safetyFile = path.join(ctx.dataDir, 'youtube-safety.json');
         let speedKmh = null, speedUpdated = 0, mode = 'native', child = null, failed = false;
+        let garageTest = false, garagePendingUntil = 0;
         const foreground = () => ui.isVisible('RUNTIME') && ui.hasFocus('RUNTIME');
         function snapshot() {
-            return { speedKmh, speedUpdated, mode, updated: Date.now(), foreground: foreground() };
+            return { speedKmh, speedUpdated, mode, garageTest, updated: Date.now(), foreground: foreground() };
         }
         function publish(value) {
             const temporary = safetyFile + '.tmp';
@@ -25,6 +26,8 @@ mgu.run({
             ui.text('STATUS', message); ui.text('RUNTIME_STATUS', message);
         }
         function stop() {
+            garageTest = false;
+            garagePendingUntil = 0;
             publish({ updated: Date.now(), foreground: false, speedKmh: null, speedUpdated: 0 });
             if (child) child.kill('SIGTERM');
         }
@@ -45,6 +48,7 @@ mgu.run({
                 failed = true; report('Runtime unavailable: ' + error.message); return;
             }
             const args = [config.project, '--mgu', '--safety-file', safetyFile, '--data-dir', ctx.dataDir];
+            if (garageTest) args.push('--garage-test');
             child = spawn(config.executable, args, {
                 env: Object.assign({}, process.env, {
                     MGU_APP_ID: ctx.spec.id, YOUTUBE_API_KEY: config.youtubeApiKey || '',
@@ -64,13 +68,19 @@ mgu.run({
         }
         function tick() {
             try {
+                if (garagePendingUntil && Date.now() <= garagePendingUntil && foreground()) {
+                    garageTest = true; garagePendingUntil = 0;
+                }
+                if (Date.now() > garagePendingUntil) garagePendingUntil = 0;
+                if (!foreground()) garageTest = false;
                 const value = snapshot();
                 publish(value);
-                const ready = safety.permit(value);
+                const ready = safety.permit(value, undefined, garageTest);
                 if (!ready && child) stop();
                 if (ready && !child && !failed) launch();
                 if (!failed) {
-                    const message = speedKmh === null ? 'No valid speed signal: playback blocked.' :
+                    const message = garageTest ? 'GARAGE TEST: speed not checked. Keep vehicle parked. BACK/HOME ends test.' :
+                        speedKmh === null ? 'No valid speed signal: playback blocked.' :
                         ready ? 'Browser running. BACK/HOME returns to iDrive.' :
                             'Playback blocked: moving, stale speed or app hidden.';
                     ui.text('STATUS', message); ui.text('RUNTIME_STATUS', message);
@@ -86,12 +96,17 @@ mgu.run({
         }, log, { pollMs: 1000 }).then(result => {
             if (result.error) { speedKmh = null; report('Speed subscription: ' + result.error); }
         }).catch(error => { speedKmh = null; report('Speed subscription: ' + error.message); });
-        function open(nextMode) {
+        async function open(nextMode, testSession) {
+            stop();
             mode = nextMode; failed = false;
-            ui.open('RUNTIME'); tick();
+            garagePendingUntil = testSession === true ? Date.now() + 3000 : 0;
+            await ui.open('RUNTIME');
+            tick();
         }
         ui.onClick('BTN_NATIVE', () => open('native'));
         ui.onClick('BTN_TV', () => open('tv'));
+        ui.onClick('BTN_GARAGE_NATIVE', () => open('native', true));
+        ui.onClick('BTN_GARAGE_TV', () => open('tv', true));
         ui.onClick('BTN_STOP', () => { stop(); ui.open('MAIN'); });
         ui.onVisible(tick); ui.onFocus(tick);
         setInterval(tick, 500);
