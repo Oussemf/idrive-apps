@@ -85,7 +85,7 @@ la dependance pour que le Store installe le compagnon avec le client.
 `/var/opt/oussem-browser/current/launch.sh` et son projet.
 La branche `main` contient le compagnon precompile, ses licences et ses
 sommes de controle. Les fichiers les plus volumineux sont compresses
-pour respecter les limites GitHub et Store, puis decompressees sous l'UID
+pour respecter les limites GitHub et Store, puis decompresses sous l'UID
 de l'app au premier lancement avec verification SHA-256. Le helper sandbox
 reste installe par le Store, root-owned ; il n'est pas decompresse par l'app.
 Les ressources Chromium sont limitees aux langues francais et anglais.

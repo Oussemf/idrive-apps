@@ -49,6 +49,13 @@ Xvfb est recompile avec des chemins XKB prives, sans ecoute TCP, authentifie
 par un cookie aleatoire par session. Le MGU recoit ses frames par le renderer,
 pas par un serveur X installe a la place du compositor du vehicule.
 
+Le canal `main` contient le paquet natif precompile sous `store/oussem-browser`.
+Il respecte les plafonds du lecteur partiel de sources du Store 0.9.39 :
+400 fichiers par composant, moins de 200 Mio apres extraction. Chromium et
+ses donnees ICU sont compresses dans l'outil ; Node 8 les decompresse en
+streaming dans le cache prive de l'app et verifie leur SHA-256 avant execution.
+Les ressources restent dans l'outil root-owned, referencees depuis le cache.
+
 Le helper sandbox officiel de Chromium est root-owned mode 4755 dans
 l'outil ; les chemins de ses dependances restent root-owned. Le navigateur
 et Xvfb sont lances sous l'UID OAP. Aucun `--no-sandbox`. Le test glibc 2.27
@@ -117,7 +124,7 @@ aucun echantillon de vitesse et la terminaison lors d'une perte de focus.
 ## Etapes restant avant une premiere version voiture
 
 1. Confirmer sur le vehicule le noyau, la politique sandbox et le budget RAM.
-2. Installer le compagnon publie via le canal Releases et verifier son
+2. Installer le compagnon publie via le canal main et verifier son
    lancement sous l'UID OAP, ses permissions sockets et son profil.
 3. En cas d'echec, conserver le message et les logs avant tout changement
    de strategie ; ne pas desactiver la sandbox.
