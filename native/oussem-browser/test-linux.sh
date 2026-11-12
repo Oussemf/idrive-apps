@@ -3,7 +3,8 @@ set -euo pipefail
 prefix=/var/opt/oussem-browser/current
 stage="$PWD/dist/browser-installed"
 mkdir -p "$stage"
-tar -xzf dist/oussem-browser@0.1.0.tgz -C "$stage"
+version=$(node -p "require('./native/oussem-browser/component.json').version")
+tar -xzf "dist/oussem-browser@$version.tgz" -C "$stage"
 docker run --rm --cap-add SYS_ADMIN \
   -v "$stage/files:$prefix" \
   -v "$PWD/native/oussem-browser:/tests:ro" \

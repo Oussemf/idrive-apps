@@ -78,7 +78,7 @@ la source HTTPS suivante :
 `https://github.com/Oussemf/idrive-apps/releases/download/catalog/catalog.json`
 
 Actualiser, installer **YouTube browser companion (experimental)**, puis
-mettre a jour **YouTube (experimental)** en **0.2.0**. Le catalogue declare
+mettre a jour **YouTube (experimental)** en **0.2.1**. Le catalogue declare
 la dependance pour que le Store installe le compagnon avec le client.
 **Aucun fichier runtime.json a creer** : le lanceur trouve automatiquement
 `/var/opt/oussem-browser/current/launch.sh` et son projet.

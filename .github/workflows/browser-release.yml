@@ -17,9 +17,18 @@ jobs:
           python-version: '3.13'
       - run: npm ci
       - run: npm run check && npm test
+      - uses: docker/setup-buildx-action@v3
       - name: Build private Linux userland and Chromium
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: native/oussem-browser/Dockerfile
+          tags: idrive-browser
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Extract native artifacts
         run: |
-          docker build --progress=plain -f native/oussem-browser/Dockerfile -t idrive-browser .
           container=$(docker create idrive-browser)
           mkdir -p dist
           docker cp "$container:/src/dist/." dist/
@@ -28,7 +37,19 @@ jobs:
         run: python tools/build_mgu.py oussem_youtube --sdk-free
       - name: Validate on glibc 2.27 userland
         run: bash native/oussem-browser/test-linux.sh
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-companion-unvalidated
+          if-no-files-found: ignore
+          path: |
+            dist/oussem-browser@*.tgz
+            dist/oussem_youtube@*.tgz
       - run: python tools/publish_catalog.py
+      - id: version
+        run: |
+          version=$(node -p "require('./native/oussem-browser/component.json').version")
+          echo "tag=browser-$version" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v4
         with:
           name: browser-companion-validated
@@ -40,9 +61,10 @@ jobs:
       - name: Publish Store release assets
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
         run: |
-          gh release create browser-0.1.0 --prerelease --title "MGU browser companion 0.1.0 (experimental)" --notes-file native/oussem-browser/RELEASE.md
-          gh release upload browser-0.1.0 dist/oussem-browser@*.tgz dist/oussem_youtube@*.tgz dist/oussem-browser-dependency-sources.tar.gz
+          gh release create "$RELEASE_TAG" --target "${{ github.sha }}" --prerelease --title "MGU $RELEASE_TAG (experimental)" --notes-file native/oussem-browser/RELEASE.md
+          gh release upload "$RELEASE_TAG" dist/oussem-browser@*.tgz dist/oussem_youtube@*.tgz dist/oussem-browser-dependency-sources.tar.gz
           if ! gh release view catalog >/dev/null 2>&1; then
             gh release create catalog --title "MGU Store catalog" --notes "MGU Store catalog. Experimental browser companion; hardware validation required."
           fi

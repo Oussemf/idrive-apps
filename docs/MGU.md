@@ -9,7 +9,7 @@ userland glibc 2.27. Il n'est pas certifie sur toutes les variantes MGU.
 1. Dans Sources, choisir `Oussemf/idrive-apps`, canal **Releases** au lieu de main.
 2. Actualiser le catalogue.
 3. Installer **YouTube browser companion (experimental)**.
-4. Mettre a jour **YouTube (experimental)** en version **0.2.0**.
+4. Mettre a jour **YouTube (experimental)** en version **0.2.1**.
 5. Ouvrir l'app, puis choisir une session de validation avec le vehicule stationne.
 
 Autre entree possible dans Sources, en HTTPS :

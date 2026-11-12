@@ -139,4 +139,10 @@ test('OAP launches only while stationary/foreground and terminates on invalid or
     assert.equal(spawned.length, 7);
     assert.equal(spawned[6].executable, '/var/opt/oussem-browser/current/launch.sh');
     assert.equal(spawned[6].args[0], '/var/opt/oussem-browser/current/project');
+    spawned[6].child.stderr.emit('data', Buffer.from('Browser companion: no compatible sandbox available\n'));
+    spawned[6].child.emit('exit', 1, null);
+    assert.match(labels.RUNTIME_STATUS, /Browser stopped: code 1/);
+    assert.equal(labels.RUNTIME_DETAIL, 'Browser companion: no compatible sandbox available');
+    interval();
+    assert.equal(spawned.length, 7);
 });

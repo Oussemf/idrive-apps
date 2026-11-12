@@ -6,7 +6,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "dist"
-TAG = "browser-0.1.0"
+app = json.loads((ROOT / "apps" / "oussem_youtube" / "app.json").read_text())
+tool = json.loads((ROOT / "native" / "oussem-browser" / "component.json").read_text())
+TAG = "browser-" + tool["version"]
 BASE = "https://github.com/Oussemf/idrive-apps/releases/download/" + TAG + "/"
 
 
@@ -16,8 +18,6 @@ def artifact(name):
             "sha256": hashlib.sha256(file.read_bytes()).hexdigest(), "url": BASE + name}
 
 
-app = json.loads((ROOT / "apps" / "oussem_youtube" / "app.json").read_text())
-tool = json.loads((ROOT / "native" / "oussem-browser" / "component.json").read_text())
 catalog = {"schema": 2, "components": [
     {"id": tool["id"], "version": tool["version"], "kind": "tool", "title": tool["title"],
      "description": tool["description"], "mguHmi": ["ID7"], "uninstallable": True,

@@ -10,6 +10,9 @@ var directory = fs.mkdtempSync(path.join(os.tmpdir(), 'companion-check-'));
 var socket = path.join(directory, 'renderer.sock');
 var safety = path.join(directory, 'safety.json');
 var frames = 0, peer = null, child = null, log = '', finished = false;
+var hostFilters = fs.readFileSync('/proc/self/status', 'utf8').match(/^Seccomp_filters:\s+(\d+)$/m);
+if (!hostFilters) throw new Error('Host does not expose seccomp filter counts for sandbox validation');
+var inheritedFilters = Number(hostFilters[1]);
 var now = Date.now();
 fs.writeFileSync(safety, JSON.stringify({
     updated: now, speedUpdated: now, speedKmh: 0, foreground: true, mode: 'native'
@@ -86,8 +89,10 @@ var check = setInterval(function () {
         try {
             var cmd = fs.readFileSync('/proc/' + pid + '/cmdline', 'utf8');
             var status = fs.readFileSync('/proc/' + pid + '/status', 'utf8');
+            var filters = status.match(/^Seccomp_filters:\s+(\d+)$/m);
             return cmd.indexOf('--type=renderer') >= 0 && cmd.indexOf('--no-sandbox') < 0 &&
-                /^Uid:\s+12345\s/m.test(status) && /^Seccomp:\s+2$/m.test(status);
+                /^Uid:\s+12345\s/m.test(status) && /^NoNewPrivs:\s+1$/m.test(status) &&
+                /^Seccomp:\s+2$/m.test(status) && filters && Number(filters[1]) > inheritedFilters;
         } catch (error) {
             if (error.code === 'ENOENT' || error.code === 'EACCES' || error.code === 'ESRCH') return false;
             throw error;

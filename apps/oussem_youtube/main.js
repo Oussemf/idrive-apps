@@ -94,13 +94,21 @@ mgu.run({
                 }),
                 stdio: ['ignore', 'pipe', 'pipe']
             });
+            let browserError = '';
             child.stdout.on('data', data => log.info('browser: ' + data.toString().slice(0, 2048)));
-            child.stderr.on('data', data => log.warn('browser: ' + data.toString().slice(0, 2048)));
+            child.stderr.on('data', data => {
+                const text = data.toString().slice(0, 2048);
+                log.warn('browser: ' + text);
+                const diagnostic = text.split('\n').find(line =>
+                    /Browser companion:|error while loading shared libraries|GLIBC_|FATAL|No usable sandbox/.test(line));
+                if (diagnostic && !browserError) browserError = diagnostic.slice(0, 350);
+            });
             child.on('error', error => { failed = true; report('Browser start failed: ' + error.message); });
             child.on('exit', (code, signal) => {
                 child = null;
                 if (code !== 0 && signal !== 'SIGTERM') {
-                    failed = true; report('Browser stopped: code ' + code + ', signal ' + signal);
+                    failed = true; report('Browser stopped: code ' + code + ', signal ' + signal,
+                        browserError || 'The browser could not start. See the app log for technical details.');
                 }
             });
         }

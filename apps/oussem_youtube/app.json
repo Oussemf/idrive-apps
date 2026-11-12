@@ -1,8 +1,8 @@
 {
   "id": "oussem_youtube",
   "title": "YouTube (experimental)",
-  "description": "Parked-only YouTube: original UI or YouTube TV. Requires a separately validated Chromium companion.",
-  "version": "0.2.0",
+  "description": "Parked-only YouTube: original UI or YouTube TV. Uses the Store-installable browser companion.",
+  "version": "0.2.1",
   "vendor": "Oussemf",
   "loggingId": "OYTB",
   "iconGlyph": "YT",
