@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>iDrive Apps - YouTube</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <div><span class="eyebrow">IDRIVE APPS / EXPERIMENTAL</span><h1>YouTube <span>pour vos pauses.</span></h1></div>
+    <nav aria-label="Affichage"><button id="native" aria-pressed="true">Interface originale</button><button id="tv">YouTube TV ↗</button><button id="fullscreen">Plein ecran</button></nav>
+  </header>
+  <main>
+    <section class="notice" aria-label="Securite">
+      <span class="dot"></span><p id="status" role="status">Connexion au runtime...</p>
+      <label id="confirmation" hidden><input id="parked" type="checkbox"> Je suis stationne (simulation bureau)</label>
+    </section>
+    <section id="browse">
+      <div class="intro"><span class="eyebrow">01 / INTERFACE ORIGINALE</span><h2>Une video, puis la route.</h2><p>Recherchez sur YouTube ou ouvrez le lien d'une video. Lecture officielle, sans extraction ni telechargement.</p></div>
+      <form id="search-form"><label for="query">Rechercher une video</label><div class="field"><input id="query" maxlength="200" placeholder="Musique, voyage, decouverte..." required><button type="submit">Rechercher</button></div><p id="api-note">La recherche utilise votre cle YouTube Data API v3.</p></form>
+      <form id="link-form"><label for="link">Ouvrir une URL ou un identifiant YouTube</label><div class="field"><input id="link" placeholder="https://www.youtube.com/watch?v=..." required><button type="submit">Ouvrir</button></div></form>
+      <p id="error" role="alert" hidden></p>
+      <section id="results" aria-label="Resultats de recherche" aria-live="polite"></section>
+      <p id="empty">Vos resultats apparaitront ici. Sans cle API, ouvrez un lien ou choisissez YouTube TV.</p>
+    </section>
+    <section id="playback" hidden aria-label="Lecteur video">
+      <div class="player-bar"><button id="back">Retour aux videos</button><button id="player-fullscreen">Plein ecran</button><span>Lecteur officiel YouTube</span></div>
+      <iframe id="player" title="Lecteur YouTube" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <p id="player-help">Si YouTube refuse cette video (integration, age, region ou connexion), utilisez YouTube TV. Aucun contournement n'est applique.</p>
+    </section>
+  </main>
+  <footer><span>NON AFFILIE A BMW OU YOUTUBE</span><span>Wi-Fi / partage de connexion du Store · A l'arret uniquement</span></footer>
+  <script src="/app.js"></script>
+</body>
+</html>

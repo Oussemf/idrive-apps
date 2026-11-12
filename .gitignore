@@ -1,0 +1,15 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+.tools/
+.env
+runtime.json
+uplink.json
+*-safety.json
+__pycache__/
+oap-sdk/
+vendor/mgu-kit/dist/
+vendor/mgu-kit/apps/
+vendor/mgu-kit/oap-sdk/
+*.log

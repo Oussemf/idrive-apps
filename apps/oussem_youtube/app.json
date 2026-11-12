@@ -1,0 +1,26 @@
+{
+  "id": "oussem_youtube",
+  "title": "YouTube (experimental)",
+  "description": "Parked-only YouTube: original UI or YouTube TV. Requires a separately validated Chromium companion.",
+  "version": "0.1.0",
+  "vendor": "Oussemf",
+  "loggingId": "OYTB",
+  "iconGlyph": "YT",
+  "maxDiskUsage": 52428800,
+  "signals": {
+    "de.bmw.infotainment.vehicle.Vehicle2": { "statusCarSpeed2": "rs" }
+  },
+  "screens": [
+    { "name": "MAIN", "kind": "menu", "title": "YouTube - parked only", "items": [
+      ["text", "STATUS", "Experimental: compatible Chromium companion required."],
+      ["button", "BTN_NATIVE", "Original interface"],
+      ["button", "BTN_TV", "YouTube TV"],
+      ["text", "DETAIL", "Use the Store connection. No video while moving."]
+    ] },
+    { "name": "RUNTIME", "kind": "menu", "title": "YouTube", "items": [
+      ["text", "RUNTIME_STATUS", "Waiting for a fresh stationary signal and the browser runtime."],
+      ["button", "BTN_STOP", "Stop and return"]
+    ] }
+  ],
+  "settings": []
+}

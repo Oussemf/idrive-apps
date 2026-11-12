@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "apps": {
+    "path": "apps/*",
+    "manifest": "app.json",
+    "mguHmi": ["ID7"],
+    "build": {
+      "python": "tools/build_mgu.py",
+      "args": ["{id}"],
+      "sdk": "oap-sdk",
+      "output": "dist/{id}@{version}.tgz",
+      "shared": ["tools/build_mgu.py", "shared", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md",
+        "vendor/mgu-kit", "oap-sdk"]
+    }
+  }
+}

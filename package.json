@@ -1,0 +1,22 @@
+{
+  "name": "idrive-apps",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Experimental parked-only YouTube clients for BMW MGU",
+  "license": "GPL-3.0-or-later",
+  "main": "runtime/main.js",
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "start": "electron .",
+    "start:mgu": "electron . --mgu",
+    "test": "node --test tests/*.test.js",
+    "test:ui": "playwright test",
+    "check": "node tools/check.js",
+    "build:mgu": "python tools/build_mgu.py oussem_youtube",
+    "preview:mgu": "python tools/build_mgu.py oussem_youtube --preview-only"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "electron": "45.3.1"
+  }
+}
