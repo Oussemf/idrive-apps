@@ -33,6 +33,25 @@ def dependencies(binary):
     return [Path(line) for line in run("/usr/bin/python3", "/usr/bin/lddtree", "-l", str(binary)).splitlines()
             if line.startswith("/")]
 
+def is_elf(file):
+    with file.open("rb") as stream:
+        return stream.read(4) == b"\x7fELF"
+
+
+def package_owner(file):
+    candidates = [str(file), str(file.resolve())]
+    for candidate in list(candidates):
+        if candidate.startswith("/usr/lib/") or candidate.startswith("/usr/bin/"):
+            candidates.append(candidate[4:])
+        elif candidate.startswith("/lib/") or candidate.startswith("/bin/"):
+            candidates.append("/usr" + candidate)
+    for candidate in dict.fromkeys(candidates):
+        try:
+            return run("dpkg-query", "-S", candidate).split(": ")[0]
+        except subprocess.CalledProcessError:
+            continue
+    raise SystemExit("Cannot identify dependency package: " + str(file))
+
 
 def main():
     if STAGE.exists():
@@ -47,7 +66,7 @@ def main():
         zipped.extractall(FILES / "electron")
     elf_files = []
     for file in (FILES / "electron").rglob("*"):
-        if file.is_file() and file.read_bytes()[:4] == b"\x7fELF":
+        if file.is_file() and is_elf(file):
             elf_files.append(file)
     packages = set()
     libs = {}
@@ -57,7 +76,7 @@ def main():
               Path("/usr/lib/x86_64-linux-gnu/libpulse-simple.so.0")]
     for binary in elf_files + programs + extras:
         for dependency in dependencies(binary):
-            if dependency == binary:
+            if dependency == binary or (FILES / "electron") in dependency.parents:
                 continue
             previous = libs.get(dependency.name)
             if previous and previous.resolve() != dependency.resolve():
@@ -69,11 +88,7 @@ def main():
         libs[binary.name] = binary
     for name, source in sorted(libs.items()):
         copy(source, FILES / "lib" / name)
-        try:
-            owner = run("dpkg-query", "-S", str(source.resolve())).split(": ")[0]
-            packages.add(owner)
-        except subprocess.CalledProcessError:
-            raise SystemExit("Cannot identify dependency package: " + str(source))
+        packages.add(package_owner(source))
     for font in Path("/usr/share/fonts/truetype/dejavu").glob("*.ttf"):
         copy(font, FILES / "fonts" / font.name)
     packages.add("fonts-dejavu-core")
@@ -83,7 +98,7 @@ def main():
     shutil.copytree("/usr/share/X11/xkb", FILES / "xkb", symlinks=False)
     # Keep every dependency under a root-owned tool prefix; never replace the system libc.
     for file in list((FILES / "electron").rglob("*")) + list((FILES / "lib").glob("*")) + list((FILES / "bin").glob("*")):
-        if not file.is_file() or file.read_bytes()[:4] != b"\x7fELF":
+        if not file.is_file() or not is_elf(file):
             continue
         if file.name == "ld-linux-x86-64.so.2":
             continue
@@ -130,7 +145,7 @@ def main():
             continue
         name = file.relative_to(FILES).as_posix()
         mode = "0644"
-        if name in ("launch.sh", "bin/Xvfb", "bin/xkbcomp", "electron/electron") or name.startswith("lib/"):
+        if name == "launch.sh" or is_elf(file):
             mode = "0755"
         if name == "electron/chrome-sandbox":
             mode = "4755"

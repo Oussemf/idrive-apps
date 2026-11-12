@@ -21,7 +21,7 @@
     ] },
     { "name": "RUNTIME", "kind": "menu", "title": "YouTube", "items": [
       ["text", "RUNTIME_STATUS", "Waiting for a fresh stationary signal and the browser runtime."],
-      ["text", "RUNTIME_DETAIL", "Requires a separately installed MGU-compatible browser companion."],
+      ["text3", "RUNTIME_DETAIL", "Requires a separately installed MGU-compatible browser companion."],
       ["button", "BTN_STOP", "Stop and return"]
     ] }
   ],

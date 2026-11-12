@@ -12,6 +12,16 @@ var profile = args.indexOf('--data-dir');
 var data = profile >= 0 ? args[profile + 1] : null;
 var work = null;
 
+function removeSession(directory) {
+    fs.readdirSync(directory).forEach(function (name) {
+        var file = path.join(directory, name);
+        var stat = fs.lstatSync(file);
+        if (stat.isDirectory() && !stat.isSymbolicLink()) removeSession(file);
+        else fs.unlinkSync(file);
+    });
+    fs.rmdirSync(directory);
+}
+
 function finish(code, message) {
     if (ended) return;
     ended = true;
@@ -19,18 +29,11 @@ function finish(code, message) {
     clearTimeout(startupTimer);
     if (browser) browser.kill('SIGTERM');
     if (display) display.kill('SIGTERM');
-    // Only the two known private files; never recursively delete app data.
-    if (work) {
-        ['Xauthority', 'fontconfig.xml'].forEach(function (name) {
-            var file = path.join(work, name);
-            try { fs.unlinkSync(file); } catch (error) {
-                if (error.code !== 'ENOENT') console.error('Companion cleanup: ' + error.message);
-            }
-        });
-        try { fs.rmdirSync(work); } catch (error) {
-            if (error.code !== 'ENOENT') console.error('Companion directory cleanup: ' + error.message);
-        }
-    }
+    var killTimer = setTimeout(function () {
+        if (browser && browser.exitCode === null) browser.kill('SIGKILL');
+        if (display && display.exitCode === null) display.kill('SIGKILL');
+    }, 5000);
+    killTimer.unref();
     process.exitCode = code;
 }
 
@@ -74,7 +77,7 @@ function start() {
     delete env.LD_LIBRARY_PATH;
     display = cp.spawn(path.join(root, 'bin', 'Xvfb'), [
         '-displayfd', '3', '-screen', '0', '1280x720x24',
-        '-nolisten', 'tcp', '-auth', auth, '-noreset', '-extension', 'GLX'
+        '-nolisten', 'tcp', '-auth', auth, '-noreset'
     ], { env: env, stdio: ['ignore', 'ignore', 'pipe', 'pipe'] });
     display.stderr.on('data', function (chunk) { console.error('Private display: ' + chunk.toString().slice(0, 2048)); });
     display.on('error', function (error) { finish(1, 'private display start failed: ' + error.message); });
@@ -91,7 +94,8 @@ function start() {
         clearTimeout(startupTimer);
         env.DISPLAY = ':' + number.trim();
         browser = cp.spawn(path.join(root, 'electron', 'electron'),
-            args.concat(['--disable-gpu', '--disable-dev-shm-usage', '--ozone-platform=x11']), {
+            args.concat(['--disable-gpu', '--disable-dev-shm-usage', '--ozone-platform=x11',
+                '--disk-cache-size=33554432', '--media-cache-size=16777216']), {
                 env: env, stdio: ['ignore', 'inherit', 'inherit']
             });
         browser.on('error', function (error) { finish(1, 'Chromium start failed: ' + error.message); });
@@ -103,4 +107,12 @@ function start() {
 
 process.on('SIGTERM', function () { finish(0); });
 process.on('SIGINT', function () { finish(0); });
+process.on('exit', function () {
+    // The exact mkdtemp session only, after children exit; never follow links or remove app data.
+    if (work) {
+        try { removeSession(work); } catch (error) {
+            if (error.code !== 'ENOENT') console.error('Companion session cleanup: ' + error.message);
+        }
+    }
+});
 try { start(); } catch (error) { finish(1, error.message); }

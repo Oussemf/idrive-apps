@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN mkdir /xserver && cd /xserver && apt-get source xorg-server \
     && cd xorg-server-* && meson setup build \
       -Dxorg=false -Dxnest=false -Dxephyr=false \
-      -Dxvfb=true -Dglamor=false -Dglx=false -Ddocs=false -Ddevel-docs=false \
+      -Dxvfb=true -Dglamor=false -Dglx=false -Ddocs=false -Ddevel-docs=false -Dsecure-rpc=false \
       -Dxkb_dir=/var/opt/oussem-browser/current/xkb \
       -Dxkb_bin_dir=/var/opt/oussem-browser/current/bin \
       -Dxkb_output_dir=/tmp \
