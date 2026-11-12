@@ -1,0 +1,2180 @@
+{
+  "id": "oussem-browser",
+  "kind": "tool",
+  "version": "0.1.2",
+  "title": "YouTube browser companion (experimental)",
+  "description": "Chromium companion and private display for idrive-apps. Hardware validation required.",
+  "mguHmi": [
+    "ID7"
+  ],
+  "requires": {
+    "mgu-deploy": "0.6.9"
+  },
+  "optional": true,
+  "units": [],
+  "enable": [],
+  "restart": [],
+  "recmgr": [],
+  "files": [
+    {
+      "path": "DEPENDENCIES.tsv",
+      "mode": "0644",
+      "sha256": "162fdc57f85fd9f3ece45d27cb5f7208ddb2eccc9bfd6a0d55de736711d493a1",
+      "from": "files/DEPENDENCIES.tsv"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "0644",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "from": "files/LICENSE"
+    },
+    {
+      "path": "bin/Xvfb",
+      "mode": "0755",
+      "sha256": "de25f1562c2d98b2fc11a401522ccb06a0921ab4f19b9115ad408d05e5217a02",
+      "from": "files/bin/Xvfb"
+    },
+    {
+      "path": "bin/xkbcomp",
+      "mode": "0755",
+      "sha256": "02078b97500fa0eca4ffebd6fe7558df7454c0dd44305a589f6432a9d83f9028",
+      "from": "files/bin/xkbcomp"
+    },
+    {
+      "path": "electron/LICENSE",
+      "mode": "0644",
+      "sha256": "5154e165bd6c2cc0cfbcd8916498c7abab0497923bafcd5cb07673fe8480087d",
+      "from": "files/electron/LICENSE"
+    },
+    {
+      "path": "electron/LICENSES.chromium.html",
+      "mode": "0644",
+      "sha256": "214152f78cc0b611f63ff8faefcc6670c4605ffbff05f092bb671e6df80ce741",
+      "from": "files/electron/LICENSES.chromium.html"
+    },
+    {
+      "path": "electron/chrome-sandbox",
+      "mode": "4755",
+      "sha256": "6607d994694cfc8661057e4dbe92771414caf0f145476b7e218d73bb24e581aa",
+      "from": "files/electron/chrome-sandbox"
+    },
+    {
+      "path": "electron/chrome_100_percent.pak",
+      "mode": "0644",
+      "sha256": "2808cd9c9e0f261ebce06777a0f8e8291c9cd931d688af1d010a41b4aecb46de",
+      "from": "files/electron/chrome_100_percent.pak"
+    },
+    {
+      "path": "electron/chrome_200_percent.pak",
+      "mode": "0644",
+      "sha256": "8d81c78e492ebe19d1bf8dea377fc0b353d543281be96791448590fb6d732ea3",
+      "from": "files/electron/chrome_200_percent.pak"
+    },
+    {
+      "path": "electron/chrome_crashpad_handler",
+      "mode": "0755",
+      "sha256": "c21dc5666dc230ff3a83b9ffeff23d8d920868b3091b66d3f59952770df5445d",
+      "from": "files/electron/chrome_crashpad_handler"
+    },
+    {
+      "path": "electron/electron.gz",
+      "mode": "0644",
+      "sha256": "75d5541b29b4b2b42d4696596651cd1b9a4891e249bcca2caddf0fcb0de7ffcc",
+      "from": "files/electron/electron.gz"
+    },
+    {
+      "path": "electron/icudtl.dat.gz",
+      "mode": "0644",
+      "sha256": "cdf428e97adbfcc137727acae0d38a4da65554921556cdfcbda05c4bda686df0",
+      "from": "files/electron/icudtl.dat.gz"
+    },
+    {
+      "path": "electron/libffmpeg.so",
+      "mode": "0755",
+      "sha256": "2ae47077a81dee703d9d9b0a387895ebeeedce14e95996ef8e4394452f7e6be9",
+      "from": "files/electron/libffmpeg.so"
+    },
+    {
+      "path": "electron/libvk_swiftshader.so",
+      "mode": "0755",
+      "sha256": "019cd34bd0fa9910d9c7a5e27b6535f5bd9501c93046706a0ed8613b338db9e6",
+      "from": "files/electron/libvk_swiftshader.so"
+    },
+    {
+      "path": "electron/libvulkan.so.1",
+      "mode": "0755",
+      "sha256": "b069819ab8ab9a6fe778577cf4cfabbe8bbbf79d2c16a19bd05bc230615675d8",
+      "from": "files/electron/libvulkan.so.1"
+    },
+    {
+      "path": "electron/locales/en-US.pak",
+      "mode": "0644",
+      "sha256": "0b62e6e46b428c2f8b95943d183276b7977d72f3f32c6772f96f699b43fc14ab",
+      "from": "files/electron/locales/en-US.pak"
+    },
+    {
+      "path": "electron/locales/fr.pak",
+      "mode": "0644",
+      "sha256": "843133d3b7f31e238310f41b4382a7b58188a5b5083cb539b0e29196a6a5acaa",
+      "from": "files/electron/locales/fr.pak"
+    },
+    {
+      "path": "electron/resources/default_app.asar",
+      "mode": "0644",
+      "sha256": "eac55d6cfcf4eab7e31a45356567f549ef7eb669e3699226b48a8492ad34f510",
+      "from": "files/electron/resources/default_app.asar"
+    },
+    {
+      "path": "electron/resources.pak",
+      "mode": "0644",
+      "sha256": "563f70448f436bd9f3af1593cfc8540e718526067c76a923fd6e22b4e8b7ce32",
+      "from": "files/electron/resources.pak"
+    },
+    {
+      "path": "electron/snapshot_blob.bin",
+      "mode": "0644",
+      "sha256": "cf453b8a5bcaf8603659a29084d1ba683fb230df2a67a20a830b0220dc1d46b3",
+      "from": "files/electron/snapshot_blob.bin"
+    },
+    {
+      "path": "electron/v8_context_snapshot.bin",
+      "mode": "0644",
+      "sha256": "265ac201f12e9dd8306c5c2eebb4a899f85782ab0c069adef44cd60341b7ba78",
+      "from": "files/electron/v8_context_snapshot.bin"
+    },
+    {
+      "path": "electron/version",
+      "mode": "0644",
+      "sha256": "3119321c81d42114e93c7db0ef0ef4aec6661e6402d3444cdcf8a97703203dc6",
+      "from": "files/electron/version"
+    },
+    {
+      "path": "electron/vk_swiftshader_icd.json",
+      "mode": "0644",
+      "sha256": "c9eef28b6b984fec220ef0abfecc40b502d46946706e47bfe97707027cb818bd",
+      "from": "files/electron/vk_swiftshader_icd.json"
+    },
+    {
+      "path": "engine.json",
+      "mode": "0644",
+      "sha256": "02d43ae9e5654999b94b273dae5ec981dd1a30f65d966fa40287cdb709bc6ded",
+      "from": "files/engine.json"
+    },
+    {
+      "path": "fonts/DejaVuSans-Bold.ttf",
+      "mode": "0644",
+      "sha256": "5c1247acef7f2b8522a31742c76d6adcb5569bacc0be7ceaa4dc39dd252ce895",
+      "from": "files/fonts/DejaVuSans-Bold.ttf"
+    },
+    {
+      "path": "fonts/DejaVuSans.ttf",
+      "mode": "0644",
+      "sha256": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280",
+      "from": "files/fonts/DejaVuSans.ttf"
+    },
+    {
+      "path": "fonts/DejaVuSansMono-Bold.ttf",
+      "mode": "0644",
+      "sha256": "3a3c502eeff669a231549e80df9f7c49de109bafe303170409e905d0b31a38fe",
+      "from": "files/fonts/DejaVuSansMono-Bold.ttf"
+    },
+    {
+      "path": "fonts/DejaVuSansMono-BoldOblique.ttf",
+      "mode": "0644",
+      "sha256": "a5251173370e30760e6919711dcd33e149d216ca4814eb74332bda03fcc7e834",
+      "from": "files/fonts/DejaVuSansMono-BoldOblique.ttf"
+    },
+    {
+      "path": "fonts/DejaVuSansMono-Oblique.ttf",
+      "mode": "0644",
+      "sha256": "3d7955616e69721f7edb8e1b7a580f8fbd7d737111c6b54266ddc1d9ef13202f",
+      "from": "files/fonts/DejaVuSansMono-Oblique.ttf"
+    },
+    {
+      "path": "fonts/DejaVuSansMono.ttf",
+      "mode": "0644",
+      "sha256": "c805f9436dbc268644c1d9584f01a601a653e028e08fd74b9b949f6cf8304d88",
+      "from": "files/fonts/DejaVuSansMono.ttf"
+    },
+    {
+      "path": "fonts/DejaVuSerif-Bold.ttf",
+      "mode": "0644",
+      "sha256": "847b33e13925f19ff87e4d934d6b3cf7cac35ce16424f6f670e40c2f377cf2df",
+      "from": "files/fonts/DejaVuSerif-Bold.ttf"
+    },
+    {
+      "path": "fonts/DejaVuSerif.ttf",
+      "mode": "0644",
+      "sha256": "8f2c103bfa3fd5de71f1b92b18f21906b5a26871fb7e19a9a4c9af539c3cc7ab",
+      "from": "files/fonts/DejaVuSerif.ttf"
+    },
+    {
+      "path": "launch.js",
+      "mode": "0644",
+      "sha256": "7fc35e883b5a6533917638a3686109617c248c3b81e82030adf953a96f99c72d",
+      "from": "files/launch.js"
+    },
+    {
+      "path": "launch.sh",
+      "mode": "0755",
+      "sha256": "14040fa41b11dc5e980b16bc2393b6b1b0ad575e749d35e2f2b8d95406694450",
+      "from": "files/launch.sh"
+    },
+    {
+      "path": "lib/ld-linux-x86-64.so.2",
+      "mode": "0755",
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da",
+      "from": "files/lib/ld-linux-x86-64.so.2"
+    },
+    {
+      "path": "lib/libFLAC.so.12",
+      "mode": "0755",
+      "sha256": "2db13f395f864b8eace6532b244f15c29027bb3e74f3d5eb9358bbff34d7f397",
+      "from": "files/lib/libFLAC.so.12"
+    },
+    {
+      "path": "lib/libX11-xcb.so.1",
+      "mode": "0755",
+      "sha256": "4e0320b6806419708d77b40fc2a6f3a629b744a14b2e623a137c0fc57e8affe5",
+      "from": "files/lib/libX11-xcb.so.1"
+    },
+    {
+      "path": "lib/libX11.so.6",
+      "mode": "0755",
+      "sha256": "9dbab1aaa9909086a91a964fcdc1428f7da58bda73b7fe03ca59503f2c93586e",
+      "from": "files/lib/libX11.so.6"
+    },
+    {
+      "path": "lib/libXau.so.6",
+      "mode": "0755",
+      "sha256": "05b395b0350fa57d1dd8ac5e628e1fa925feaece30c9658c1d36f9345a383110",
+      "from": "files/lib/libXau.so.6"
+    },
+    {
+      "path": "lib/libXcomposite.so.1",
+      "mode": "0755",
+      "sha256": "6bec8413cac4bf5d41853dbc160dcf378c2d0d8916bf36f258d67a91d986b701",
+      "from": "files/lib/libXcomposite.so.1"
+    },
+    {
+      "path": "lib/libXcursor.so.1",
+      "mode": "0755",
+      "sha256": "9105a2c45ae540873717494c973f77e3c8d8b30748e3487f7f4dc177574d5229",
+      "from": "files/lib/libXcursor.so.1"
+    },
+    {
+      "path": "lib/libXdamage.so.1",
+      "mode": "0755",
+      "sha256": "f3af49af7b8af78c482ac2c5855970121e3f589a8c8e7636b5fed2c02f02547f",
+      "from": "files/lib/libXdamage.so.1"
+    },
+    {
+      "path": "lib/libXdmcp.so.6",
+      "mode": "0755",
+      "sha256": "66603546a9a4be54ac4803c2bd66e3a0c96bdb900aeb65c7fde5f1726dc50567",
+      "from": "files/lib/libXdmcp.so.6"
+    },
+    {
+      "path": "lib/libXext.so.6",
+      "mode": "0755",
+      "sha256": "0b38456c2b5b1936826752da1153623cea393738a44dca0beb0c66ba9bd2a89f",
+      "from": "files/lib/libXext.so.6"
+    },
+    {
+      "path": "lib/libXfixes.so.3",
+      "mode": "0755",
+      "sha256": "fb4967994d5a70304c1b6efe02660076ec3206643af428cb95100298624b3d1e",
+      "from": "files/lib/libXfixes.so.3"
+    },
+    {
+      "path": "lib/libXfont2.so.2",
+      "mode": "0755",
+      "sha256": "83d20611f96aeaa370ce794d2769f1c85e99d62dac4268884817d4d4bc1136db",
+      "from": "files/lib/libXfont2.so.2"
+    },
+    {
+      "path": "lib/libXi.so.6",
+      "mode": "0755",
+      "sha256": "9533cd730cb8a01b68276215de46117b19ddd15c92dab03381b9eb15e7a0d5b2",
+      "from": "files/lib/libXi.so.6"
+    },
+    {
+      "path": "lib/libXinerama.so.1",
+      "mode": "0755",
+      "sha256": "3b929812d644a11fb9971a226b13c3e976421eac730a5fd1e6c7089348541855",
+      "from": "files/lib/libXinerama.so.1"
+    },
+    {
+      "path": "lib/libXrandr.so.2",
+      "mode": "0755",
+      "sha256": "4fcc3018c5af4a04d95378f5d725ae32479947a442b20ef9422f2833562deda9",
+      "from": "files/lib/libXrandr.so.2"
+    },
+    {
+      "path": "lib/libXrender.so.1",
+      "mode": "0755",
+      "sha256": "b97d62e983b5c9ad696a0545f3c10b69a36a072ef0069ff96dc3150a203bd7f6",
+      "from": "files/lib/libXrender.so.1"
+    },
+    {
+      "path": "lib/libapparmor.so.1",
+      "mode": "0755",
+      "sha256": "7b71671f1179c1f00d3ee8d7e7b39d86083b40526cd8646be75f1888047e25da",
+      "from": "files/lib/libapparmor.so.1"
+    },
+    {
+      "path": "lib/libasound.so.2",
+      "mode": "0755",
+      "sha256": "203559b2a912e811183760409d1b09b87b2668e9300d3d0926150f5bf93e8630",
+      "from": "files/lib/libasound.so.2"
+    },
+    {
+      "path": "lib/libasyncns.so.0",
+      "mode": "0755",
+      "sha256": "16843033dbbc03819ad48ef87f76a4e1931b204767a168c15fd5363ba56c3453",
+      "from": "files/lib/libasyncns.so.0"
+    },
+    {
+      "path": "lib/libatk-1.0.so.0",
+      "mode": "0755",
+      "sha256": "af7576ddfe6565d15d12f4d541338f01815588814dd86ef4a2cd268e5ce3ab20",
+      "from": "files/lib/libatk-1.0.so.0"
+    },
+    {
+      "path": "lib/libatk-bridge-2.0.so.0",
+      "mode": "0755",
+      "sha256": "e541edc88b63db79d3d3e254dd833e274a39c9b9b55631b5a1ed8b87fb8cde74",
+      "from": "files/lib/libatk-bridge-2.0.so.0"
+    },
+    {
+      "path": "lib/libatspi.so.0",
+      "mode": "0755",
+      "sha256": "af0a3c1a2158fd67a812866681c81c060c182728e82f752b1b129e7965f89e23",
+      "from": "files/lib/libatspi.so.0"
+    },
+    {
+      "path": "lib/libaudit.so.1",
+      "mode": "0755",
+      "sha256": "5911d7f92c6c1c3de8478e736ef7ce086a777f63e1243e11336147f956193740",
+      "from": "files/lib/libaudit.so.1"
+    },
+    {
+      "path": "lib/libavahi-client.so.3",
+      "mode": "0755",
+      "sha256": "414632dd56023e4a4c874a11381fbd328f7bce0343b6f02ab6e748dc15dc7a32",
+      "from": "files/lib/libavahi-client.so.3"
+    },
+    {
+      "path": "lib/libavahi-common.so.3",
+      "mode": "0755",
+      "sha256": "fb895c3a9c85be93049527b4050cf7a7b40fd4323cc809866c3a5f37f3086d53",
+      "from": "files/lib/libavahi-common.so.3"
+    },
+    {
+      "path": "lib/libblkid.so.1",
+      "mode": "0755",
+      "sha256": "2fede9b9b7437bf1c6e60ee6272aee5559809b5decd7bfc4848f161b8b9009ff",
+      "from": "files/lib/libblkid.so.1"
+    },
+    {
+      "path": "lib/libbrotlicommon.so.1",
+      "mode": "0755",
+      "sha256": "756be20f87b747b196b85094c8226b91844b1fc920e5e2598537bd3a46dfc63c",
+      "from": "files/lib/libbrotlicommon.so.1"
+    },
+    {
+      "path": "lib/libbrotlidec.so.1",
+      "mode": "0755",
+      "sha256": "c3ae82ef6721d64f0f3113293ec9c8503de0dbe6fff132ffc98634c98188a955",
+      "from": "files/lib/libbrotlidec.so.1"
+    },
+    {
+      "path": "lib/libbsd.so.0",
+      "mode": "0755",
+      "sha256": "b226fe4e3f6e47e7303d955e08c0ec6348013c4f4263a8d0473203a6a2345202",
+      "from": "files/lib/libbsd.so.0"
+    },
+    {
+      "path": "lib/libbz2.so.1.0",
+      "mode": "0755",
+      "sha256": "7eb0f4c378bf0b1f88514f0e7fd15770e53dd89782df6a328bcc27e0b72778ac",
+      "from": "files/lib/libbz2.so.1.0"
+    },
+    {
+      "path": "lib/libc.so.6",
+      "mode": "0755",
+      "sha256": "b51c7bb54d6f3443786668dafff39ef49520e2c611ba0307eff09c6c61432d17",
+      "from": "files/lib/libc.so.6"
+    },
+    {
+      "path": "lib/libcairo-gobject.so.2",
+      "mode": "0755",
+      "sha256": "72db5613ef486b1db7b044e094972120df4e263e4a7e25fb3c1a915639953ada",
+      "from": "files/lib/libcairo-gobject.so.2"
+    },
+    {
+      "path": "lib/libcairo.so.2",
+      "mode": "0755",
+      "sha256": "6de4256dbfc2aeb1e38fc1227687f0bc39bde1037727fd2cdf2f0df5c123f9a9",
+      "from": "files/lib/libcairo.so.2"
+    },
+    {
+      "path": "lib/libcap-ng.so.0",
+      "mode": "0755",
+      "sha256": "6001b8a3483183f2bfd63f6f1d572883c8259e8e70f0c6ce60985de020aba2d9",
+      "from": "files/lib/libcap-ng.so.0"
+    },
+    {
+      "path": "lib/libcap.so.2",
+      "mode": "0755",
+      "sha256": "41885e65dd7c0322f11c8a0183280ed8f6e20cb60fca905aeae92532796c86d2",
+      "from": "files/lib/libcap.so.2"
+    },
+    {
+      "path": "lib/libcom_err.so.2",
+      "mode": "0755",
+      "sha256": "317eb26701bf8683ef44c8e97c476b126dbbe3e69097f12b5397b8035d6578d4",
+      "from": "files/lib/libcom_err.so.2"
+    },
+    {
+      "path": "lib/libcups.so.2",
+      "mode": "0755",
+      "sha256": "63e28be89fb3ce6531e38d4c11394d232405593830731fd367fd8c3bc2b2eb1c",
+      "from": "files/lib/libcups.so.2"
+    },
+    {
+      "path": "lib/libdatrie.so.1",
+      "mode": "0755",
+      "sha256": "71e7f170db7a56f9edee1f3bb68f8526d0ff40dabdb5e015d536e27f6e4781be",
+      "from": "files/lib/libdatrie.so.1"
+    },
+    {
+      "path": "lib/libdbus-1.so.3",
+      "mode": "0755",
+      "sha256": "2d1576be92d45cfe70a771e4a5ed2755347f5a47400b389a6c5019cd60c1aa53",
+      "from": "files/lib/libdbus-1.so.3"
+    },
+    {
+      "path": "lib/libdl.so.2",
+      "mode": "0755",
+      "sha256": "7347c0f33299adad0865046b5f18a930d70fdab45c46ae29fd2d2e0f2e864c25",
+      "from": "files/lib/libdl.so.2"
+    },
+    {
+      "path": "lib/libdrm.so.2",
+      "mode": "0755",
+      "sha256": "30e31f2981172f6668f4529999bc2fa4edec3c4935195eee5676935906a3069a",
+      "from": "files/lib/libdrm.so.2"
+    },
+    {
+      "path": "lib/libepoxy.so.0",
+      "mode": "0755",
+      "sha256": "d031eae256c73118f3b9e5be1ea7045d8e247f349d501d2ded0301b45d76b163",
+      "from": "files/lib/libepoxy.so.0"
+    },
+    {
+      "path": "lib/libexpat.so.1",
+      "mode": "0755",
+      "sha256": "40537bdfc739533b36084e164764536395b8963216264e20cd48dfde534154e2",
+      "from": "files/lib/libexpat.so.1"
+    },
+    {
+      "path": "lib/libffi.so.8",
+      "mode": "0755",
+      "sha256": "578a3c1002d5a7344423acd66cfec2ebe481e28028d5efb79b97f8c57b06f1f6",
+      "from": "files/lib/libffi.so.8"
+    },
+    {
+      "path": "lib/libfontconfig.so.1",
+      "mode": "0755",
+      "sha256": "5629f8fcc3e8ee281678b43b0cbfcec330fe3f7aff439f2ec740171926a95195",
+      "from": "files/lib/libfontconfig.so.1"
+    },
+    {
+      "path": "lib/libfontenc.so.1",
+      "mode": "0755",
+      "sha256": "44663340cb5a26df7a4b59cd5ee09182e017be7b35a7e1fb241c5c1a6b87ffec",
+      "from": "files/lib/libfontenc.so.1"
+    },
+    {
+      "path": "lib/libfreetype.so.6",
+      "mode": "0755",
+      "sha256": "4a4e1baabeb45b303d145356f2c09d29888d87301bc91baccbdd5c5650cbf8f8",
+      "from": "files/lib/libfreetype.so.6"
+    },
+    {
+      "path": "lib/libfribidi.so.0",
+      "mode": "0755",
+      "sha256": "64fe0930bc5ca1b4ab06c6846149b2b6d783c864db158c603c17ae50027f51ea",
+      "from": "files/lib/libfribidi.so.0"
+    },
+    {
+      "path": "lib/libgbm.so.1",
+      "mode": "0755",
+      "sha256": "d6018891e6ef2e419c7e46d92cccab06b1618ce1b8f28deacde6db81d7cc9b81",
+      "from": "files/lib/libgbm.so.1"
+    },
+    {
+      "path": "lib/libgcc_s.so.1",
+      "mode": "0755",
+      "sha256": "c1c38e73be4bbbe458bd3b6221e13e8d2b2afebf05faa92d8d775d3dee4f6558",
+      "from": "files/lib/libgcc_s.so.1"
+    },
+    {
+      "path": "lib/libgcrypt.so.20",
+      "mode": "0755",
+      "sha256": "7df8fca5a7a7b35c9d745be495e50dc7931c7735d78f0194abec444578012fbe",
+      "from": "files/lib/libgcrypt.so.20"
+    },
+    {
+      "path": "lib/libgdk-3.so.0",
+      "mode": "0755",
+      "sha256": "5720809e29b78442dff3504302d691e1d3a5f13558a7b2c67d7aa3d805333fd9",
+      "from": "files/lib/libgdk-3.so.0"
+    },
+    {
+      "path": "lib/libgdk_pixbuf-2.0.so.0",
+      "mode": "0755",
+      "sha256": "ffc60a65b74e7eefa764bc9612105232f11f8e5180bdf3e1e4cdd71f817bd1d5",
+      "from": "files/lib/libgdk_pixbuf-2.0.so.0"
+    },
+    {
+      "path": "lib/libgio-2.0.so.0",
+      "mode": "0755",
+      "sha256": "c72a8165c9e7ec33d61b0bb193b19d506c201e7a47bf9a65dfdf94a36c0c807d",
+      "from": "files/lib/libgio-2.0.so.0"
+    },
+    {
+      "path": "lib/libglib-2.0.so.0",
+      "mode": "0755",
+      "sha256": "5ac3950fdb0d0c431bd58f3ab696a5f08b7d68e71743cbabce1c68be07886a0d",
+      "from": "files/lib/libglib-2.0.so.0"
+    },
+    {
+      "path": "lib/libgmodule-2.0.so.0",
+      "mode": "0755",
+      "sha256": "5fce7ece50fc027fd247d3682332fb68f2ecaee9dfe805c8fc85c480e8cf8939",
+      "from": "files/lib/libgmodule-2.0.so.0"
+    },
+    {
+      "path": "lib/libgmp.so.10",
+      "mode": "0755",
+      "sha256": "82a45a1f2ff573debc9814593ab0985914d67464e4798b067dea91b147dfb603",
+      "from": "files/lib/libgmp.so.10"
+    },
+    {
+      "path": "lib/libgnutls.so.30",
+      "mode": "0755",
+      "sha256": "ef423b20fab2a9302a2bbb36c04e35c5423773564d24edb887a2b98342b1b280",
+      "from": "files/lib/libgnutls.so.30"
+    },
+    {
+      "path": "lib/libgobject-2.0.so.0",
+      "mode": "0755",
+      "sha256": "852c7f107edefa59f0a870ae6b1000ce57161477cb3d357433f07c0e94d005e0",
+      "from": "files/lib/libgobject-2.0.so.0"
+    },
+    {
+      "path": "lib/libgpg-error.so.0",
+      "mode": "0755",
+      "sha256": "7c8e1a09d37086d19803f02b88695523d906a2ac91d616f9b7553e76ef3c98ae",
+      "from": "files/lib/libgpg-error.so.0"
+    },
+    {
+      "path": "lib/libgraphite2.so.3",
+      "mode": "0755",
+      "sha256": "ec2a5b780695e28a22b2cedbf53816f944f73b5c52bf676a3fc1163bd9d44a76",
+      "from": "files/lib/libgraphite2.so.3"
+    },
+    {
+      "path": "lib/libgssapi_krb5.so.2",
+      "mode": "0755",
+      "sha256": "99a7a425adc31f752bac1bd78b5f7c1539b31b9321aa5951467383ec3e9966f2",
+      "from": "files/lib/libgssapi_krb5.so.2"
+    },
+    {
+      "path": "lib/libgtk-3.so.0",
+      "mode": "0755",
+      "sha256": "85b3afcc686f2411e4081ac248dd858b2eacd468f281607d3bdc3de984b21cfe",
+      "from": "files/lib/libgtk-3.so.0"
+    },
+    {
+      "path": "lib/libharfbuzz.so.0",
+      "mode": "0755",
+      "sha256": "e35183ad0ae04e3627480e7e71fead8b768bd0a8764b8271edbf541d2f822c57",
+      "from": "files/lib/libharfbuzz.so.0"
+    },
+    {
+      "path": "lib/libhogweed.so.6",
+      "mode": "0755",
+      "sha256": "6bbb1748d23c8433d1e4609e11860ba8b8a82ba8fe5e35beca9cdde52bc1a65f",
+      "from": "files/lib/libhogweed.so.6"
+    },
+    {
+      "path": "lib/libidn2.so.0",
+      "mode": "0755",
+      "sha256": "9a432449a6ed0c3358d21386b2141520fa194f671ce3badb32cee54327babae2",
+      "from": "files/lib/libidn2.so.0"
+    },
+    {
+      "path": "lib/libjpeg.so.8",
+      "mode": "0755",
+      "sha256": "9acd302b8d7e26ba2b1c7f07f87307e5c094a46e05a31bbb1793fdef7d38f0be",
+      "from": "files/lib/libjpeg.so.8"
+    },
+    {
+      "path": "lib/libk5crypto.so.3",
+      "mode": "0755",
+      "sha256": "f65e60c2b058f24495b0e2cfb7a9878405ccd8c3e897705b8fa96ec68bd29e00",
+      "from": "files/lib/libk5crypto.so.3"
+    },
+    {
+      "path": "lib/libkeyutils.so.1",
+      "mode": "0755",
+      "sha256": "2b4826bc8f1bf5728cb0a157f2e3ddb27501e9dbf918f7cd9281782c34dafc79",
+      "from": "files/lib/libkeyutils.so.1"
+    },
+    {
+      "path": "lib/libkrb5.so.3",
+      "mode": "0755",
+      "sha256": "36e77f6ad13d8b7153b23ec94d86f3b569cd0f57697aa60a474acb8214a5c8c8",
+      "from": "files/lib/libkrb5.so.3"
+    },
+    {
+      "path": "lib/libkrb5support.so.0",
+      "mode": "0755",
+      "sha256": "1c2dd34a0d72bafcb7eec0ae67f5ecfb732bf5169a4db273bfdaa8346c8cc9c9",
+      "from": "files/lib/libkrb5support.so.0"
+    },
+    {
+      "path": "lib/liblz4.so.1",
+      "mode": "0755",
+      "sha256": "cb077588795dc09ccdc44625e62c496272b60ab926ac755dd664bd3017f49ead",
+      "from": "files/lib/liblz4.so.1"
+    },
+    {
+      "path": "lib/liblzma.so.5",
+      "mode": "0755",
+      "sha256": "3859d3d58cd69610860bcb69169c2c4e798d131a04b33658a6568bc9b48bbd4d",
+      "from": "files/lib/liblzma.so.5"
+    },
+    {
+      "path": "lib/libm.so.6",
+      "mode": "0755",
+      "sha256": "012015a790489463e687634aa740148767e3a9eef05b52abf702f93d1b99f5d9",
+      "from": "files/lib/libm.so.6"
+    },
+    {
+      "path": "lib/libmd.so.0",
+      "mode": "0755",
+      "sha256": "fb8abac25fd28d82f7381033754fcbb89079236900fa76918cab13b0f650beda",
+      "from": "files/lib/libmd.so.0"
+    },
+    {
+      "path": "lib/libmount.so.1",
+      "mode": "0755",
+      "sha256": "04ab2edd49c8bad8208cfed52e32d478015d376ac73383445759c0e0563dfa5e",
+      "from": "files/lib/libmount.so.1"
+    },
+    {
+      "path": "lib/libmp3lame.so.0",
+      "mode": "0755",
+      "sha256": "ce5079f8f0f78cc96cfeeae581d689b26c2a71d6da5f646f63c40fcfb966a66c",
+      "from": "files/lib/libmp3lame.so.0"
+    },
+    {
+      "path": "lib/libmpg123.so.0",
+      "mode": "0755",
+      "sha256": "68844a20f5987bc4ae10348ba33b03328283c68a0f6da3090669d1c7118ac7e3",
+      "from": "files/lib/libmpg123.so.0"
+    },
+    {
+      "path": "lib/libnettle.so.8",
+      "mode": "0755",
+      "sha256": "021c5116f1f73f247942462ccff95496294e144315df0ad2d741dbae09d983ee",
+      "from": "files/lib/libnettle.so.8"
+    },
+    {
+      "path": "lib/libnspr4.so",
+      "mode": "0755",
+      "sha256": "3dd9af5ba19ae3cb7d422a644f112ca25ea14909c0cf9d7c81cc42560591059a",
+      "from": "files/lib/libnspr4.so"
+    },
+    {
+      "path": "lib/libnss3.so",
+      "mode": "0755",
+      "sha256": "916c9bbf452a01c497e48b17b8cb7ecf6045d0ebaa47b413a0ea17a1fe900220",
+      "from": "files/lib/libnss3.so"
+    },
+    {
+      "path": "lib/libnssutil3.so",
+      "mode": "0755",
+      "sha256": "5426d5a1ff7ddd0a1ea85262ed6d4163a84907588de85fa7f3c2ab8b901b42fa",
+      "from": "files/lib/libnssutil3.so"
+    },
+    {
+      "path": "lib/libogg.so.0",
+      "mode": "0755",
+      "sha256": "522a16bc9fa6cf085aa0d9dbfb7be42da1c55cb83e831b5e8babf6fb1357a9a3",
+      "from": "files/lib/libogg.so.0"
+    },
+    {
+      "path": "lib/libopus.so.0",
+      "mode": "0755",
+      "sha256": "e93ab4f357bc830e7788de27df6e2e467cbf28b336c9e07cbfc6f17a934a2968",
+      "from": "files/lib/libopus.so.0"
+    },
+    {
+      "path": "lib/libp11-kit.so.0",
+      "mode": "0755",
+      "sha256": "5ef8128f3027f8f458d7ac9af3d38d5c080809f8ac5effc593ccf49e4b4929cd",
+      "from": "files/lib/libp11-kit.so.0"
+    },
+    {
+      "path": "lib/libpango-1.0.so.0",
+      "mode": "0755",
+      "sha256": "6d445713f6c117995491bec6acc4091f347da93212e8ca6b5b020ac43efa90a1",
+      "from": "files/lib/libpango-1.0.so.0"
+    },
+    {
+      "path": "lib/libpangocairo-1.0.so.0",
+      "mode": "0755",
+      "sha256": "7aab359c0e279d9509e9784ffea0c8ae806ffc1f2ef643b97d68a1eb73c51145",
+      "from": "files/lib/libpangocairo-1.0.so.0"
+    },
+    {
+      "path": "lib/libpangoft2-1.0.so.0",
+      "mode": "0755",
+      "sha256": "cddd98e435bf08b2a5927915e24b1f61386cbc66e8cb7fbc7d04b12f9026e59a",
+      "from": "files/lib/libpangoft2-1.0.so.0"
+    },
+    {
+      "path": "lib/libpcre2-8.so.0",
+      "mode": "0755",
+      "sha256": "761833a18f41cc5913d064df2701961580956a30a4c6c358ce0a0db8ddbd0249",
+      "from": "files/lib/libpcre2-8.so.0"
+    },
+    {
+      "path": "lib/libpixman-1.so.0",
+      "mode": "0755",
+      "sha256": "e65276da4e5d66d1686b4fcdefdd476431e3bae118202e62dd76e08f1622a4c1",
+      "from": "files/lib/libpixman-1.so.0"
+    },
+    {
+      "path": "lib/libplc4.so",
+      "mode": "0755",
+      "sha256": "73a5a2928c87c1add1fc7e90d42410bfdbc3fb2308de4fd5adae17abf37c94d9",
+      "from": "files/lib/libplc4.so"
+    },
+    {
+      "path": "lib/libplds4.so",
+      "mode": "0755",
+      "sha256": "5efbabe57c88af479e3e4a882612c7ff398cf91ba9c1e1ddffc4921b5a23109c",
+      "from": "files/lib/libplds4.so"
+    },
+    {
+      "path": "lib/libpng16.so.16",
+      "mode": "0755",
+      "sha256": "d4146e0cdfab9df8a6d97090d539abb7a05bc81fe721f02a21757e68020aaf83",
+      "from": "files/lib/libpng16.so.16"
+    },
+    {
+      "path": "lib/libpthread.so.0",
+      "mode": "0755",
+      "sha256": "e36f16d2d139eb971f79749ef5a1fa8bc659e06b34436d1dfcc7227bb55f9069",
+      "from": "files/lib/libpthread.so.0"
+    },
+    {
+      "path": "lib/libpulse-simple.so.0",
+      "mode": "0755",
+      "sha256": "71a26f474405bc866c15d9a54556b547c45d99de3c0b5e89b1b806155e027884",
+      "from": "files/lib/libpulse-simple.so.0"
+    },
+    {
+      "path": "lib/libpulse.so.0",
+      "mode": "0755",
+      "sha256": "6b9f51fb1fa641d42560d76a587b1a1f2aaf4f073134259f3bb486a75b2cf714",
+      "from": "files/lib/libpulse.so.0"
+    },
+    {
+      "path": "lib/libpulsecommon-16.1.so",
+      "mode": "0755",
+      "sha256": "4a01916da8288946b66697d14aa88c5716c6e15e6b24736415b264dc44ad94e0",
+      "from": "files/lib/libpulsecommon-16.1.so"
+    },
+    {
+      "path": "lib/libresolv.so.2",
+      "mode": "0755",
+      "sha256": "213b5505484e4c488499a9372bb08ee6e2b614bd42aa751917303e1c62edb9e9",
+      "from": "files/lib/libresolv.so.2"
+    },
+    {
+      "path": "lib/libselinux.so.1",
+      "mode": "0755",
+      "sha256": "41a47224d03facd1b79ae25432e2924bab111141f999525232435c4b964efc50",
+      "from": "files/lib/libselinux.so.1"
+    },
+    {
+      "path": "lib/libsmime3.so",
+      "mode": "0755",
+      "sha256": "db87bf64725e699ee3b2b5d7c8ba7ffe25ab24188075e2715a2bd733b540e6ff",
+      "from": "files/lib/libsmime3.so"
+    },
+    {
+      "path": "lib/libsndfile.so.1",
+      "mode": "0755",
+      "sha256": "bc87210aece9d5ea46546c936e40c90d045315db12088a88e79c5e8507574119",
+      "from": "files/lib/libsndfile.so.1"
+    },
+    {
+      "path": "lib/libsystemd.so.0",
+      "mode": "0755",
+      "sha256": "dcda09526860e59d41f585013891ec1f9cb896afa11d566fb9f7af193d77f00a",
+      "from": "files/lib/libsystemd.so.0"
+    },
+    {
+      "path": "lib/libtasn1.so.6",
+      "mode": "0755",
+      "sha256": "2f5195ae708372d0c0089fbcabe2f955d3b675e7e83a53e5da38a53c65be1709",
+      "from": "files/lib/libtasn1.so.6"
+    },
+    {
+      "path": "lib/libthai.so.0",
+      "mode": "0755",
+      "sha256": "586f8ffcea3d1b10a0706ce609ee50f9eda84db3ea1bf13d77303041818297da",
+      "from": "files/lib/libthai.so.0"
+    },
+    {
+      "path": "lib/libudev.so.1",
+      "mode": "0755",
+      "sha256": "5460d70eab660c4717feeeee58e1493be18e128b3e77467ae632e5bc637d41ed",
+      "from": "files/lib/libudev.so.1"
+    },
+    {
+      "path": "lib/libunistring.so.5",
+      "mode": "0755",
+      "sha256": "039ffe09adb8e769461b4c97c62891dc56965acaa0f656d5ea62c1e21011184e",
+      "from": "files/lib/libunistring.so.5"
+    },
+    {
+      "path": "lib/libvorbis.so.0",
+      "mode": "0755",
+      "sha256": "3785347fdb6a931cc2cf396a61d5490f8aa339f9b3452a32ae4fb273a7836f06",
+      "from": "files/lib/libvorbis.so.0"
+    },
+    {
+      "path": "lib/libvorbisenc.so.2",
+      "mode": "0755",
+      "sha256": "cac38a66f1b31e70942f2766f606fb8c1d8c9d784f29878b36edcd55c525f0bb",
+      "from": "files/lib/libvorbisenc.so.2"
+    },
+    {
+      "path": "lib/libwayland-client.so.0",
+      "mode": "0755",
+      "sha256": "21a0b07700d4984a84b0a44ba72ad4bce31c4635e1bd2b39acdac26f0524bd08",
+      "from": "files/lib/libwayland-client.so.0"
+    },
+    {
+      "path": "lib/libwayland-cursor.so.0",
+      "mode": "0755",
+      "sha256": "962851ddf860c3dbd3195d1ec6162a2e524aba9f22d15bfb67b7ee6dacd5a6bd",
+      "from": "files/lib/libwayland-cursor.so.0"
+    },
+    {
+      "path": "lib/libwayland-egl.so.1",
+      "mode": "0755",
+      "sha256": "038e73c15617170d200a4e6e8f35f6a0388ffaf18f2bd8fc6bbc5f6de15e86f3",
+      "from": "files/lib/libwayland-egl.so.1"
+    },
+    {
+      "path": "lib/libxcb-render.so.0",
+      "mode": "0755",
+      "sha256": "04f3a2357b1d63fd19f4ab1ef4500ff401c99a5c4e1e0505212a4d9d699b5e2d",
+      "from": "files/lib/libxcb-render.so.0"
+    },
+    {
+      "path": "lib/libxcb-shm.so.0",
+      "mode": "0755",
+      "sha256": "7ff9007111640297a9a06a3f3a860a08c3d6a5432497b997e8c2038164a4c874",
+      "from": "files/lib/libxcb-shm.so.0"
+    },
+    {
+      "path": "lib/libxcb.so.1",
+      "mode": "0755",
+      "sha256": "ccba29a665f600c58cd294746ecef9e0633ecf93eb7367b8ec0acf575eb3f261",
+      "from": "files/lib/libxcb.so.1"
+    },
+    {
+      "path": "lib/libxkbcommon.so.0",
+      "mode": "0755",
+      "sha256": "016cc8790aee383921b4f7eb2bac2a14a0925179bda5864252c639ecdaf5ece1",
+      "from": "files/lib/libxkbcommon.so.0"
+    },
+    {
+      "path": "lib/libxkbfile.so.1",
+      "mode": "0755",
+      "sha256": "8e0747df1aed6f4f28750cca97b3b83cd304743428f998485c10423df7c9a08a",
+      "from": "files/lib/libxkbfile.so.1"
+    },
+    {
+      "path": "lib/libz.so.1",
+      "mode": "0755",
+      "sha256": "8cda37feeeffeecc9bcd56b0cf2be5a41ccc6cb3a9634e2d07eb457230ad6de7",
+      "from": "files/lib/libz.so.1"
+    },
+    {
+      "path": "lib/libzstd.so.1",
+      "mode": "0755",
+      "sha256": "0c617970f23044f097bc9e62546a65e126b8b7125f7c8c2ad9415ee8a7425e7a",
+      "from": "files/lib/libzstd.so.1"
+    },
+    {
+      "path": "licenses/fonts-dejavu-core/copyright",
+      "mode": "0644",
+      "sha256": "63d3ba759d12804c5b31a9d5940d855c1820d1f5999e6b0872eb1c7ff045fbc9",
+      "from": "files/licenses/fonts-dejavu-core/copyright"
+    },
+    {
+      "path": "licenses/libapparmor1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "52b7cf37d674ca47296cf6270a95ecda0ecbef976cc090d702acbd741e36b3b4",
+      "from": "files/licenses/libapparmor1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libasound2t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "9b356b4fae53b5d5e7668e048f085d68a5039de7b6afbf465f50e81513334062",
+      "from": "files/licenses/libasound2t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libasyncns0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "26f98be71539b8f1038fbaf51551598d0e2eb16f98db9a62094fc85db5f1c25d",
+      "from": "files/licenses/libasyncns0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libatk-bridge2.0-0t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "72fbc9d2c44016dd061f3f63f75253e57089bcd23a4f9023039de4631e7cf918",
+      "from": "files/licenses/libatk-bridge2.0-0t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libatk1.0-0t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "72fbc9d2c44016dd061f3f63f75253e57089bcd23a4f9023039de4631e7cf918",
+      "from": "files/licenses/libatk1.0-0t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libatspi2.0-0t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "72fbc9d2c44016dd061f3f63f75253e57089bcd23a4f9023039de4631e7cf918",
+      "from": "files/licenses/libatspi2.0-0t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libaudit1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "6c7011e93f643b112c4cc3622131e28a30477afad6c4f5efe466b13aa7f603cc",
+      "from": "files/licenses/libaudit1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libavahi-client3_amd64/copyright",
+      "mode": "0644",
+      "sha256": "66849d0ab7cbf0d770e40e00276ed8d264ed8974c0e064fb12814c0f80430c5d",
+      "from": "files/licenses/libavahi-client3_amd64/copyright"
+    },
+    {
+      "path": "licenses/libavahi-common3_amd64/copyright",
+      "mode": "0644",
+      "sha256": "66849d0ab7cbf0d770e40e00276ed8d264ed8974c0e064fb12814c0f80430c5d",
+      "from": "files/licenses/libavahi-common3_amd64/copyright"
+    },
+    {
+      "path": "licenses/libblkid1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "3492fb92cb56cf517d9a899828b4f989038421a38736e49e5525ffbd33196eab",
+      "from": "files/licenses/libblkid1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libbrotli1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "24a64e5bb83d0960d1835696a1e23c0896ad6055b0ca47c66ab0eb9a766324b1",
+      "from": "files/licenses/libbrotli1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libbsd0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "978426553ab7b9cfb4503d98e578a77b8c3142c099100aa9791fd21be5a95f97",
+      "from": "files/licenses/libbsd0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libbz2-1.0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "832ed535ff3c3d025a8d2348eb1b697b89addcf2eaadbc17650262040b9145e2",
+      "from": "files/licenses/libbz2-1.0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libc6_amd64/copyright",
+      "mode": "0644",
+      "sha256": "d3c95b56fa33e28b57860580f0baf4e4f4de2a268a2b80f1d031a5191bade265",
+      "from": "files/licenses/libc6_amd64/copyright"
+    },
+    {
+      "path": "licenses/libcairo-gobject2_amd64/copyright",
+      "mode": "0644",
+      "sha256": "408fb9e704e875cd42d432e7c9b3b378f568e3c89db2b5c5ef3d11c025319574",
+      "from": "files/licenses/libcairo-gobject2_amd64/copyright"
+    },
+    {
+      "path": "licenses/libcairo2_amd64/copyright",
+      "mode": "0644",
+      "sha256": "408fb9e704e875cd42d432e7c9b3b378f568e3c89db2b5c5ef3d11c025319574",
+      "from": "files/licenses/libcairo2_amd64/copyright"
+    },
+    {
+      "path": "licenses/libcap-ng0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "567997de097e3738564c90e6fe13343b2daae21a7926d6fb161df41322c1840b",
+      "from": "files/licenses/libcap-ng0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libcap2_amd64/copyright",
+      "mode": "0644",
+      "sha256": "e60a5642e12e340060e4e519a65b2eb0330be2917854841c644e36268f607d54",
+      "from": "files/licenses/libcap2_amd64/copyright"
+    },
+    {
+      "path": "licenses/libcom-err2_amd64/copyright",
+      "mode": "0644",
+      "sha256": "1ca415a294c0e56958c4f795b3f1f69ea3479bca53d7811f5cdd020a258949db",
+      "from": "files/licenses/libcom-err2_amd64/copyright"
+    },
+    {
+      "path": "licenses/libcups2t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "82dabde9d9e18c5929f320e274095627f2ed1c45153fd4744ab884adac65c425",
+      "from": "files/licenses/libcups2t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libdatrie1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "7c994f175cb0da0bbe158f729ca43bc6193bb99d3c8bc82b41c46d93904b584d",
+      "from": "files/licenses/libdatrie1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libdbus-1-3_amd64/copyright",
+      "mode": "0644",
+      "sha256": "20d4fee565b0a0910670b8202c15f040ed5dd488a685a3008eb04b65d987f89c",
+      "from": "files/licenses/libdbus-1-3_amd64/copyright"
+    },
+    {
+      "path": "licenses/libdrm2_amd64/copyright",
+      "mode": "0644",
+      "sha256": "512c9a57fd8b449aa157351da9df07bf8e19f767e496a72205a4020268ddb2e0",
+      "from": "files/licenses/libdrm2_amd64/copyright"
+    },
+    {
+      "path": "licenses/libepoxy0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "a8be83fe8a66a6ecc1a9fbcec9cf1b43aacca69d38220a94fb37632f090b611e",
+      "from": "files/licenses/libepoxy0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libexpat1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "60919fe1a156395ff14511bb6ff79756c50ade2fff59ac60c9bae1d8a7fe6292",
+      "from": "files/licenses/libexpat1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libffi8_amd64/copyright",
+      "mode": "0644",
+      "sha256": "737ff68f0eb104d3b0d96b291c3a8f40a775a3ec2b53f9b2e4bcfe3188bde118",
+      "from": "files/licenses/libffi8_amd64/copyright"
+    },
+    {
+      "path": "licenses/libflac12t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "b09e581d4a200e49d0c5e032777a3f9c5cfd164b3dfc90f5071f285df9543f18",
+      "from": "files/licenses/libflac12t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libfontconfig1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "b215a61cdd3e62b5b17cc28b1852c78acb3dd38be0fb30706f7efc050dba91db",
+      "from": "files/licenses/libfontconfig1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libfontenc1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "a7cb43c56c51407bc6539032a47c5351cd03962ed6a30b4f52dec6ed7db54383",
+      "from": "files/licenses/libfontenc1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libfreetype6_amd64/copyright",
+      "mode": "0644",
+      "sha256": "ce6d766883ea111e7f47acc09e9d49be8827daa6a03f2c2707243a425d41f0e9",
+      "from": "files/licenses/libfreetype6_amd64/copyright"
+    },
+    {
+      "path": "licenses/libfribidi0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "39000badbcd15a4a144cfa2d2f0d906d4d9183f42350e8193ac775baded86b7c",
+      "from": "files/licenses/libfribidi0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libgbm1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "cbf3d2eb38998daf390f52d49969d1be5607a6aee138351e161c12a6976ba49e",
+      "from": "files/licenses/libgbm1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libgcc-s1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "20390f8a6f3b1e4d7cb45dd8652dabb259bbef688cbad839bcdb0b9ba7252f79",
+      "from": "files/licenses/libgcc-s1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libgcrypt20_amd64/copyright",
+      "mode": "0644",
+      "sha256": "40162167dff80843a4b24aa8d0a4ffc50be5338d004ebe38f86ae3397ba9de3e",
+      "from": "files/licenses/libgcrypt20_amd64/copyright"
+    },
+    {
+      "path": "licenses/libgdk-pixbuf-2.0-0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "a0189e53d508d32aeec6462c4740013de70b40f06e507f5e700d3cceb6e8f178",
+      "from": "files/licenses/libgdk-pixbuf-2.0-0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libglib2.0-0t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "b52574b109fb876dfa71dea7a98b8aee1bb583f6aa90c327d1e4dc0a1d59f211",
+      "from": "files/licenses/libglib2.0-0t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libgmp10_amd64/copyright",
+      "mode": "0644",
+      "sha256": "7d366aef5ba325150246de1d7820c4c9926cd27ca61a69948492b26cd3b61601",
+      "from": "files/licenses/libgmp10_amd64/copyright"
+    },
+    {
+      "path": "licenses/libgnutls30t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "51da5214308b87d6a0a2fbcaea1f7dbd15510be733e5921d9548ff6b88d84dd8",
+      "from": "files/licenses/libgnutls30t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libgpg-error0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "0250e9e7cbf6c68c2bd05b6db1ea684988f91cd95da69f2936064cf302729fe5",
+      "from": "files/licenses/libgpg-error0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libgraphite2-3_amd64/copyright",
+      "mode": "0644",
+      "sha256": "a33017ba0308c41bdbde4751bff349ab7b26af45fadbb1e3e7ac67c372985572",
+      "from": "files/licenses/libgraphite2-3_amd64/copyright"
+    },
+    {
+      "path": "licenses/libgssapi-krb5-2_amd64/copyright",
+      "mode": "0644",
+      "sha256": "936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816",
+      "from": "files/licenses/libgssapi-krb5-2_amd64/copyright"
+    },
+    {
+      "path": "licenses/libgtk-3-0t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "2be2199cc990913cd94874b6f16fc84f1e3c35aaaa4719ad34b4478f1e69c557",
+      "from": "files/licenses/libgtk-3-0t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libharfbuzz0b_amd64/copyright",
+      "mode": "0644",
+      "sha256": "6ffcef5a169fca847bc886b052bbe9a478754850621d8661ae4ea424b7eeb26e",
+      "from": "files/licenses/libharfbuzz0b_amd64/copyright"
+    },
+    {
+      "path": "licenses/libhogweed6t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "2cecdc7ac1913beb31299a41a8092fc936d9e6a1d00872fc3bf6e2263aecf842",
+      "from": "files/licenses/libhogweed6t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libidn2-0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "41702469f28e8ff406345e3d1dd0c741f11bdfca319264f67036efd6aaa79e4b",
+      "from": "files/licenses/libidn2-0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libjpeg-turbo8_amd64/copyright",
+      "mode": "0644",
+      "sha256": "3821184e23385bf2cdc01f56bd999b34036fc3aa03d5135d41680374eb81bf8a",
+      "from": "files/licenses/libjpeg-turbo8_amd64/copyright"
+    },
+    {
+      "path": "licenses/libk5crypto3_amd64/copyright",
+      "mode": "0644",
+      "sha256": "936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816",
+      "from": "files/licenses/libk5crypto3_amd64/copyright"
+    },
+    {
+      "path": "licenses/libkeyutils1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "c62fe37d22203046611112bc10a9e03a39a7f73bec1b061e7c615326166d9ff5",
+      "from": "files/licenses/libkeyutils1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libkrb5-3_amd64/copyright",
+      "mode": "0644",
+      "sha256": "936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816",
+      "from": "files/licenses/libkrb5-3_amd64/copyright"
+    },
+    {
+      "path": "licenses/libkrb5support0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816",
+      "from": "files/licenses/libkrb5support0_amd64/copyright"
+    },
+    {
+      "path": "licenses/liblz4-1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "d3be0f43fe14da244f97c451bbae789c0acf868612598a69f5f22a289abeca40",
+      "from": "files/licenses/liblz4-1_amd64/copyright"
+    },
+    {
+      "path": "licenses/liblzma5_amd64/copyright",
+      "mode": "0644",
+      "sha256": "a2dc8fac0f496e1c58aff67018cf0c6b88336316afa5642f9335b71642e28aa8",
+      "from": "files/licenses/liblzma5_amd64/copyright"
+    },
+    {
+      "path": "licenses/libmd0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "4365ef6255ad553fce69dd4bc0e093472c5d0e41b8ea493a545cc926ce171aa6",
+      "from": "files/licenses/libmd0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libmount1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "3492fb92cb56cf517d9a899828b4f989038421a38736e49e5525ffbd33196eab",
+      "from": "files/licenses/libmount1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libmp3lame0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "f0e4c5098ffedad31473eec38810c26409223858fb8d63dd7685bf225f96bc5d",
+      "from": "files/licenses/libmp3lame0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libmpg123-0t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "ba3657ec83ab9af9070bacccc6c9735d1856c8a5adab275708ba3d4c9e41b5f8",
+      "from": "files/licenses/libmpg123-0t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libnettle8t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "2cecdc7ac1913beb31299a41a8092fc936d9e6a1d00872fc3bf6e2263aecf842",
+      "from": "files/licenses/libnettle8t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libnspr4_amd64/copyright",
+      "mode": "0644",
+      "sha256": "3c4fcc131809b2b6993513bfe4cf6f1ede391ec84f1d5ceca78fb75537b22452",
+      "from": "files/licenses/libnspr4_amd64/copyright"
+    },
+    {
+      "path": "licenses/libnss3_amd64/copyright",
+      "mode": "0644",
+      "sha256": "3f450f9453233852b3a469a36a897cc68fb87be3e8b3a5ba64f63a7904528408",
+      "from": "files/licenses/libnss3_amd64/copyright"
+    },
+    {
+      "path": "licenses/libogg0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "36bb02bf6a764f4fac0ca9d38d2563932513df6015d98bd162624b18feaf096c",
+      "from": "files/licenses/libogg0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libopus0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "893be2dfc7b9d827675d69c43e1f172a89ef10d3745ffd15a48514c08470cace",
+      "from": "files/licenses/libopus0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libp11-kit0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "d33af1e069981d1c1b576cb22e4bc260a134ffa2fce6ddd3cbbbb5b181113f0c",
+      "from": "files/licenses/libp11-kit0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libpango-1.0-0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "10e2b3c2cd6c6ecd7c65ebb7319be463f514096a16e832441ee61dfef72a107f",
+      "from": "files/licenses/libpango-1.0-0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libpangocairo-1.0-0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "10e2b3c2cd6c6ecd7c65ebb7319be463f514096a16e832441ee61dfef72a107f",
+      "from": "files/licenses/libpangocairo-1.0-0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libpangoft2-1.0-0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "10e2b3c2cd6c6ecd7c65ebb7319be463f514096a16e832441ee61dfef72a107f",
+      "from": "files/licenses/libpangoft2-1.0-0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libpcre2-8-0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "030511beb4d9d620ad09914c369c36ec0528dcf301d1923cc643c948ee7c6a38",
+      "from": "files/licenses/libpcre2-8-0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libpixman-1-0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "1b3fb5690861e15ca4fd6640fd4def4b2576617942eec04b6fcb7d8bc6c4c9da",
+      "from": "files/licenses/libpixman-1-0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libpng16-16t64_amd64/copyright",
+      "mode": "0644",
+      "sha256": "4620d402b97601a910946acccbbe2e15bdffac11615bf9046520990d3b00f2b9",
+      "from": "files/licenses/libpng16-16t64_amd64/copyright"
+    },
+    {
+      "path": "licenses/libpulse0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "aff3f1d729168de06e34d940dc493cc305a6e4a6278f1ac38ee52ec0f69e342c",
+      "from": "files/licenses/libpulse0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libselinux1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "864f1bb189f609075d580b8c4aada16d85a44546884f1687989e1cacc8c56751",
+      "from": "files/licenses/libselinux1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libsndfile1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "56bc3dae5803b8b2d59adf72fcd526eef2f4ac929d2442562d12248867222335",
+      "from": "files/licenses/libsndfile1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libsystemd0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "a7d06854714a1ca99f6dbd1a1641dde5bcf28635be149f6554449618f8f427f3",
+      "from": "files/licenses/libsystemd0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libtasn1-6_amd64/copyright",
+      "mode": "0644",
+      "sha256": "572ad60ad184d8f52c6dc66d83a61a68f137db560b3452ce00588c9ecf128a65",
+      "from": "files/licenses/libtasn1-6_amd64/copyright"
+    },
+    {
+      "path": "licenses/libthai0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "62d2835587b92a6abdbe62fe4524a7b6a59ac478df2c591eb98c3fbce6c3fa08",
+      "from": "files/licenses/libthai0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libudev1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "a7d06854714a1ca99f6dbd1a1641dde5bcf28635be149f6554449618f8f427f3",
+      "from": "files/licenses/libudev1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libunistring5_amd64/copyright",
+      "mode": "0644",
+      "sha256": "dbbfee567c5eb53ad1c75ce666779e596b5f794b52be7f5834685ddd633185ea",
+      "from": "files/licenses/libunistring5_amd64/copyright"
+    },
+    {
+      "path": "licenses/libvorbis0a_amd64/copyright",
+      "mode": "0644",
+      "sha256": "47badad9f7f750f92cd12f44db08b6937e5b4d47935ba1cc60de0ea3a2adff9b",
+      "from": "files/licenses/libvorbis0a_amd64/copyright"
+    },
+    {
+      "path": "licenses/libvorbisenc2_amd64/copyright",
+      "mode": "0644",
+      "sha256": "47badad9f7f750f92cd12f44db08b6937e5b4d47935ba1cc60de0ea3a2adff9b",
+      "from": "files/licenses/libvorbisenc2_amd64/copyright"
+    },
+    {
+      "path": "licenses/libwayland-client0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "736bf54141fa9808939ffff2691b817888ea53197484c2099e8d03b954b83e3b",
+      "from": "files/licenses/libwayland-client0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libwayland-cursor0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "736bf54141fa9808939ffff2691b817888ea53197484c2099e8d03b954b83e3b",
+      "from": "files/licenses/libwayland-cursor0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libwayland-egl1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "736bf54141fa9808939ffff2691b817888ea53197484c2099e8d03b954b83e3b",
+      "from": "files/licenses/libwayland-egl1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libx11-6_amd64/copyright",
+      "mode": "0644",
+      "sha256": "0b380a7fd5b2228f26e9585e56f14812efd3350f3df307507d2bc055dfd8de3e",
+      "from": "files/licenses/libx11-6_amd64/copyright"
+    },
+    {
+      "path": "licenses/libx11-xcb1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "0b380a7fd5b2228f26e9585e56f14812efd3350f3df307507d2bc055dfd8de3e",
+      "from": "files/licenses/libx11-xcb1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxau6_amd64/copyright",
+      "mode": "0644",
+      "sha256": "118dd263a7b91c8f21c489f949bf13281dff9e766deea92b829dac4dce66601a",
+      "from": "files/licenses/libxau6_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxcb-render0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "4f7cb9db6bf6542f5417e3d674c780d3a5fd12291a54d63054fb576ee0cfae80",
+      "from": "files/licenses/libxcb-render0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxcb-shm0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "4f7cb9db6bf6542f5417e3d674c780d3a5fd12291a54d63054fb576ee0cfae80",
+      "from": "files/licenses/libxcb-shm0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxcb1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "4f7cb9db6bf6542f5417e3d674c780d3a5fd12291a54d63054fb576ee0cfae80",
+      "from": "files/licenses/libxcb1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxcomposite1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "e37c7a7e4026343c3e5c13990a6d9a8879194ae3ab26bfe420b34f6f206bf35f",
+      "from": "files/licenses/libxcomposite1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxcursor1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "817abc0ccc9e2591057be256b0f6d80edb134221ced29dd545a9eafaf40b423c",
+      "from": "files/licenses/libxcursor1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxdamage1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "09182bc7805ff77a41251e450cebd0d33c48a74ba8ec4b734855a22c86f50417",
+      "from": "files/licenses/libxdamage1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxdmcp6_amd64/copyright",
+      "mode": "0644",
+      "sha256": "1bcbb50f8603fe8b86d330bfa460b772ea04fbd3c70e4499f0768b5340b9fd6e",
+      "from": "files/licenses/libxdmcp6_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxext6_amd64/copyright",
+      "mode": "0644",
+      "sha256": "bc57e445ca1d9fe082c8d54189dd411ff26caa8552c9c63d44ea06a982f32124",
+      "from": "files/licenses/libxext6_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxfixes3_amd64/copyright",
+      "mode": "0644",
+      "sha256": "051ffe073ab38244c504bb379903b4ecda6081fb3d97d0d3dce44bc11712eef2",
+      "from": "files/licenses/libxfixes3_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxfont2_amd64/copyright",
+      "mode": "0644",
+      "sha256": "c0ec1767e5a927bdf17f8ca2af231263f973c06e5f30efa1b4867e93614dd061",
+      "from": "files/licenses/libxfont2_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxi6_amd64/copyright",
+      "mode": "0644",
+      "sha256": "c812f9c54513ae593aab9580b54a4b18219648df7068d49ca1daa47f522ba3fa",
+      "from": "files/licenses/libxi6_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxinerama1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "e49d9732f261b3ffcb50c40914bd9d144de5557dad9b2ae20dbe8e3c5b3d17fb",
+      "from": "files/licenses/libxinerama1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxkbcommon0_amd64/copyright",
+      "mode": "0644",
+      "sha256": "5eeaeb1b6e029a0274e1573765bb0bae2926ef96a3679203faa4fd00fdaeaa88",
+      "from": "files/licenses/libxkbcommon0_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxkbfile1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "41044d815bd99a5d1267fdabc79b5041fa83c7134639bb81e84f367cefe68316",
+      "from": "files/licenses/libxkbfile1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxrandr2_amd64/copyright",
+      "mode": "0644",
+      "sha256": "6d8e6239cfe9dd25bbeef06dcf0610d802ebbdc8968db87cf5adf00ff98927d4",
+      "from": "files/licenses/libxrandr2_amd64/copyright"
+    },
+    {
+      "path": "licenses/libxrender1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "ed2a78123a5076b4f11da38cb1ffb85b5cb9fdc26b5746c517b1d7e7a9029704",
+      "from": "files/licenses/libxrender1_amd64/copyright"
+    },
+    {
+      "path": "licenses/libzstd1_amd64/copyright",
+      "mode": "0644",
+      "sha256": "35e85e8e9bbb71492c5f5dddf39ed65b68775a02ad8d710c25d097b497f06c49",
+      "from": "files/licenses/libzstd1_amd64/copyright"
+    },
+    {
+      "path": "licenses/x11-xkb-utils/copyright",
+      "mode": "0644",
+      "sha256": "bf23f1dfd52e0f7526b83496effacba1e3f29a38adaf119091efad060f8836b1",
+      "from": "files/licenses/x11-xkb-utils/copyright"
+    },
+    {
+      "path": "licenses/xkb-data/copyright",
+      "mode": "0644",
+      "sha256": "648621d1a2180678818eb393565849bbc8b332cc521c21e009d948ea5541b3c3",
+      "from": "files/licenses/xkb-data/copyright"
+    },
+    {
+      "path": "licenses/xvfb/copyright",
+      "mode": "0644",
+      "sha256": "4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f",
+      "from": "files/licenses/xvfb/copyright"
+    },
+    {
+      "path": "licenses/zlib1g_amd64/copyright",
+      "mode": "0644",
+      "sha256": "9e5b96d63773a5d177ba264254390f792be07e41748ebd94730981c6cac31cc6",
+      "from": "files/licenses/zlib1g_amd64/copyright"
+    },
+    {
+      "path": "prepare-engine.js",
+      "mode": "0644",
+      "sha256": "abac96e35655fc2153f174dfdebef6b4a07e24b2f2adabf1bd2beb38fc2b863d",
+      "from": "files/prepare-engine.js"
+    },
+    {
+      "path": "project/LICENSE",
+      "mode": "0644",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "from": "files/project/LICENSE"
+    },
+    {
+      "path": "project/NOTICE",
+      "mode": "0644",
+      "sha256": "6e98ca4bfdb0b047ac26b3db7892314306718a8efdba4311a18fc996c7d97d25",
+      "from": "files/project/NOTICE"
+    },
+    {
+      "path": "project/THIRD_PARTY_NOTICES.md",
+      "mode": "0644",
+      "sha256": "523f7eac25f420dc8face1565db43aad8151e09faea72b26dd35fae41d4ae9d1",
+      "from": "files/project/THIRD_PARTY_NOTICES.md"
+    },
+    {
+      "path": "project/package.json",
+      "mode": "0644",
+      "sha256": "328287c67ce47f8f51b03a47653576bdc24594c5c3d93546f8da2bb8db41c799",
+      "from": "files/project/package.json"
+    },
+    {
+      "path": "project/runtime/gpu.js",
+      "mode": "0644",
+      "sha256": "b5e08bcbadc77b9694d4ef5d052f81f4c665d559fb71ca1df0e80c46995d54e2",
+      "from": "files/project/runtime/gpu.js"
+    },
+    {
+      "path": "project/runtime/main.js",
+      "mode": "0644",
+      "sha256": "934698e010084ba2dd0beb17e5a97ce86f4378c185c0cd6e7839a3f249da18c1",
+      "from": "files/project/runtime/main.js"
+    },
+    {
+      "path": "project/runtime/network.js",
+      "mode": "0644",
+      "sha256": "661d87026260b62beb80cebca478100d58ad408efaea02eea5a53d82a2763bdf",
+      "from": "files/project/runtime/network.js"
+    },
+    {
+      "path": "project/runtime/preload.js",
+      "mode": "0644",
+      "sha256": "99e49d2bf6362c47cef0a1ec695b34f19db108466d54ff7dd65ad059652ae9da",
+      "from": "files/project/runtime/preload.js"
+    },
+    {
+      "path": "project/runtime/server.js",
+      "mode": "0644",
+      "sha256": "52d873320b3e869805a99e8fd71df032edb579c9b48169c39aedab5127c27388",
+      "from": "files/project/runtime/server.js"
+    },
+    {
+      "path": "project/shared/safety.js",
+      "mode": "0644",
+      "sha256": "43f351006af000fe7b8adddbe99cd747d0c99c0c08b8187c33ab0ab326e816aa",
+      "from": "files/project/shared/safety.js"
+    },
+    {
+      "path": "project/shared/youtube.js",
+      "mode": "0644",
+      "sha256": "edf011f630136731e5b4167f8bb4a8a5bf4c3b0730e724876c8dd287bd17842d",
+      "from": "files/project/shared/youtube.js"
+    },
+    {
+      "path": "project/vendor/mgu-render/LICENSE",
+      "mode": "0644",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "from": "files/project/vendor/mgu-render/LICENSE"
+    },
+    {
+      "path": "project/vendor/mgu-render/LICENSE.mgu-renderd",
+      "mode": "0644",
+      "sha256": "481b839c45d8426a0b561b5a4f8d7437dd22dc61e08c8a2817b16831fab1e86a",
+      "from": "files/project/vendor/mgu-render/LICENSE.mgu-renderd"
+    },
+    {
+      "path": "project/vendor/mgu-render/mgu_render_client.js",
+      "mode": "0644",
+      "sha256": "a93e9ca6fc30550f49720cf703208429866b647c196759d69044956778d81df9",
+      "from": "files/project/vendor/mgu-render/mgu_render_client.js"
+    },
+    {
+      "path": "project/web/app.js",
+      "mode": "0644",
+      "sha256": "4f591ec460f03a2eafa1b9a9e77910196bfe210f60f4ccb5b3daa5f67481a7df",
+      "from": "files/project/web/app.js"
+    },
+    {
+      "path": "project/web/index.html",
+      "mode": "0644",
+      "sha256": "30987ca7975256c2c2ab43c06c63cec2b885e5b088c74af718b6eaf7343b5151",
+      "from": "files/project/web/index.html"
+    },
+    {
+      "path": "project/web/style.css",
+      "mode": "0644",
+      "sha256": "accdfad07fe0866f9b2a735415c1c8adfe10e8a37f594824f7fd71f3911e98af",
+      "from": "files/project/web/style.css"
+    },
+    {
+      "path": "xkb/compat/README",
+      "mode": "0644",
+      "sha256": "ab88a02b01ce646a5a3965a05f1876b70b97b24e4d6409973126a0baa59126a5",
+      "from": "files/xkb/compat/README"
+    },
+    {
+      "path": "xkb/compat/accessx",
+      "mode": "0644",
+      "sha256": "e7f0630dbf09f3bb3adf3bb8e8d2464afbd6e616fe0075dbef29b7e82bd2a50d",
+      "from": "files/xkb/compat/accessx"
+    },
+    {
+      "path": "xkb/compat/basic",
+      "mode": "0644",
+      "sha256": "381cdef43f910f7f4ddb476b2ff258afe3af6881051f9c71efa5554108c30b4a",
+      "from": "files/xkb/compat/basic"
+    },
+    {
+      "path": "xkb/compat/caps",
+      "mode": "0644",
+      "sha256": "d001767068fe2791a48f829153820a8717f659e08c9a061759cd66e9e37a3833",
+      "from": "files/xkb/compat/caps"
+    },
+    {
+      "path": "xkb/compat/complete",
+      "mode": "0644",
+      "sha256": "11d1fd1f5364ef778eb0edc36b4f1955ca165c1900703f163c1406aa8ae767cd",
+      "from": "files/xkb/compat/complete"
+    },
+    {
+      "path": "xkb/compat/iso9995",
+      "mode": "0644",
+      "sha256": "bfb9feee868fde37f9f5f4ba43924f2b70f621ebe058e1d4c7cef6f7aa4278ca",
+      "from": "files/xkb/compat/iso9995"
+    },
+    {
+      "path": "xkb/compat/japan",
+      "mode": "0644",
+      "sha256": "6a3c404ed599ee6d1ac25dcec0f7c924a7ee715e45555f9a851d52cf3d86716b",
+      "from": "files/xkb/compat/japan"
+    },
+    {
+      "path": "xkb/compat/ledcaps",
+      "mode": "0644",
+      "sha256": "7d3882ccecb24b1621975fde25fc7e90e5c1c00197cf67820622458f35bb34ae",
+      "from": "files/xkb/compat/ledcaps"
+    },
+    {
+      "path": "xkb/compat/ledcompose",
+      "mode": "0644",
+      "sha256": "20fa02f9fe45d9a5f81cca79255755ca7836433c455c727b05f0d3e99b21ae61",
+      "from": "files/xkb/compat/ledcompose"
+    },
+    {
+      "path": "xkb/compat/lednum",
+      "mode": "0644",
+      "sha256": "24c54410578e535f6284801c3f1bd342203eb766836bec18b3d40646d165f33d",
+      "from": "files/xkb/compat/lednum"
+    },
+    {
+      "path": "xkb/compat/ledscroll",
+      "mode": "0644",
+      "sha256": "4deb4eb4390d48791e27840e564b4c0737598252101063dc0a5b5471b7968da5",
+      "from": "files/xkb/compat/ledscroll"
+    },
+    {
+      "path": "xkb/compat/level5",
+      "mode": "0644",
+      "sha256": "e07406a8982fa3fc94c9bbedbd6a3e3a0159d3e7426960e3b60d7f5bcb8bba1a",
+      "from": "files/xkb/compat/level5"
+    },
+    {
+      "path": "xkb/compat/misc",
+      "mode": "0644",
+      "sha256": "d105da789ead1201ae5c8b094efff1bd0ee636f610f3347b175d45b15e12621b",
+      "from": "files/xkb/compat/misc"
+    },
+    {
+      "path": "xkb/compat/mousekeys",
+      "mode": "0644",
+      "sha256": "b4de6898f10617c8172f9a35aae362def187793e1d995f5bb646e0c220b31255",
+      "from": "files/xkb/compat/mousekeys"
+    },
+    {
+      "path": "xkb/compat/olpc",
+      "mode": "0644",
+      "sha256": "ca4f6a2a5228e120b0f89af67a0c9c0e0cc605f99912e017134981726993fbec",
+      "from": "files/xkb/compat/olpc"
+    },
+    {
+      "path": "xkb/compat/pc",
+      "mode": "0644",
+      "sha256": "6e1fc869ac431eaa287475c434be6bb1d9eaba79f9592e1949aea60e5605dc96",
+      "from": "files/xkb/compat/pc"
+    },
+    {
+      "path": "xkb/compat/pc98",
+      "mode": "0644",
+      "sha256": "5a38d69bc01936edcb19ac2013af10258c020d45bb3391abd0bea59edb88c9c5",
+      "from": "files/xkb/compat/pc98"
+    },
+    {
+      "path": "xkb/compat/xfree86",
+      "mode": "0644",
+      "sha256": "ade96d0e9fa4427c48e50ec708407bbd94c1bf4560fd05581391647e5f9ee9bb",
+      "from": "files/xkb/compat/xfree86"
+    },
+    {
+      "path": "xkb/compat/xtest",
+      "mode": "0644",
+      "sha256": "978f3f50180025e7de1bbd3b6cd93fab05e1dfa28d48bcf30b8d10eaddb0363d",
+      "from": "files/xkb/compat/xtest"
+    },
+    {
+      "path": "xkb/geometry/pc",
+      "mode": "0644",
+      "sha256": "b38584a903c8e5eaec371d9fe8fe6611f5bf3baaf5a38a3d555d47c0d07f3f40",
+      "from": "files/xkb/geometry/pc"
+    },
+    {
+      "path": "xkb/keycodes/README",
+      "mode": "0644",
+      "sha256": "e074717ddf8dbfda1e911efb80cf22ebad64e30c74766c0da24a084b1261056b",
+      "from": "files/xkb/keycodes/README"
+    },
+    {
+      "path": "xkb/keycodes/aliases",
+      "mode": "0644",
+      "sha256": "85f774170fc1526e8a909a1e2952423dae3891b721abc293a27dc450818dcc6d",
+      "from": "files/xkb/keycodes/aliases"
+    },
+    {
+      "path": "xkb/keycodes/amiga",
+      "mode": "0644",
+      "sha256": "d8469bc1c9375625b62c93847e6e1505598d825bb29d176a5a5f028f0e6a45d0",
+      "from": "files/xkb/keycodes/amiga"
+    },
+    {
+      "path": "xkb/keycodes/ataritt",
+      "mode": "0644",
+      "sha256": "8d39211d4948fe77c483d45f953ea983c0e11c120ababe634fdc696300106fa2",
+      "from": "files/xkb/keycodes/ataritt"
+    },
+    {
+      "path": "xkb/keycodes/digital_vndr/lk",
+      "mode": "0644",
+      "sha256": "2edf152ecdba233761f41559374454c53332251d8a98a787b1ec60d12a0987ae",
+      "from": "files/xkb/keycodes/digital_vndr/lk"
+    },
+    {
+      "path": "xkb/keycodes/digital_vndr/pc",
+      "mode": "0644",
+      "sha256": "ae823d2f59bfa9df036ac82972c7e2faf51a892fb11d0336b0b8d5ab9b039613",
+      "from": "files/xkb/keycodes/digital_vndr/pc"
+    },
+    {
+      "path": "xkb/keycodes/empty",
+      "mode": "0644",
+      "sha256": "69997f35044955d76a14361f4751a5aca361d3edca6ba2007368ee7c7e8c024f",
+      "from": "files/xkb/keycodes/empty"
+    },
+    {
+      "path": "xkb/keycodes/evdev",
+      "mode": "0644",
+      "sha256": "6f52c4f4e0f599a3b57913ac0c74dae4bfff1866c903eaceda45cda51a14d231",
+      "from": "files/xkb/keycodes/evdev"
+    },
+    {
+      "path": "xkb/keycodes/fujitsu",
+      "mode": "0644",
+      "sha256": "8526ca756290d468e390f0c3b8b06c56068c1ea71c7d0f44bffd95a2efb66a43",
+      "from": "files/xkb/keycodes/fujitsu"
+    },
+    {
+      "path": "xkb/keycodes/hp",
+      "mode": "0644",
+      "sha256": "2410b73208fdb5addbf85c6f245207c07b1e4f0f0d3771c7a297413205f93161",
+      "from": "files/xkb/keycodes/hp"
+    },
+    {
+      "path": "xkb/keycodes/ibm",
+      "mode": "0644",
+      "sha256": "a49eb0ebdcd564a3050bd0df6158f8586791e1ba9a2fc63ff8109e8b9b6a492f",
+      "from": "files/xkb/keycodes/ibm"
+    },
+    {
+      "path": "xkb/keycodes/jolla",
+      "mode": "0644",
+      "sha256": "7f1a36f508f43c9f5613e0b167f4cebec3e6efba4c24e09eff2473fa7261f1d2",
+      "from": "files/xkb/keycodes/jolla"
+    },
+    {
+      "path": "xkb/keycodes/macintosh",
+      "mode": "0644",
+      "sha256": "791270abfad6a4d37fe105305d0cedcf7e556ebb107a9792e14bf607dbcfbbf7",
+      "from": "files/xkb/keycodes/macintosh"
+    },
+    {
+      "path": "xkb/keycodes/olpc",
+      "mode": "0644",
+      "sha256": "b0ccc40066ba04bba9afd68a002ace2b1adedde2f16caa044b7b5b1d2c167b26",
+      "from": "files/xkb/keycodes/olpc"
+    },
+    {
+      "path": "xkb/keycodes/sgi_vndr/indigo",
+      "mode": "0644",
+      "sha256": "e7567e5fc5892eb1c23b82d3bcfc2a1e2c8eb6e499bac24e641ff300a066cbe3",
+      "from": "files/xkb/keycodes/sgi_vndr/indigo"
+    },
+    {
+      "path": "xkb/keycodes/sgi_vndr/indy",
+      "mode": "0644",
+      "sha256": "a8e49f04133afdbbcf18b1039f9b9fdd912729ce5d6dc89eacecde2a8263a82c",
+      "from": "files/xkb/keycodes/sgi_vndr/indy"
+    },
+    {
+      "path": "xkb/keycodes/sgi_vndr/iris",
+      "mode": "0644",
+      "sha256": "ce07fdaefbf422068d81ad11db84e97e5293e623815707b1bff37ee5089a38f8",
+      "from": "files/xkb/keycodes/sgi_vndr/iris"
+    },
+    {
+      "path": "xkb/keycodes/sony",
+      "mode": "0644",
+      "sha256": "d139cbf6038f8b03e870727a101aa89a7891bc745e92aaf15ba0bbb6007c084c",
+      "from": "files/xkb/keycodes/sony"
+    },
+    {
+      "path": "xkb/keycodes/sun",
+      "mode": "0644",
+      "sha256": "82a6c5dd6b6a0804efa2fc0f301705d86742198db6773fe5df926c2e53cff3dd",
+      "from": "files/xkb/keycodes/sun"
+    },
+    {
+      "path": "xkb/keycodes/xfree86",
+      "mode": "0644",
+      "sha256": "fe02da14c9216fce5278c4dbb7059a12063649b3bade565a808c1f5bb2f3a602",
+      "from": "files/xkb/keycodes/xfree86"
+    },
+    {
+      "path": "xkb/keycodes/xfree98",
+      "mode": "0644",
+      "sha256": "cd7b8343937d98653b3a2f698fcc5dc3aff3a6b523d2cce5307d6eead5006602",
+      "from": "files/xkb/keycodes/xfree98"
+    },
+    {
+      "path": "xkb/rules/README",
+      "mode": "0644",
+      "sha256": "808e2a1f26cbfd2e26830f26179365312d0a167bfc11365cd553c8670718279d",
+      "from": "files/xkb/rules/README"
+    },
+    {
+      "path": "xkb/rules/base",
+      "mode": "0644",
+      "sha256": "4bb79c563eecc789363e49f743e96c59665685a0963c77b1d76bb580cd900276",
+      "from": "files/xkb/rules/base"
+    },
+    {
+      "path": "xkb/rules/base.extras.xml",
+      "mode": "0644",
+      "sha256": "4b38ad3097a927b91af19ea6429a805f70fac5d06eabee8f495b96233b8e683b",
+      "from": "files/xkb/rules/base.extras.xml"
+    },
+    {
+      "path": "xkb/rules/base.lst",
+      "mode": "0644",
+      "sha256": "48d142b5fbfab54f76b98fe7cdd170a2be956b9b0cbe3c613042324b24a5dff2",
+      "from": "files/xkb/rules/base.lst"
+    },
+    {
+      "path": "xkb/rules/base.xml",
+      "mode": "0644",
+      "sha256": "b6f661b0c2ab40b92c7a22e8d7f129047ed91c3931d93746a2b7de4daabccd71",
+      "from": "files/xkb/rules/base.xml"
+    },
+    {
+      "path": "xkb/rules/evdev",
+      "mode": "0644",
+      "sha256": "43a2ee6f57dd6a3217b4bba6dc2126bd8b27ea3ac5532e880b0be5d6ea30c668",
+      "from": "files/xkb/rules/evdev"
+    },
+    {
+      "path": "xkb/rules/evdev.extras.xml",
+      "mode": "0644",
+      "sha256": "4b38ad3097a927b91af19ea6429a805f70fac5d06eabee8f495b96233b8e683b",
+      "from": "files/xkb/rules/evdev.extras.xml"
+    },
+    {
+      "path": "xkb/rules/evdev.lst",
+      "mode": "0644",
+      "sha256": "48d142b5fbfab54f76b98fe7cdd170a2be956b9b0cbe3c613042324b24a5dff2",
+      "from": "files/xkb/rules/evdev.lst"
+    },
+    {
+      "path": "xkb/rules/evdev.xml",
+      "mode": "0644",
+      "sha256": "b6f661b0c2ab40b92c7a22e8d7f129047ed91c3931d93746a2b7de4daabccd71",
+      "from": "files/xkb/rules/evdev.xml"
+    },
+    {
+      "path": "xkb/rules/xfree98",
+      "mode": "0644",
+      "sha256": "37d80f9625f9e844a417daaca8b89030f9b001ee1ebdebbfa18475daeb224d70",
+      "from": "files/xkb/rules/xfree98"
+    },
+    {
+      "path": "xkb/rules/xkb.dtd",
+      "mode": "0644",
+      "sha256": "63aada3760407202d5aa366ffba231cfa6f24f1d22dbe6aaad04970e2930af7e",
+      "from": "files/xkb/rules/xkb.dtd"
+    },
+    {
+      "path": "xkb/rules/xorg",
+      "mode": "0644",
+      "sha256": "4bb79c563eecc789363e49f743e96c59665685a0963c77b1d76bb580cd900276",
+      "from": "files/xkb/rules/xorg"
+    },
+    {
+      "path": "xkb/rules/xorg.lst",
+      "mode": "0644",
+      "sha256": "48d142b5fbfab54f76b98fe7cdd170a2be956b9b0cbe3c613042324b24a5dff2",
+      "from": "files/xkb/rules/xorg.lst"
+    },
+    {
+      "path": "xkb/rules/xorg.xml",
+      "mode": "0644",
+      "sha256": "b6f661b0c2ab40b92c7a22e8d7f129047ed91c3931d93746a2b7de4daabccd71",
+      "from": "files/xkb/rules/xorg.xml"
+    },
+    {
+      "path": "xkb/symbols/altwin",
+      "mode": "0644",
+      "sha256": "6a19dc93d2b274ca05d631c1afb0e35db50387c3d223a845d4d0025b55a904e7",
+      "from": "files/xkb/symbols/altwin"
+    },
+    {
+      "path": "xkb/symbols/capslock",
+      "mode": "0644",
+      "sha256": "1fe187515174b87f0636e88d199afc84acac59e3a36319d39b625a4ff525bc67",
+      "from": "files/xkb/symbols/capslock"
+    },
+    {
+      "path": "xkb/symbols/compose",
+      "mode": "0644",
+      "sha256": "10947142db6939e7adf1004b5cde6b190d577706ff4b7c0f0ca0a0ddb57262d9",
+      "from": "files/xkb/symbols/compose"
+    },
+    {
+      "path": "xkb/symbols/ctrl",
+      "mode": "0644",
+      "sha256": "f483e41594282730c37a4aa2b623df15790df8e1711a7e63ae5b49ef21f45e2f",
+      "from": "files/xkb/symbols/ctrl"
+    },
+    {
+      "path": "xkb/symbols/eurosign",
+      "mode": "0644",
+      "sha256": "ec63fd5afa4e85b86c9502f8ad4f1b087afd40967d24a3b01f8046f1a2407d63",
+      "from": "files/xkb/symbols/eurosign"
+    },
+    {
+      "path": "xkb/symbols/fr",
+      "mode": "0644",
+      "sha256": "23cb3962d1bdb215e669cf4037f6cf0762e1963e69642b5a8405abe0e2a9ff15",
+      "from": "files/xkb/symbols/fr"
+    },
+    {
+      "path": "xkb/symbols/group",
+      "mode": "0644",
+      "sha256": "d962772859c00eb77223056cf3ec22e12c11b31ae8204760ca94e1c31f220000",
+      "from": "files/xkb/symbols/group"
+    },
+    {
+      "path": "xkb/symbols/inet",
+      "mode": "0644",
+      "sha256": "1898f21ec05985f72c66d1d55f3257d26c510753e67d56288247d27e692f9063",
+      "from": "files/xkb/symbols/inet"
+    },
+    {
+      "path": "xkb/symbols/keypad",
+      "mode": "0644",
+      "sha256": "1e4c121750d9139e39def3cc9dd1eb50e0206abc3d6e5e4af9f78933cc541a2d",
+      "from": "files/xkb/symbols/keypad"
+    },
+    {
+      "path": "xkb/symbols/latin",
+      "mode": "0644",
+      "sha256": "fe44b3fb50d309a1d8c7f1497e6d7a0af33e791165d36e8966701b9f5a0262d9",
+      "from": "files/xkb/symbols/latin"
+    },
+    {
+      "path": "xkb/symbols/level3",
+      "mode": "0644",
+      "sha256": "5163e13327fb49de204683b8bd0e4fe21cbf66193e51ca7132bd777d1e26fd13",
+      "from": "files/xkb/symbols/level3"
+    },
+    {
+      "path": "xkb/symbols/level5",
+      "mode": "0644",
+      "sha256": "d5a6af25714fa768177862b3ffbc5e38d9ec22784aae962f4a4e43f60221036d",
+      "from": "files/xkb/symbols/level5"
+    },
+    {
+      "path": "xkb/symbols/pc",
+      "mode": "0644",
+      "sha256": "4b2fe0b0f106bc6233c6626e9a0da2f25b1f5f56a05656bfde3b19bf4a11885c",
+      "from": "files/xkb/symbols/pc"
+    },
+    {
+      "path": "xkb/symbols/shift",
+      "mode": "0644",
+      "sha256": "8bd3a36b2e5e0c246613cd00af5600b6d2cc5c9a02f490be5c8d8a7790240c6b",
+      "from": "files/xkb/symbols/shift"
+    },
+    {
+      "path": "xkb/symbols/srvr_ctrl",
+      "mode": "0644",
+      "sha256": "652d16838143dbeb218aff2997cc603f9e9731e1e55e2300dee910d167e25d85",
+      "from": "files/xkb/symbols/srvr_ctrl"
+    },
+    {
+      "path": "xkb/symbols/us",
+      "mode": "0644",
+      "sha256": "c48909ff9be8e13cb3b035d844f1d5674c225d7072b75ae1954fd2a4f427ffaf",
+      "from": "files/xkb/symbols/us"
+    },
+    {
+      "path": "xkb/types/README",
+      "mode": "0644",
+      "sha256": "025721133e20380f998c5c6dce07aea624baad997855cba6e389ca3c26fe05b1",
+      "from": "files/xkb/types/README"
+    },
+    {
+      "path": "xkb/types/basic",
+      "mode": "0644",
+      "sha256": "4c18eb87250a3ba92b9d9881a4f07316bcda47d186c5f4e9c76e6d4fcbfbf948",
+      "from": "files/xkb/types/basic"
+    },
+    {
+      "path": "xkb/types/cancel",
+      "mode": "0644",
+      "sha256": "047acba53c463dc55d40d664210b5ffee85ba061aeb06949c56473ca012c2a68",
+      "from": "files/xkb/types/cancel"
+    },
+    {
+      "path": "xkb/types/caps",
+      "mode": "0644",
+      "sha256": "5523bd14fa8c51362e946c108d817f2f01a551a7afb25a057e0b4730c0113a63",
+      "from": "files/xkb/types/caps"
+    },
+    {
+      "path": "xkb/types/complete",
+      "mode": "0644",
+      "sha256": "038d66c8861dbc797b7d2226bc9135698e62adf3d6d9f99f1be60b768f591aee",
+      "from": "files/xkb/types/complete"
+    },
+    {
+      "path": "xkb/types/default",
+      "mode": "0644",
+      "sha256": "205a4131e04cf5ecb1c4d831c61594c56db731ef46d0eb5844b1c744666b3677",
+      "from": "files/xkb/types/default"
+    },
+    {
+      "path": "xkb/types/extra",
+      "mode": "0644",
+      "sha256": "14a3fc9749313ce38a8559c3fc48775c7705a04af89519062f0c0856350856b6",
+      "from": "files/xkb/types/extra"
+    },
+    {
+      "path": "xkb/types/iso9995",
+      "mode": "0644",
+      "sha256": "37dc0a4905d8eae972fb8e4eb87a2f5b3050a86aa2fcbe217630647163aea975",
+      "from": "files/xkb/types/iso9995"
+    },
+    {
+      "path": "xkb/types/level5",
+      "mode": "0644",
+      "sha256": "faabfcdb7c1324c3787846fb82e03746a0644d58e671907bd4e8ede308a4e652",
+      "from": "files/xkb/types/level5"
+    },
+    {
+      "path": "xkb/types/mousekeys",
+      "mode": "0644",
+      "sha256": "8cd68606f38aa725915ea7a0de775f322a27b5b79bcd871569ac72b31b93585f",
+      "from": "files/xkb/types/mousekeys"
+    },
+    {
+      "path": "xkb/types/nokia",
+      "mode": "0644",
+      "sha256": "a63b9d10e7898c5f78d12777675bed2d0d1b723b13c18692fb46e44f85ea082e",
+      "from": "files/xkb/types/nokia"
+    },
+    {
+      "path": "xkb/types/numpad",
+      "mode": "0644",
+      "sha256": "4a064b2cabb2099c93dc2c5073bda7c373baac48c49f55205d640142a5c1041d",
+      "from": "files/xkb/types/numpad"
+    },
+    {
+      "path": "xkb/types/pc",
+      "mode": "0644",
+      "sha256": "316c9cfb47ee6fb9901ee99cead1c6c59fe24fe0c58c250272515a0429c786d7",
+      "from": "files/xkb/types/pc"
+    }
+  ]
+}

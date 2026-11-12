@@ -3,15 +3,36 @@
   "apps": {
     "path": "apps/*",
     "manifest": "app.json",
-    "mguHmi": ["ID7"],
-    "requires": { "oussem-browser": "0.1.2", "mgu-render": "0.6.19" },
+    "mguHmi": [
+      "ID7"
+    ],
+    "requires": {
+      "oussem-browser": "0.1.2",
+      "mgu-render": "0.6.19"
+    },
     "build": {
       "python": "tools/build_mgu.py",
-      "args": ["{id}"],
+      "args": [
+        "{id}"
+      ],
       "sdk": "oap-sdk",
       "output": "dist/{id}@{version}.tgz",
-      "shared": ["tools/build_mgu.py", "shared", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md",
-        "vendor/mgu-kit", "oap-sdk"]
+      "shared": [
+        "tools/build_mgu.py",
+        "shared",
+        "LICENSE",
+        "NOTICE",
+        "THIRD_PARTY_NOTICES.md",
+        "vendor/mgu-kit",
+        "oap-sdk"
+      ]
     }
-  }
+  },
+  "tools": [
+    {
+      "id": "oussem-browser",
+      "path": "store/oussem-browser",
+      "uninstallable": true
+    }
+  ]
 }
