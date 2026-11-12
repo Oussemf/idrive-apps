@@ -26,7 +26,7 @@ catalog = {"schema": 2, "components": [
     {"id": app["id"], "version": app["version"], "kind": "app", "title": app["title"],
      "description": "YouTube client with automatically detected browser companion (experimental).",
      "mguHmi": ["ID7"], "uninstallable": True,
-     "requires": {"oussem-browser": tool["version"]},
+     "requires": {"oussem-browser": tool["version"], "mgu-render": "0.6.19"},
      "artifact": artifact(f"{app['id']}@{app['version']}.tgz")}
 ]}
 (OUT / "catalog.json").write_text(json.dumps(catalog, indent=2) + "\n")

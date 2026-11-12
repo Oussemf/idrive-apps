@@ -1,9 +1,25 @@
 # Integration MGU : developpement experimental
 
-**Pas de binaire voiture valide, pas de release prete a installer.**
-Le Store peut construire le lanceur ID7, pas fournir automatiquement
-un navigateur compatible. L'ajout de cette source ne rend pas les videos
-fonctionnelles sans le compagnon.
+**Compagnon experimental disponible via le catalogue Releases.**
+Il contient un navigateur et ses dependances prives, avec des tests sur
+userland glibc 2.27. Il n'est pas certifie sur toutes les variantes MGU.
+
+## Installation depuis MGU Store 0.9.39
+
+1. Dans Sources, choisir `Oussemf/idrive-apps`, canal **Releases** au lieu de main.
+2. Actualiser le catalogue.
+3. Installer **YouTube browser companion (experimental)**.
+4. Mettre a jour **YouTube (experimental)** en version **0.2.0**.
+5. Ouvrir l'app, puis choisir une session de validation avec le vehicule stationne.
+
+Autre entree possible dans Sources, en HTTPS :
+`https://github.com/Oussemf/idrive-apps/releases/download/catalog/catalog.json`
+
+Le catalogue versionne les deux composants et leurs SHA-256. Le Store
+les telecharge et verifie les fichiers. Le lanceur utilise automatiquement
+le compagnon installe : aucun JSON, terminal ni SSH n'est necessaire.
+Le compagnon est un outil amovible sans service permanent. Son affichage
+X11 prive n'ecoute pas le reseau et ne remplace pas le compositor du MGU.
 
 ## Prerequis
 
@@ -13,33 +29,37 @@ fonctionnelles sans le compagnon.
 - Routage tactile / controller gate selon le renderer pour les commandes.
 - `mgu-uplink` configure dans le Store, application autorisee a acceder
   au reseau. Wi-Fi du telephone ou autre uplink choisi dans le Store.
-- Executable Chromium/Electron compatible avec le firmware, valide sur
-  banc, lance sous **le meme UID** que l'app. Le depot ne le fournit pas.
+- Compagnon `oussem-browser`, lance sous **le meme UID** que l'app.
+  La release est testee avec une glibc systeme 2.27 sans utiliser ses
+  bibliotheques pour Chromium ; les contraintes du noyau restent a verifier.
 - Pas de execution root, pas de `--no-sandbox`, pas de bibliotheques BMW
   copiees dans ce depot.
 
 ## Build du lanceur
 
 Prerequis de build : Python >= 3.8 et Node.js.
-Le Store fournit lui-meme `oap-sdk` depuis le vehicule. En local, seule
-la version preview est possible sans ce SDK :
+Le Store fournit lui-meme `oap-sdk` depuis le vehicule. Une preview locale
+ne produit pas de paquet installable :
 
 ```powershell
 python tools\build_mgu.py oussem_youtube --preview-only
 ```
 
-Avec un SDK provenant legalement de votre propre unite, dans le dossier
-ignore `oap-sdk`, le meme outil sans `--preview-only` genere les archives.
-Le wrapper retire le SDK des archives finales et ajoute `mguInternet`.
+Pour une archive publique sans SDK, utiliser
+`python tools/build_mgu.py oussem_youtube --sdk-free`.
+Le Store injecte le SDK provenant de son propre donneur a l'installation.
+Le wrapper ajoute `mguInternet`. Un build avec SDK local reste possible,
+mais le SDK est retire des archives finales.
 **Ne jamais publier le SDK ni les archives intermediaires d'un build.**
 
 ID7 uniquement pour le paquet actuel. Le runtime GPU emploie les zones
 negociees et non une resolution ID7 codee en dur, mais cela ne valide
 pas l'interface OAP d'ID8.
 
-## Configuration du compagnon (apres validation materielle)
+## Configuration du compagnon (optionnelle pour developpeurs)
 
-Le lanceur lit `runtime.json` dans son propre dossier `data`. Exemple
+Sans fichier, le lanceur detecte le composant Store. Pour remplacer cette
+selection, il lit `runtime.json` dans son propre dossier `data`. Exemple
 de structure, avec des chemins a adapter (ne pas committer ce fichier) :
 
 ```json
@@ -55,8 +75,8 @@ Il faut les sources du projet et le runtime approprie, pas les
 production : Electron fournit Node/Chromium, le client renderer est
 vendore. Restreindre les droits du fichier a l'UID de l'app.
 Le lanceur ne telecharge ni n'installe de programmes privilegies.
-La distribution de ce compagnon en outil Store reste a faire apres
-avoir identifie un runtime effectivement compatible.
+Le composant fourni dans Releases embarque ces sources et son executable.
+Ne pas utiliser les chemins d'exemple pour l'installation normale.
 
 ## Securite et cycle de vie
 
@@ -79,7 +99,7 @@ du renderer restent obligatoires. Sortie, popup ou perte de focus annulent
 la session dans le lanceur et terminent le compagnon. Revenir a l'app ne
 reactive pas ce mode ; il faut choisir a nouveau un bouton Garage test.
 Les restrictions video d'origine du vehicule ne sont pas modifiees.
-Ce mode ne fournit toujours pas le binaire Chromium compatible manquant.
+Le mode garage et le compagnon navigateur sont deux mecanismes distincts.
 
 ### Fonctionnement normal (hors session garage)
 
@@ -123,7 +143,12 @@ sur chaque variante avant un essai utilisateur.
   **Ce n'est pas une panne YouTube, reseau ou GPU** : le navigateur n'a pas
   encore ete lance. Creer seulement le JSON ne suffit pas sans executable
   et sources compatibles installes ; les chemins d'exemple ne sont pas
-  des programmes livres par ce depot.
+  des programmes livres par les anciennes versions du depot. Depuis 0.2.0,
+  installer le compagnon publie et supprimer seulement une ancienne
+  configuration manuelle incorrecte, si vous en aviez cree une.
+- `Install YouTube browser companion in the Store.` : mettre a jour la
+  source via Releases, installer l'outil `oussem-browser` puis relancer.
+  Les anciennes versions 0.1.x ne detectent pas le compagnon automatiquement.
 - `Cannot read runtime.json` : verifier les droits de lecture du fichier.
 - `Invalid runtime.json configuration.` : JSON invalide ou chemins absolus absents.
 - `Configured browser executable is unavailable.` : executable configure absent.

@@ -41,11 +41,19 @@ recommande l'application officielle. Cela confirme l'accessibilite HTTPS,
 **pas** la disponibilite de l'interface TV dans Electron. Aucun
 user-agent de televiseur ni contournement de ce refus n'est ajoute.
 
-Le moteur actuel est Electron, **validable sur ordinateur**, non fourni
-comme binaire deployable MGU. Cette separation est intentionnelle :
-aucun paquet moderne glibc ne doit etre suppose executable sur le firmware.
-Un futur port Chromium/CEF/QtWebEngine doit reproduire les interfaces,
-l'isolation et les garde-fous du runtime, pas seulement afficher une URL.
+Le moteur actuel est Electron. Le composant `oussem-browser` fournit
+l'executable recent et un userland prive : son loader et ses bibliotheques
+sont sous `/var/opt/oussem-browser/current/lib`. Les ELF ont un interpreter
+et un RPATH explicites vers ce composant, pas vers la glibc du firmware.
+Xvfb est recompile avec des chemins XKB prives, sans ecoute TCP, authentifie
+par un cookie aleatoire par session. Le MGU recoit ses frames par le renderer,
+pas par un serveur X installe a la place du compositor du vehicule.
+
+Le helper sandbox officiel de Chromium est root-owned mode 4755 dans
+l'outil ; les chemins de ses dependances restent root-owned. Le navigateur
+et Xvfb sont lances sous l'UID OAP. Aucun `--no-sandbox`. Le test glibc 2.27
+demarre l'ensemble depuis Node 8, verifie des frames et le filtre seccomp
+du processus renderer. Le noyau du conteneur de test n'est pas celui du MGU.
 
 ## Chemin voiture experimental
 
@@ -108,10 +116,11 @@ aucun echantillon de vitesse et la terminaison lors d'une perte de focus.
 
 ## Etapes restant avant une premiere version voiture
 
-1. Relever architecture CPU, glibc, bibliotheques, sandbox et budget RAM.
-2. Choisir et compiler un Chromium maintenu compatible, sans desactiver
-   la sandbox ; distribuer son compagnon comme outil Store distinct.
-3. Valider lancement sous l'UID OAP, permissions sockets et profil.
+1. Confirmer sur le vehicule le noyau, la politique sandbox et le budget RAM.
+2. Installer le compagnon publie via le canal Releases et verifier son
+   lancement sous l'UID OAP, ses permissions sockets et son profil.
+3. En cas d'echec, conserver le message et les logs avant tout changement
+   de strategie ; ne pas desactiver la sandbox.
 4. Mesurer CPU/GPU/memoire, navigation, codecs et lecture YouTube reelle.
 5. Integrer et tester l'audio-focus et interruptions telephone/camera.
 6. Valider les garde-fous sur banc puis vehicule stationne.

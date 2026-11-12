@@ -21,16 +21,12 @@ class BuildTest(unittest.TestCase):
             for name in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"):
                 shutil.copyfile(ROOT / name, root / name)
             sdk = root / "oap-sdk"
-            sdk.mkdir()
-            # Test-only placeholder, not a BMW SDK, never published.
-            (sdk / "index.js").write_text("module.exports = {};", encoding="utf-8")
-            (sdk / "package.json").write_text('{"name":"test-only-sdk","version":"0.0.0"}', encoding="utf-8")
             wrapper.ROOT = root
             wrapper.builder.ROOT = str(root)
             wrapper.builder.APPS = str(root / "apps")
             wrapper.builder.DIST = str(root / "dist")
             wrapper.builder.SDK = str(sdk)
-            wrapper.build("oussem_youtube2")
+            wrapper.build("oussem_youtube2", sdk_free=True)
             version = json.loads((root / "apps" / "oussem_youtube" / "app.json").read_text(encoding="utf-8"))["version"]
             archive = root / "dist" / f"oussem_youtube2@{version}.tgz"
             with tarfile.open(archive, "r:gz") as package:

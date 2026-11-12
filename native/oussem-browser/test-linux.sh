@@ -12,8 +12,6 @@ docker run --rm --cap-add SYS_ADMIN \
     apt-get install -y --no-install-recommends nodejs ca-certificates procps
     test "$(getconf GNU_LIBC_VERSION)" = "glibc 2.27"
     useradd -m -u 12345 browser-test
-    mkdir -p /tmp/.X11-unix
-    chmod 1777 /tmp/.X11-unix
     chown root:root /var/opt/oussem-browser/current/electron/chrome-sandbox
     chmod 4755 /var/opt/oussem-browser/current/electron/chrome-sandbox
     su -s /bin/sh browser-test -c "node /tests/test-runtime.js"

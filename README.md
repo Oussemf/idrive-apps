@@ -7,9 +7,10 @@ Projet independant, GPL-3.0-or-later, non affilie a BMW, Google ou YouTube.
 > **Prototype experimental, pas une application validee sur voiture.**
 > Le lecteur officiel fonctionne dans le runtime de developpement Electron ;
 > le mode TV est soumis au refus du navigateur par YouTube.
-> Le lanceur OAP ID7 et le pont GPU sont implementes, mais il manque encore
-> un runtime Chromium compatible avec le firmware MGU et une validation
-> sur materiel. **ID8 n'est pas encore installable** : le kit de reference
+> Le lanceur OAP ID7, le pont GPU et un compagnon Chromium installable via
+> le catalogue Releases sont fournis. Le compagnon embarque ses bibliotheques,
+> sans remplacer celles du MGU ; la compatibilite materielle reste a valider.
+> **ID8 n'est pas encore installable** : le kit de reference
 > produit uniquement les descriptions HMI ID7. Ne pas installer Electron
 > standard sur une voiture en supposant qu'il est compatible.
 
@@ -70,10 +71,27 @@ Les tests remplacent seulement le contenu des sites tiers.
 
 ## Dans le MGU Store
 
-Source GitHub : **`Oussemf/idrive-apps`**, branche **`main`**.
-Le Store peut construire le lanceur ID7 depuis `mgu-repo.json`, avec le
-SDK provenant exclusivement du vehicule. Ce lanceur affiche un diagnostic
-explicite tant que le runtime compagnon n'est pas configure.
+Source GitHub : **`Oussemf/idrive-apps`**, canal **`Releases`**.
+Dans le Store, modifier la source existante (actuellement `main`) ou ajouter
+la source HTTPS suivante :
+
+`https://github.com/Oussemf/idrive-apps/releases/download/catalog/catalog.json`
+
+Actualiser, installer **YouTube browser companion (experimental)**, puis
+mettre a jour **YouTube (experimental)** en **0.2.0**. Le catalogue declare
+la dependance pour que le Store installe le compagnon avec le client.
+**Aucun fichier runtime.json a creer** : le lanceur trouve automatiquement
+`/var/opt/oussem-browser/current/launch.sh` et son projet.
+La branche `main` reste un canal de sources pour developpeurs ; le compagnon
+binaire est distribue exclusivement par le catalogue Releases.
+
+Le compagnon installe une copie privee d'Electron, glibc et des dependances,
+ainsi qu'un affichage virtuel Xvfb sans port TCP, authentifie par cookie
+aleatoire. Il s'execute sous l'UID de l'app. Le seul programme setuid est
+le helper sandbox officiel de Chromium ; aucune option `--no-sandbox`.
+Il n'installe aucun service permanent et se retire depuis le Store.
+Prevoir de l'espace disque pour le telechargement, l'extraction et les
+sauvegardes du Store ; la taille exacte figure dans le catalogue.
 
 Le paquet declare `mguInternet: true`. Le runtime utilise le **bail DNS
 du Store** (`data/uplink.json`) et les routes de l'UID de l'app. Il ne
@@ -95,8 +113,10 @@ npm run preview:mgu
 Les tests UI lancent de vraies fenetres Electron et verifient notamment
 le plein ecran reel, la navigation principale TV, l'isolation du site
 distant et l'arret du lecteur. Ils ne prouvent pas qu'une video reelle
-est lisible sur MGU. Le test de packaging emploie un faux SDK de test,
-jamais un SDK BMW ni un paquet destine a l'installation.
+est lisible sur MGU. Le test de packaging construit sans SDK ; le Store
+fournit le sien depuis le vehicule. Le pipeline du compagnon verifie aussi
+un demarrage non-root et sandboxe sur un userland glibc 2.27 avec Node 8.
+Le noyau, les politiques OAP et l'audio du vehicule ne sont pas reproduits.
 
 ## Securite et statut
 
