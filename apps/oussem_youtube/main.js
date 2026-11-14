@@ -70,7 +70,7 @@ mgu.run({
     async start(ctx) {
         const { ui, settings, log } = ctx;
         const parked = Parked.watch(ctx, log, { strict: true });
-        const noVideo = () => parked.moving();
+        const noVideo = () => false;
 
         /* ---------- the daemon ---------- */
         const ctl = new Ctl(process.env.MGU_YT_SOCKET || SOCKET, log);
