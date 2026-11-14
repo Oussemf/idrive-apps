@@ -12,7 +12,7 @@ HDR = struct.Struct('<4sHHHHHxxI12x')  # 32 bytes, frame count at offset 16
 REC = struct.Struct('<IQIB')            # 17 bytes: pts_ms, pos, size, key
 PREFIX = {6, 7, 8, 9}                   # SEI, SPS, PPS, AUD
 SLICE = {1, 5}
-FFPROBE = '/opt/homebrew/bin/ffprobe'
+FFPROBE = 'ffprobe'
 
 
 def nal_starts(buf):
@@ -116,5 +116,4 @@ def validate(index_path, h264_path, n_packets=None):
     if n_packets is not None:
         assert hdr['n'] == n_packets, f"{hdr['n']} records != {n_packets} packets"
     return hdr, recs
-
 

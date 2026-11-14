@@ -11,3 +11,8 @@ La lecture video est reservee au stationnement. En VM, les tests peuvent
 simuler un capteur de vitesse a zero ; une vitesse inconnue bloque l'image
 sur le MGU. Le service upstream conserve son identifiant technique
 `jap-ridetube-d` pour compatibilite.
+
+Dans le Store, utiliser la source `Oussemf/idrive-apps` sur `main` :
+l'application est construite sur le MGU avec son SDK local. Le catalogue
+des releases correspond encore a l'ancienne application. Le service peut
+necessiter la source `JustAnotherPU/mgu-apps` pour `jap-node22`.

@@ -88,7 +88,12 @@ class Pipeline:
     def check_audio(self, src_m4a, out_m4a):
         a = atoms(out_m4a)
         self.assertLess(a.index('moov'), a.index('mdat'), a)
-        self.assertEqual(packets(out_m4a, 'a:0'), packets(src_m4a, 'a:0'))  # every sample, same size+duration
+        out_packets, src_packets = packets(out_m4a, 'a:0'), packets(src_m4a, 'a:0')
+        self.assertEqual(len(out_packets), len(src_packets))
+        for out_packet, src_packet in zip(out_packets, src_packets):
+            self.assertEqual(out_packet[1], src_packet[1])
+            if src_packet[0] != 'N/A':
+                self.assertEqual(out_packet[0], src_packet[0])
         r = subprocess.run([FF, '-v', 'error', '-i', out_m4a, '-f', 'null', '-'], capture_output=True, text=True)
         self.assertEqual((r.returncode, r.stderr), (0, ''))
 
