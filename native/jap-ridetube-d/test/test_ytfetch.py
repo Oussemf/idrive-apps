@@ -90,10 +90,10 @@ class Pipeline:
         self.assertLess(a.index('moov'), a.index('mdat'), a)
         out_packets, src_packets = packets(out_m4a, 'a:0'), packets(src_m4a, 'a:0')
         self.assertEqual(len(out_packets), len(src_packets))
-        for out_packet, src_packet in zip(out_packets, src_packets):
+        for i, (out_packet, src_packet) in enumerate(zip(out_packets, src_packets)):
             self.assertEqual(out_packet[1], src_packet[1])
             if src_packet[0] != 'N/A':
-                self.assertEqual(out_packet[0], src_packet[0])
+                self.assertEqual(out_packet[0], src_packet[0], f'packet {i} of {len(src_packets)}')
         r = subprocess.run([FF, '-v', 'error', '-i', out_m4a, '-f', 'null', '-'], capture_output=True, text=True)
         self.assertEqual((r.returncode, r.stderr), (0, ''))
 
