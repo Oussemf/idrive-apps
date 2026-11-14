@@ -120,6 +120,14 @@ RideTube itself is GPL-3.0-or-later (LICENSE). The parts below come from others.
 6. Fonts baked into kit/runtime/fonts: Ubuntu (Ubuntu Font Licence 1.0, kit/runtime/fonts/UFL-Ubuntu.txt) and
    Noto Sans SC (SIL Open Font License 1.1, kit/runtime/fonts/OFL-NotoSansSC.txt).
 
+7. Waze on cluster - apps/robertn_waze_cluster, native/waze-on-cluster, native/cluster-render and
+   tools/oap_link.js, tools/oap_pack.js: Copyright (C) 2026 Robert Nisipeanu and contributors
+   (github.com/robertnisipeanu/idrive-apps, commit 7ad7a0bbea7a426c77580a07a4da64b644edc9bf),
+   GPL-3.0-or-later (the LICENSE in each folder). apps/robertn_waze_cluster/src/qrcodegen.js is MIT
+   (package/LICENSE-qrcodegen.txt); cluster-render's client library, kit/, abi/ and dcsm/abi files are
+   MPL-2.0 (native/cluster-render/LICENSES/MPL-2.0.txt), as each file's SPDX line says. Changes made
+   here are noted in each folder's CHANGELOG or README.
+
 8. SponsorBlock - skip segments come from the SponsorBlock API (sponsor.ajay.app) at run time; its data is
    licensed CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/). The app credits it on its
    menu page.

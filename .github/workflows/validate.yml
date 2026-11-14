@@ -33,3 +33,18 @@ jobs:
           node test/test_ytd.js
           node test/test_thumb.js
           python3.12 -I test/test_ytfetch.py
+  waze-cluster:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test Waze on cluster app
+        run: |
+          node apps/robertn_waze_cluster/tools/test_control.js
+          node apps/robertn_waze_cluster/tools/test_page.js
+          node apps/robertn_waze_cluster/tools/test_profiles.js
+          node apps/robertn_waze_cluster/tools/test_i18n.js
+      - name: Check the wide map probe script
+        run: sh -n native/waze-on-cluster/tools/wide-probe.sh

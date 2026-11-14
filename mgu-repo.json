@@ -1,8 +1,20 @@
 {
   "schema": 1,
+  "components": [
+    {
+      "id": "robertn_waze_cluster",
+      "kind": "app",
+      "path": "apps/robertn_waze_cluster",
+      "build": "unit",
+      "mguHmi": ["ID7"],
+      "requires": { "waze-on-cluster": "0.9.14" },
+      "uninstallable": true
+    }
+  ],
   "apps": {
     "path": "apps/*",
     "manifest": "app.json",
+    "exclude": ["robertn_waze_cluster"],
     "mguHmi": ["ID7"],
     "requires": {
       "jap-ridetube-d": "0.3.9",

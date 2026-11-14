@@ -3,3 +3,4 @@
 *.wasm binary
 *.pack binary
 store/** -text
+CHANGELOG.md merge=union
