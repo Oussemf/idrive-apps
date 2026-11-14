@@ -27,6 +27,8 @@ jobs:
           node kit/tools/test_ridetube.js
       - name: Test upstream service
         run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
           cd native/jap-ridetube-d
           node test/test_ytd.js
           node test/test_thumb.js
