@@ -141,6 +141,8 @@ function targets(o) {
             mark: path.join(dir, 'shutdown-aapd'), restart: restart, restartInfo: restartInfo,
             pending: path.join(shm, 'aa-pending'), killed: path.join(shm, 'aapd-killed'), running: o.aapd + '.woc-running',
             killedRun: function (i) { return (i.state === 'failed' || i.state === 'inactive') && i.result === 'signal' && i.code === CLD_KILLED && i.status === '9'; },
+            /* the wide map's start settings (fork), which go with the patched aapd.conf */
+            wide: { crop: path.join(dir, 'aa-crop.env'), clusterRender: path.join(dir, 'cluster-render.env') },
         },
     };
     t.carplay.other = t.aapd;
@@ -506,6 +508,7 @@ function restoreTarget(t, onlyIfRunning, fails, cb, waitMs) {
                 record.write(t.target, !writes.length ? { patched: false } : refused ? { patched: false, by: 'refused', at: new Date().toISOString() }
                     : { patched: false, by: 'recovery', at: new Date().toISOString(), fails: fails });
                 try { fs.unlinkSync(t.pending); } catch (e) {}   /* the pending patch is gone */
+                if (writes.length) dropWide(t);
             } catch (e) { wErr = e; }
             remountRo(RO_TRIES, function (roErr) {
                 if (wErr) finish(new Error('writing: ' + wErr.message + (roErr ? '; ' + roErr.message : '')));
@@ -526,6 +529,18 @@ function restoreTarget(t, onlyIfRunning, fails, cb, waitMs) {
 
 /* Whether a restore holds the remount lock in this process. */
 var writing = false;
+
+/* With the original aapd.conf back, the wide map's start settings (fork)
+ * no longer match the phone's picture: cluster-render's goes, and the
+ * render's crop when it is the wide one (a hidden card's is left, as
+ * upstream leaves it). Both are on /var/opt, outside the remount. */
+function dropWide(t) {
+    if (!t.wide) return;
+    try { fs.unlinkSync(t.wide.clusterRender); } catch (e) {}
+    try {
+        if (/ -s target=panel /.test(fs.readFileSync(t.wide.crop, 'utf8'))) { fs.unlinkSync(t.wide.crop); log('the wide map\'s start settings removed with aapd.conf'); }
+    } catch (e) {}
+}
 
 /* A restore cut short (the boot step out of time): / is put back read-only,
  * one bounded try, and the lock released. */

@@ -111,6 +111,7 @@ test-node:
 	umask 077 && $(NODE) patch/test/x86_flow_test.js
 	umask 077 && $(NODE) patch/test/aapd_locate_test.js
 	umask 077 && $(NODE) patch/test/aapd_test.js
+	umask 077 && $(NODE) patch/test/wide_test.js
 	umask 077 && $(NODE) patch/test/head_unit_test.js
 
 test-cpp: $(CPP_TESTS)

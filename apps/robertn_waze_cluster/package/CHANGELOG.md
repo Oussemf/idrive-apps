@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.7.0
+
+Wide map (under the gauges), a checkbox in Android Auto (fork of
+robertnisipeanu/idrive-apps): the phone draws its map in a wide band and the
+cluster shows it across the cluster between the gauges, BMW's speed, rpm and
+warnings drawn over it. One choice with Hide phone's turn card: ticking one
+unticks the other. Takes effect at the next head-unit start. Needs
+waze-on-cluster 0.10.0.
+
 ## 0.6.8
 
 A plainer description in the Store: on supported cars the map turns on by

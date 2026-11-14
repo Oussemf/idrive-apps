@@ -980,6 +980,43 @@ test('zoom and turn card: the value on disk, "(after restart)" only for the sett
     c.close();
 });
 
+test('wide map: one layout with the turn card, ticked from disk, "(after restart)" for the layout that waits, the other box unticked', async (render, patch) => {
+    const c = control();
+    c.open();
+    await until('connected', () => c.aa());
+    const D = [150, 400, 10];
+    const show = async (aa) => {
+        patch.aa = aa;
+        patch.announce('patched', 'high', null);
+        await until(JSON.stringify(aa), () => JSON.stringify(c.aa()) === JSON.stringify(aa));
+        return [c.wideText(), c.wideOn(), c.cardText(), c.cardHidden()];
+    };
+    assert.deepStrictEqual(await show({ state: 'patched', dpi: 180, diskCard: 'shown', density: 180, card: 'shown', densities: D }),
+        ['Wide map (under the gauges)', false, "Hide phone's turn card", false]);
+    c.toggleWide();
+    await until('aa-card wide sent', () => patch.count('aa-card') === 1);
+    assert.strictEqual(patch.received.filter((m) => m.cmd === 'aa-card').pop().value, 'wide');
+    assert.deepStrictEqual([c.wideOn(), c.cardHidden()], [true, false], 'the asked layout ticks at once');
+    await until('the wide layout on disk', () => c.aa().state === 'patched' && c.aa().diskCard === 'wide');
+    assert.deepStrictEqual([c.wideOn(), c.cardHidden()], [true, false], 'then from disk');
+    assert.deepStrictEqual(await show({ state: 'unknown', pending: 'apply', aapd: 'deferred', dpi: 180, diskCard: 'wide', runDpi: 180,
+        runCard: 'shown', density: 180, card: 'wide', densities: D }),
+        ['Wide map (under the gauges) (after restart)', true, "Hide phone's turn card", false]);
+    assert.deepStrictEqual(await show({ state: 'unknown', pending: 'apply', aapd: 'deferred', dpi: 180, diskCard: 'hidden', runDpi: 180,
+        runCard: 'wide', density: 180, card: 'hidden', densities: D }),
+        ['Wide map (under the gauges) (after restart)', false, "Hide phone's turn card (after restart)", true]);
+    await show({ state: 'patched', dpi: 180, diskCard: 'wide', density: 180, card: 'wide', densities: D });
+    c.toggleWide();
+    await until('aa-card shown sent', () => patch.count('aa-card') === 2);
+    assert.strictEqual(patch.received.filter((m) => m.cmd === 'aa-card').pop().value, 'shown', 'unticking goes back to the card shown');
+    await until('the card shown on disk', () => c.aa().state === 'patched' && c.aa().diskCard === 'shown');
+    await show({ state: 'patched', dpi: 180, diskCard: 'wide', density: 180, card: 'wide', densities: D, conflict: 'aapd is another build than our backup' });
+    c.toggleWide();
+    await sleep(100);
+    assert.strictEqual(patch.count('aa-card'), 2, 'a greyed wide map sends nothing');
+    c.close();
+});
+
 test('the spacing between zoom and card changes greys both until it ends', async (render, patch) => {
     const c = control();
     let changes = 0;

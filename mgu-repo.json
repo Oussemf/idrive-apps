@@ -7,7 +7,7 @@
       "path": "apps/robertn_waze_cluster",
       "build": "unit",
       "mguHmi": ["ID7"],
-      "requires": { "waze-on-cluster": "0.9.14" },
+      "requires": { "waze-on-cluster": "0.10.0" },
       "uninstallable": true
     }
   ],
@@ -30,6 +30,10 @@
     }
   },
   "tools": [
+    {
+      "id": "waze-on-cluster",
+      "path": "store/waze-on-cluster"
+    },
     {
       "id": "jap-ridetube-d",
       "path": "store/jap-ridetube-d",

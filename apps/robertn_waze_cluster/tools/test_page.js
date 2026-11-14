@@ -289,7 +289,7 @@ async function main() {
         'wocHudRight Move right', 'wocHudUp Move up', 'wocHudDown Move down', 'wocHudCentre Centre',
         'wocHeadCarPlay CarPlay', 'wocStatus Status: Connecting…', 'wocEnable Patch', 'wocDisable Remove patch', 'wocWifi ', 'wocWifiHint ',
         'wocHeadAa Android Auto', 'wocAaStatus Status: Connecting…', 'wocAaEnable Patch', 'wocAaDisable Remove patch',
-        'wocAaZoom Zoom: —', 'wocAaZoomOut Zoom out', 'wocAaZoomIn Zoom in', "wocAaCard Hide phone's turn card",
+        'wocAaZoom Zoom: —', 'wocAaZoomOut Zoom out', 'wocAaZoomIn Zoom in', "wocAaCard Hide phone's turn card", 'wocAaWide Wide map (under the gauges)',
         'wocRestart Restart head unit', 'wocRestartStatus '],
         'the main page: four sections, in order');
     assert.deepStrictEqual(xmlIds('1').map(([id, type]) => `${id} ${type}`).sort(),
@@ -306,7 +306,7 @@ async function main() {
         .find((id) => components[id].name === n)].properties.Focusable.value]), Array(4).fill(['0', 0]), 'the section headers take no focus');
     assert.strictEqual(main.find(([, , name]) => focus[name] === '3')[2], 'wocShowOn', 'the first row the controller stops on: Show on');
     assert(!main.some(([, , name]) => /^wocRow|^wocSetup|^wocCapture/.test(name)), 'no log rows, setup line or capture on the main page');
-    assert.deepStrictEqual(['wocAaCard', 'wocGuide', 'wocProfile', 'wocHudKeep'].map((n) => widgets[n]), Array(4).fill('LT_CheckBox_1Row'),
+    assert.deepStrictEqual(['wocAaCard', 'wocAaWide', 'wocGuide', 'wocProfile', 'wocHudKeep'].map((n) => widgets[n]), Array(5).fill('LT_CheckBox_1Row'),
         'the on/off settings are checkboxes');
     assert.deepStrictEqual([widgets.wocShowOn, widgets.wocHudSize], ['LT_DropDownMenu_1Row_2Col3070', 'LT_Slider_LeftJustified_Fill_Steps'],
         'where the map shows: a drop-down of four; the HUD\'s size: a slider');
@@ -356,7 +356,7 @@ async function main() {
         await until('page shows the map', () => byName.wocMap.text === `Cluster map: Showing ${RENDER_PAGE} — ${RENDER_FPS}` && status.text === 'Status: Patched');
         assert(!logs.some((l) => /^error/.test(l)), logs.filter((l) => /^error/.test(l)).join('\n'));
         const bound = logs.filter((l) => l.startsWith('info: BIND OK: ')).map((l) => l.split(' ')[3]).sort();
-        assert.deepStrictEqual(bound, ['wocAaCard', 'wocAaDisable', 'wocAaEnable', 'wocAaZoomIn', 'wocAaZoomOut', 'wocCapture', 'wocDisable', 'wocEnable',
+        assert.deepStrictEqual(bound, ['wocAaCard', 'wocAaDisable', 'wocAaEnable', 'wocAaWide', 'wocAaZoomIn', 'wocAaZoomOut', 'wocCapture', 'wocDisable', 'wocEnable',
             'wocGuide', 'wocHudCentre', 'wocHudDown', 'wocHudKeep', 'wocHudLeft', 'wocHudRight', 'wocHudUp', 'wocLogs', 'wocLogsSave', 'wocProfile',
             'wocRestart'],
             'bound buttons and checkbox');
@@ -378,13 +378,14 @@ async function main() {
         console.log('ok   CarPlay\'s Remove patch button enabled while patched, CarPlay\'s Patch button while not; presses go to the patch daemon, none to the render');
 
         /* Android Auto next to CarPlay: its line, Patch, then Remove patch, the zoom and the card. */
-        const aaRow = () => ['wocAaEnable', 'wocAaDisable', 'wocAaZoomOut', 'wocAaZoomIn', 'wocAaCard'].map((n) => byName[n].enabled);
+        const aaRow = () => ['wocAaEnable', 'wocAaDisable', 'wocAaZoomOut', 'wocAaZoomIn', 'wocAaCard', 'wocAaWide'].map((n) => byName[n].enabled);
         await until('Android Auto off, Patch enabled', () => byName.wocAaStatus.text === 'Status: Not patched' &&
-            JSON.stringify(aaRow()) === JSON.stringify([true, false, false, false, false]) && byName.wocAaZoom.text === 'Zoom: —' &&
-            byName.wocAaCard.text === "Hide phone's turn card" && byName.wocAaCard.selected === false);
+            JSON.stringify(aaRow()) === JSON.stringify([true, false, false, false, false, false]) && byName.wocAaZoom.text === 'Zoom: —' &&
+            byName.wocAaCard.text === "Hide phone's turn card" && byName.wocAaCard.selected === false &&
+            byName.wocAaWide.text === 'Wide map (under the gauges)' && byName.wocAaWide.selected === false);
         byName.wocAaEnable.emit('action');
         await until('Android Auto on', () => byName.wocAaStatus.text === 'Status: Patched' &&
-            JSON.stringify(aaRow()) === JSON.stringify([false, true, true, true, true]));
+            JSON.stringify(aaRow()) === JSON.stringify([false, true, true, true, true, true]));
         byName.wocAaZoomOut.emit('action');
         await until('zoomed out', () => patch.received.some((m) => m.cmd === 'aa-density' && m.value === 170) &&
             byName.wocAaZoom.text === 'Zoom: 170 dpi');
@@ -398,6 +399,17 @@ async function main() {
             card.text === "Hide phone's turn card");
         await sleep(100);
         assert(card.ticks.every((t) => t === true), `ticked from the press on, never unticked meanwhile: ${JSON.stringify(card.ticks)}`);
+        /* the wide map: the same choice as the turn card, so each unticks the other */
+        const wide = byName.wocAaWide;
+        await until('the wide map enabled', () => wide.enabled === true && wide.selected === false);
+        wide.press();
+        await until('wide map on', () => patch.received.some((m) => m.cmd === 'aa-card' && m.value === 'wide') &&
+            patch.aa.state === 'patched' && patch.aa.diskCard === 'wide' && wide.selected === true && card.selected === false &&
+            wide.enabled === true);
+        await sleep(450);   /* past PRESS_DEDUPE_MS since the card's last press */
+        card.press();
+        await until('card hidden again, wide map off', () => patch.aa.state === 'patched' && patch.aa.diskCard === 'hidden' &&
+            card.selected === true && wide.selected === false);
         patch.aa = Object.assign({}, patch.aa, { state: 'unknown', pending: 'apply', aapd: 'deferred', dpi: 160, density: 160, runDpi: 170, runCard: 'shown' });
         patch.announce('patched', 'high', null);
         await until('waiting for a restart', () => byName.wocAaZoom.text === 'Zoom: 160 dpi (after restart)' &&
@@ -406,7 +418,7 @@ async function main() {
         patch.aa = { state: 'original', density: 160, densities: [150, 400, 10], conflict: 'not supported on this car (KI_KOMBI_VARIANT 9)' };
         patch.announce('patched', 'high', null);
         await until('not supported', () => byName.wocAaStatus.text === 'Status: Not supported on this car' &&
-            JSON.stringify(aaRow()) === JSON.stringify([false, false, false, false, false]) && byName.wocRestart.visible === false);
+            JSON.stringify(aaRow()) === JSON.stringify([false, false, false, false, false, false]) && byName.wocRestart.visible === false);
         patch.aa = { state: 'patched', dpi: 160, density: 160, densities: [150, 400, 10] };
         patch.announce('patched', 'high', null);
         console.log('ok   Android Auto: its own line, Patch, Remove patch, the zoom and the Hide phone\'s turn card checkbox with their values, marked while waiting; ' +
@@ -676,7 +688,7 @@ async function main() {
             'only CarPlay Wi-Fi, its line and the restart\'s rows are shown and hidden');
         Object.values(components).filter((d) => !/^(wocRestart|wocWifi)/.test(d.name) && d.type !== 'title')
             .forEach((d) => assert.strictEqual(byName[d.name].visible, true, `${d.name} stays on the page`));
-        ['wocEnable', 'wocDisable', 'wocAaEnable', 'wocAaDisable', 'wocAaZoomOut', 'wocAaZoomIn', 'wocAaCard', 'wocGuide', 'wocShowOn', 'wocProfile', 'wocHudSize',
+        ['wocEnable', 'wocDisable', 'wocAaEnable', 'wocAaDisable', 'wocAaZoomOut', 'wocAaZoomIn', 'wocAaCard', 'wocAaWide', 'wocGuide', 'wocShowOn', 'wocProfile', 'wocHudSize',
             'wocHudLeft', 'wocHudCentre', 'wocHudKeep']
             .forEach((n) => assert.deepStrictEqual([...byName[n].enabledSeen].sort(), [false, true], `${n} greyed and enabled in place`));
         const valueRow = /^[A-Z][A-Za-z ]+: [A-Z0-9\u2014]/;

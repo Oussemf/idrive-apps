@@ -83,6 +83,10 @@ The app is in the head unit's display language.
   bigger text.
 - **Hide phone's turn card** (Android Auto only): hides Google Maps' own
   turn card at the top of the map.
+- **Wide map (under the gauges)** (Android Auto only, this fork): the map
+  spans the cluster between the gauges, BMW's speed, rpm and warnings drawn
+  over it. Ticking it unticks Hide phone's turn card, and the other way
+  round. Needs a head-unit restart.
 
 **Restart head unit** shows when a change needs a restart. Press it to
 apply the change.
@@ -267,6 +271,7 @@ supported, HIGH F included.
 | | Zoom | `Zoom: 180 dpi`, the density on disk, with `(after restart)` while it differs from the one aapd runs until the next head-unit start; `Zoom: —` without the patch |
 | | Zoom out / Zoom in | 10 dpi a press (150-400): out shows more map; enabled while patched, nothing is pending, no conflict stands but `Untested version`, and the 10 s between changes has passed |
 | | Hide phone's turn card | a checkbox, ticked while the turn card on disk is hidden, or as asked while its change runs: the phone's own turn card cropped off the map; `(after restart)` as for the zoom; enabled as Zoom out and Zoom in |
+| | Wide map (under the gauges) | a checkbox (this fork), the third value of the same choice (`aa-card` `wide`): ticked while the layout on disk is wide, or as asked while its change runs; ticking it sends `wide`, unticking it `shown`; `(after restart)` while the wide layout on disk and the one aapd runs differ; enabled as the turn card |
 | (the page's end) | Restart head unit | the Node State Manager's normal head-unit restart; shown while a written change, CarPlay's or Android Auto's, waits for the next head-unit start; enabled while nothing runs and the restart limit (one every 10 minutes) allows it |
 | | Restart | shown while it has something to say: `Restart: In progress`, `Restart: Failed, not accepted` (NSM did not take it), `Restart: Failed, the head unit stayed on`, `Restart: Failed, command failed`, each with `— possible in 8 min` while the limit holds, `Restart: Possible in 8 min` |
 

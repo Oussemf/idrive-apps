@@ -18,8 +18,9 @@
  * while the HUD is off or disabled after errors. CarPlay and Android Auto
  * have the same rows: Status, Patch, Remove patch; CarPlay adds CarPlay
  * Wi-Fi (the band, 5 GHz or 2.4 GHz) and, on 2.4 GHz, the line under it;
- * Android Auto adds Zoom with Zoom out and Zoom in, and the Hide phone's
- * turn card checkbox. Info rows read "Name: Value"; every on/off setting is
+ * Android Auto adds Zoom with Zoom out and Zoom in, the Hide phone's
+ * turn card checkbox and the Wide map (under the gauges) checkbox, two
+ * values of one layout choice. Info rows read "Name: Value"; every on/off setting is
  * a checkbox. One that cannot act now is greyed, and while patchd runs any
  * operation every operation is. Every row stays on the page but four, the
  * only rows shown and hidden: CarPlay Wi-Fi while CarPlay runs over Wi-Fi
@@ -82,6 +83,7 @@ const AA_ZOOM_NAME = 'wocAaZoom';
 const AA_ZOOM_OUT_NAME = 'wocAaZoomOut';
 const AA_ZOOM_IN_NAME = 'wocAaZoomIn';
 const AA_CARD_NAME = 'wocAaCard';
+const AA_WIDE_NAME = 'wocAaWide';
 const GUIDE_NAME = 'wocGuide';
 const HEAD_GENERAL_NAME = 'wocHeadGeneral';
 const HEAD_HUD_NAME = 'wocHeadHud';
@@ -205,7 +207,7 @@ class WazeClusterApp extends OnlineApp {
             return Promise.reject(new Error(`uiDescription has no ${STATE_NAME} or ${LOGS_STATE}`));
         }
         const names = [STATUS_NAME, MAP_NAME, RESTART_STATUS_NAME, ENABLE_NAME, DISABLE_NAME, WIFI_NAME, WIFI_HINT_NAME, AA_STATUS_NAME,
-            AA_ENABLE_NAME, AA_DISABLE_NAME, AA_ZOOM_NAME, AA_ZOOM_OUT_NAME, AA_ZOOM_IN_NAME, AA_CARD_NAME, RESTART_NAME, GUIDE_NAME,
+            AA_ENABLE_NAME, AA_DISABLE_NAME, AA_ZOOM_NAME, AA_ZOOM_OUT_NAME, AA_ZOOM_IN_NAME, AA_CARD_NAME, AA_WIDE_NAME, RESTART_NAME, GUIDE_NAME,
             HEAD_GENERAL_NAME, HEAD_HUD_NAME, SHOW_ON_NAME, PROFILE_NAME, HUD_NAME, HUD_KEEP_NAME, HUD_SIZE_NAME, HUD_POS_NAME]
             .concat(Object.values(HUD_MOVE_NAMES), [HUD_CENTRE_NAME, CAPTURE_NAME, CAPTURE_STATUS,
                 LOGS_NAME, LOGS_SAVE, LOGS_STATUS, LOGS_QR, LOGS_URL], LOGS_ROW_NAMES);
@@ -224,6 +226,12 @@ class WazeClusterApp extends OnlineApp {
             /* as for the turn box: patchd's answer decides the tick */
             delete this._written[`selected:${AA_CARD_NAME}`];
             this._control.toggleCard();
+        });
+        this._bind(AA_WIDE_NAME, () => {
+            /* one choice with the turn card: patchd's answer decides both ticks */
+            delete this._written[`selected:${AA_WIDE_NAME}`];
+            delete this._written[`selected:${AA_CARD_NAME}`];
+            this._control.toggleWide();
         });
         this._bind(RESTART_NAME, () => this._control.requestRestart());
         this._bind(GUIDE_NAME, () => {
@@ -536,12 +544,14 @@ class WazeClusterApp extends OnlineApp {
         this._write(AA_ZOOM_NAME, c.zoomText());
         this._write(AA_CARD_NAME, c.cardText());
         this._setSelected(AA_CARD_NAME, c.cardHidden());
+        this._write(AA_WIDE_NAME, c.wideText());
+        this._setSelected(AA_WIDE_NAME, c.wideOn());
         this._write(CAPTURE_NAME, c.captureButtonText());
         this._write(CAPTURE_STATUS, c.captureText());
         [[ENABLE_NAME, c.canEnable()], [DISABLE_NAME, c.canDisable()],
             [AA_ENABLE_NAME, c.canEnableAa()], [AA_DISABLE_NAME, c.canDisableAa()],
             [AA_ZOOM_OUT_NAME, c.canZoom(-ZOOM_STEP)], [AA_ZOOM_IN_NAME, c.canZoom(ZOOM_STEP)],
-            [AA_CARD_NAME, c.canToggleCard()], [CAPTURE_NAME, c.canCapture()], [RESTART_NAME, c.canRestart()]]
+            [AA_CARD_NAME, c.canToggleCard()], [AA_WIDE_NAME, c.canToggleCard()], [CAPTURE_NAME, c.canCapture()], [RESTART_NAME, c.canRestart()]]
             .forEach(([name, enabled]) => this._setEnabled(name, enabled));
         const restartText = c.restartText();
         this._setVisibleComp(RESTART_NAME, c.restartNeeded() || c.restartRequested());

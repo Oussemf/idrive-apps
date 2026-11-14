@@ -32,7 +32,7 @@
  * unit that refuses our parts (head_unit.js); revert works on any.
  *
  *   aapd_patch.js status [--target <aapd>] [--conf <aapd.conf>] [--coding <shm>]
- *   aapd_patch.js apply  [--dpi <n>] [--card shown|hidden] [--target ...] [--conf ...] [--coding ...] [--unproven] [--yes]
+ *   aapd_patch.js apply  [--dpi <n>] [--card shown|hidden|wide] [--target ...] [--conf ...] [--coding ...] [--unproven] [--yes]
  *   aapd_patch.js revert [--target ...] [--conf ...] [--yes] [--force] [--drop-backup]
  *
  * Every write is an atomic rename; the running aapd keeps its old binary
@@ -443,7 +443,7 @@ function main() {
     if (a._[0] === 'status') { cmdStatus(t); line('end', 'complete'); }
     else if (a._[0] === 'apply') cmdApply(t, a.dpi === undefined ? conf.DEFAULT_DPI : Number(a.dpi), a.card || conf.DEFAULT_CARD, a.yes, a.unproven);
     else if (a._[0] === 'revert') cmdRevert(t, a.yes, a.force, a['drop-backup']);
-    else { process.stderr.write('usage: aapd_patch.js status|apply|revert [--target <aapd>] [--conf <aapd.conf>] [--coding <shm>] [--dpi <n>] [--card shown|hidden] [--unproven] [--yes] [--force] [--drop-backup]\n'); process.exit(2); }
+    else { process.stderr.write('usage: aapd_patch.js status|apply|revert [--target <aapd>] [--conf <aapd.conf>] [--coding <shm>] [--dpi <n>] [--card shown|hidden|wide] [--unproven] [--yes] [--force] [--drop-backup]\n'); process.exit(2); }
 }
 
 module.exports = { CODING: CODING, PROVEN: PROVEN, trusted: trusted, binOther: binOther, readCoding: readCoding, codingRefusal: codingRefusal };

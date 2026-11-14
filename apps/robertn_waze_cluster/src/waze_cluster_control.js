@@ -29,7 +29,7 @@
  *                       {"cmd":"apply","panel":"high","mode":"avb"}
  *                       {"cmd":"revert"}
  *                       {"cmd":"aa-apply"} | {"cmd":"aa-revert"}
- *                       {"cmd":"aa-density","value":n} | {"cmd":"aa-card","value":"shown"|"hidden"}
+ *                       {"cmd":"aa-density","value":n} | {"cmd":"aa-card","value":"shown"|"hidden"|"wide"}
  *                       {"cmd":"reboot"}  activate a deferred change, CarPlay's or
  *                        Android Auto's, with a normal head-unit restart
  *     daemon -> app     {"ev":"status","state":"original"|"patched"|"unknown"|
@@ -776,8 +776,17 @@ class WazeClusterControl extends EventEmitter {
     }
 
     cardText() {
+        return t("Hide phone's turn card") + afterRestart(this._layoutWaits('hidden'));
+    }
+
+    /* A change of `card` on disk that aapd runs only from the next head-unit
+     * start; with no patch running yet, every layout waits. */
+    _layoutWaits(card) {
         const aa = this.aa();
-        return t("Hide phone's turn card") + afterRestart(aa && aa.diskCard && aa.pending === 'apply' && aa.runCard !== aa.diskCard);
+        if (!aa || !aa.diskCard || aa.pending !== 'apply') {
+            return false;
+        }
+        return aa.runCard == null || (aa.runCard === card) !== (aa.diskCard === card);
     }
 
     /* The turn card checkbox's tick: the card a change asked for while it
@@ -785,6 +794,18 @@ class WazeClusterControl extends EventEmitter {
     cardHidden() {
         const aa = this.aa();
         return this._cardAsked ? this._cardAsked === 'hidden' : !!aa && aa.diskCard === 'hidden';
+    }
+
+    /* The wide map is Android Auto's third layout (aa-card "wide"): the turn
+     * card's checkbox and this one share patchd's one choice, so ticking
+     * either unticks the other. */
+    wideText() {
+        return t('Wide map (under the gauges)') + afterRestart(this._layoutWaits('wide'));
+    }
+
+    wideOn() {
+        const aa = this.aa();
+        return this._cardAsked ? this._cardAsked === 'wide' : !!aa && aa.diskCard === 'wide';
     }
 
     enableAa() {
@@ -808,6 +829,13 @@ class WazeClusterControl extends EventEmitter {
     toggleCard() {
         if (this.canToggleCard()) {
             this._cardAsked = this.aa().diskCard === 'hidden' ? 'shown' : 'hidden';
+            this.patch.send({ cmd: 'aa-card', value: this._cardAsked });
+        }
+    }
+
+    toggleWide() {
+        if (this.canToggleCard()) {
+            this._cardAsked = this.aa().diskCard === 'wide' ? 'shown' : 'wide';
             this.patch.send({ cmd: 'aa-card', value: this._cardAsked });
         }
     }

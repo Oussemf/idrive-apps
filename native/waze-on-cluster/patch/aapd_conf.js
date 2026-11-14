@@ -29,11 +29,18 @@
  * byte. A file without those entries and numbers, with a key twice, or
  * that is not JSON is refused (check).
  *
+ * The wide layout (fork) gives the phone a band of the WIDE rect's shape,
+ * the top 1280x416 of the stream, which the render draws stretched back to
+ * its shape in WIDE.rect of cluster-render's whole-panel target, moved to
+ * the KOMBI slot WIDE.slot (wideArgs): the map spans the cluster between
+ * the gauges, at the same 1088x480 texture. The safe area is the part of
+ * the band between the two gauges, so the turn card stays readable.
+ *
  * Node 8 on the unit, no dependencies. */
 'use strict';
 
 var DENSITY_MIN = 150, DENSITY_MAX = 400, DENSITY_STEP = 10, DEFAULT_DPI = 180;
-var CARDS = ['shown', 'hidden'], DEFAULT_CARD = 'shown';
+var CARDS = ['shown', 'hidden', 'wide'], DEFAULT_CARD = 'shown';
 var DENSITIES = [];
 for (var d = DENSITY_MIN; d <= DENSITY_MAX; d += DENSITY_STEP) DENSITIES.push(d);
 
@@ -48,8 +55,25 @@ var STREAM = { w: 1280, h: 720 };
 var GEOMETRY = {
     shown: { codec: STREAM, ui: { x: 0, y: 0, w: 1280, h: 564 }, safe: { x: 336, y: 84, w: 592, h: 432 } },
     hidden: { codec: STREAM, ui: { x: 0, y: 0, w: 1280, h: 720 }, safe: { x: 336, y: 0, w: 592, h: 672 } },
+    wide: { codec: STREAM, ui: { x: 0, y: 0, w: 1280, h: 416 }, safe: { x: 288, y: 0, w: 704, h: 416 } },
 };
 var SLOT = { w: 1088, h: 480 };
+
+/* Where the wide layout's map goes: the rect in the 1920x720 panel target
+ * (1600:520 is the band's 1280:416), and the KOMBI slot that target is
+ * moved to, the one BMW's own full-width content (0x01000500) is shown in,
+ * taken over from it while the map shows. */
+var WIDE = { rect: { x: 160, y: 100, w: 1600, h: 520 }, slot: '0x200' };
+
+/* The command-line settings of the wide layout: waze-on-cluster's (the
+ * panel target and the rect) and cluster-render's (the slot). */
+function wideArgs() {
+    var r = WIDE.rect;
+    return {
+        render: '-s target=panel -s map_rect=' + [r.x, r.y, r.w, r.h].join(','),
+        clusterRender: '-s panel_slot=' + WIDE.slot + ' -s panel_take_over_stock=1',
+    };
+}
 
 /* The rows the crop cuts off the top with the card hidden: the card's
  * bottom edge is about 0.62 x dpi rows down, so at least the shown layout's
@@ -62,6 +86,7 @@ function cardCut(dpi) { return Math.max(CARD_CUT, Math.ceil((0.62 * dpi + 10) / 
  * slot's 1088:480 when fewer than 564 rows are left. Every number even. */
 function srcCrop(card, dpi) {
     var W = STREAM.w, H = STREAM.h, keep = H - CARD_CUT;
+    if (card === 'wide') return W + 'x' + H + ':0,0,' + W + ',' + GEOMETRY.wide.ui.h;
     if (card !== 'hidden') return W + 'x' + H + ':0,0,' + W + ',' + keep;
     var cut = cardCut(dpi), h = H - cut;
     if (h >= keep) return W + 'x' + H + ':0,' + cut + ',' + W + ',' + keep;
@@ -245,4 +270,5 @@ module.exports = {
     GEOMETRY: GEOMETRY, DENSITIES: DENSITIES, DEFAULT_DPI: DEFAULT_DPI,
     DENSITY_MIN: DENSITY_MIN, DENSITY_MAX: DENSITY_MAX, DENSITY_STEP: DENSITY_STEP, CARDS: CARDS, DEFAULT_CARD: DEFAULT_CARD,
     PROVEN: PROVEN, check: check, transform: transform, edited: edited, stockOriginal: stockOriginal, otherFile: otherFile, srcCrop: srcCrop,
+    WIDE: WIDE, wideArgs: wideArgs,
 };

@@ -235,6 +235,19 @@ function onlyEdits(a, b) {
     });
     var shipped = /^src_crop = (.*)$/m.exec(fs.readFileSync(path.join(PATCH, '..', 'waze-on-cluster.conf'), 'utf8'));
     ok('the shipped conf crops the card-shown geometry', shipped && shipped[1] === conf.srcCrop('shown', 180));
+    /* The wide map (fork): the top 1280x416 band, the rect's shape, with the
+     * safe area between the gauges; the crop is the band at any density. */
+    r = patcher(t, ['apply', '--dpi', '200', '--card', 'wide', '--yes']);
+    k = JSON.parse(fs.readFileSync(t.conf, 'utf8')).SCREENS.KOMBI_DISPLAY; c = k.CODEC_DEFINITION.HIGH_1080P; sa = k.DIMENSIONS['12.3'];
+    ok('wide: 1280x720 with the UI in its top 1280x416, safe area 704x416 at 288,0, 200 dpi', r.code === 0 && c.VERTICAL_MARGIN_SIZE === 304 &&
+        c.HEIGHT_TARGET_VIEWPORT === 416 && c.WIDTH_TARGET_VIEWPORT === 1280 &&
+        [sa.SA_OFFSET_LEFTPIXELS, sa.SA_OFFSET_TOPPIXELS, sa.SA_WIDTHPIXELS, sa.SA_HEIGHTPIXELS].join() === '288,0,704,416' && c.REPORTED_SCREEN_DENSITY === 200, r.out);
+    ok('wide: status names the band\'s crop', /PATCHED \(200 dpi, card wide, crop 1280x720:0,0,1280,416\)/.test(status(t)));
+    var wr = conf.WIDE.rect, wa = conf.wideArgs();
+    ok('wide: the rect has the band\'s shape, inside the 1920x720 panel', wr.w * 416 === wr.h * 1280 && wr.x + wr.w <= 1920 && wr.y + wr.h <= 720 &&
+        conf.srcCrop('wide', 150) === conf.srcCrop('wide', 400));
+    ok('wide: the render\'s and cluster-render\'s settings', wa.render === '-s target=panel -s map_rect=160,100,1600,520' &&
+        wa.clusterRender === '-s panel_slot=0x200 -s panel_take_over_stock=1', JSON.stringify(wa));
     var origText = SRCCONF.toString('utf8'), every = true;
     conf.DENSITIES.forEach(function (d) {
         conf.CARDS.forEach(function (cd) {
@@ -714,6 +727,7 @@ function daemon(t) {
     });
 }
 function cropEnv(t) { try { return fs.readFileSync(path.join(t.d, 'var', 'aa-crop.env'), 'utf8'); } catch (e) { return null; } }
+function crEnvFile(t) { try { return fs.readFileSync(path.join(t.d, 'var', 'cluster-render.env'), 'utf8'); } catch (e) { return null; } }
 function aaDone(m) { return m.ev === 'status' && m.aa && m.aa.state !== 'busy' && !/^(applying|reverting)$/.test(m.aa.reason || ''); }
 
 async function socketTests() {
@@ -1092,6 +1106,38 @@ async function socketTests() {
     ok('a marker without run stays without', !marker(n, 'aa-pending').hasOwnProperty('run') && st.aa.runDpi === undefined,
         JSON.stringify([marker(n, 'aa-pending'), st.aa]));
     pn.proc.kill('SIGKILL');
+
+    /* The wide map (fork): the band's crop with the panel target and rect
+     * for the render, cluster-render's slot in its own file, deferred to
+     * the next head-unit start; the card shown again or a revert takes
+     * both away. */
+    var w = patchdUnit();
+    w.env.WOC_DENSITY_SPACING_MS = '1';
+    hook(w, 'activate');
+    fs.unlinkSync(path.join(w.shm, 'aa-pending'));
+    var pw = await daemon(w);
+    await pw.next(function (m) { return aaDone(m) && m.aa.state === 'patched'; });
+    pw.send({ cmd: 'aa-card', value: 'wide' });
+    st = await pw.next(function (m) { return aaDone(m) && m.aa.diskCard === 'wide'; });
+    ok('aa-card wide: the render\'s and cluster-render\'s start settings written, deferred', st.aa.card === 'wide' && st.aa.pending === 'apply' &&
+        cropEnv(w) === 'WOC_SRC_CROP=-s src_crop=1280x720:0,0,1280,416 -s target=panel -s map_rect=160,100,1600,520\n' &&
+        crEnvFile(w) === 'WOC_CLUSTER_RENDER_ARGS=-s panel_slot=0x200 -s panel_take_over_stock=1\n',
+        JSON.stringify(st.aa) + ' ' + cropEnv(w) + ' ' + crEnvFile(w));
+    await sleep(20);
+    pw.send({ cmd: 'aa-card', value: 'shown' });
+    st = await pw.next(function (m) { return aaDone(m) && m.aa.diskCard === 'shown'; });
+    ok('aa-card shown after wide: both start settings gone', cropEnv(w) === null && crEnvFile(w) === null, JSON.stringify(st.aa));
+    await sleep(20);
+    pw.send({ cmd: 'aa-card', value: 'wide' });
+    await pw.next(function (m) { return aaDone(m) && m.aa.diskCard === 'wide'; });
+    pw.send({ cmd: 'aa-revert' });
+    await pw.next(function (m) { return aaDone(m) && (m.aa.state === 'original' || m.aa.pending === 'revert'); });
+    ok('aa-revert with the wide map: originals back, both start settings gone', sha(w.conf) === sha(SRCCONF) && cropEnv(w) === null &&
+        crEnvFile(w) === null);
+    pw.send({ cmd: 'aa-card', value: 'bogus' });
+    var refused = await pw.next(function (m) { return m.ev === 'refused'; });
+    ok('an unknown layout is refused, naming the three', /shown or hidden or wide/.test(refused.reason), refused.reason);
+    pw.proc.kill('SIGKILL');
 
     /* An operation takes what aapd runs from a read that starts after its
      * command: aa-apply sent while a status read runs (patchd just started,

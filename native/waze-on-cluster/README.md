@@ -180,6 +180,30 @@ density, so `patchd` passes that crop to the render
 density change while the card is hidden, takes effect at the next head-unit
 start.
 
+**Wide map (this fork).** The app's **Wide map (under the gauges)** is a
+third layout of the same choice (`{"cmd":"aa-card","value":"wide"}`,
+`patch/aapd_conf.js` `WIDE`). The phone is told to draw its UI in the top
+1280x416 of the stream, the shape of a 1600x520 rect, with the safe area
+(704x416 at 288,0) between the gauges. `patchd` writes
+`-s src_crop=1280x720:0,0,1280,416 -s target=panel -s map_rect=160,100,1600,520`
+to `aa-crop.env`, so the render crops that band, scales it into the same
+1088x480 texture (same upload as the stock map) and draws it stretched back
+to its shape in cluster-render's whole-panel target. It writes
+`WOC_CLUSTER_RENDER_ARGS=-s panel_slot=0x200 -s panel_take_over_stock=1` to
+`/var/opt/waze-on-cluster/cluster-render.env`, which this tool's drop-in
+`cluster-render.service.d/50-waze-on-cluster.conf` passes on cluster-render's
+command line: the panel target moves to KOMBI slot 0x200, where BMW shows
+its own full-width content (0x01000500) under the gauges, taken over while
+the map shows. Both take effect at the next head-unit start; the card shown
+again, or **Remove patch**, removes both files, as does boot recovery when
+it puts the original aapd.conf back. Not yet verified on a car: whether the
+KOMBI draws 0x200 under the gauges is what the layout tests
+(`tools/wide-probe.sh` checks it from a shell, through the local confs).
+While wide, any other client of cluster-render's `panel` target goes to
+0x200 too, and the panel target and rect apply to whichever phone streams:
+a CarPlay map (1088x480) would be drawn stretched in the wide rect, so
+untick it before using CarPlay.
+
 Set **Instrument cluster > Central display area** to **Map view**: the
 cluster shows the stock map, the Waze map replaces it while CarPlay's cluster
 stream is live and shows a map, and the stock map is back when the stream
