@@ -1,0 +1,98 @@
+{
+  "id": "jap-ridetube-d",
+  "kind": "tool",
+  "version": "0.3.9",
+  "title": "RideTube service",
+  "description": "The car side of RideTube, an unofficial client for YouTube: yt-dlp (from its official release, run in mgu-python) fetches as the daemon's own internet uid; search, feeds and thumbnails on the car (jap-node22); audio through the BMW MediaPlayer, video decoded by ytdec into the mgu-render video layer; TV device sign-in; controlled by the RideTube app over /run/jap-ridetube-d/ctl.sock",
+  "files": [
+    {
+      "path": "ytd.js",
+      "mode": "0644",
+      "sha256": "612e863d6964bc91679dbd4b2ec5357fd3ab2b07674c9663c4ccc9a081e61be0",
+      "from": "files/ytd.js"
+    },
+    {
+      "path": "ytdec",
+      "mode": "0755",
+      "sha256": "15a9c75d2a19e3cafda3f5a8d0f7eb706a12c90ca90f5b60f1253d25749dd2eb",
+      "from": "files/ytdec"
+    },
+    {
+      "path": "ytfetch.py",
+      "mode": "0644",
+      "sha256": "270fef8252ccd0ac3c47cf3727c9f2915f196590f34f0e0771b3bfd7fc897dc2",
+      "from": "files/ytfetch.py"
+    },
+    {
+      "path": "ytdlp.pyz",
+      "mode": "0644",
+      "sha256": "9e4e1be29d4f2cfef2ed34f63445be6c8d26d7e3452559eaf7b0cf62b65cbddc",
+      "from": "files/ytdlp.pyz"
+    },
+    {
+      "path": "thumb.js",
+      "mode": "0644",
+      "sha256": "da719a05013d468008b930331c733155476358e5edc716ec765f7e869b075cc3",
+      "from": "files/thumb.js"
+    },
+    {
+      "path": "vendor/jpeg-js/decoder.js",
+      "mode": "0644",
+      "sha256": "a3f175fd6f62d142aad94d3bd90f3a30be4e076baf9b6a6fa31c8e84d9d4aa9f",
+      "from": "files/vendor/jpeg-js/decoder.js"
+    },
+    {
+      "path": "vendor/jpeg-js/LICENSE",
+      "mode": "0644",
+      "sha256": "c0a8512eabe960492fefd4f287523eb3b5ca1518ca37ef0ec83344cd7f089cb8",
+      "from": "files/vendor/jpeg-js/LICENSE"
+    },
+    {
+      "path": "check.sh",
+      "mode": "0755",
+      "sha256": "3ea3df680c4b21542301393befa2e4a697201ce04e901da882e96cf69b9e1fb0",
+      "from": "files/check.sh"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "0644",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "from": "files/LICENSE"
+    },
+    {
+      "path": "THIRD_PARTY_LICENSES",
+      "mode": "0644",
+      "sha256": "521e6534308124a8935a9612c9288cbf892ac18ece1aa9d77551250f9540f6a1",
+      "from": "files/THIRD_PARTY_LICENSES"
+    }
+  ],
+  "units": [
+    {
+      "name": "jap-ridetube-d.service",
+      "from": "units/jap-ridetube-d.service"
+    }
+  ],
+  "enable": [
+    {
+      "unit": "jap-ridetube-d.service",
+      "target": "multi-user.target"
+    }
+  ],
+  "recmgr": [
+    "jap-ridetube-d"
+  ],
+  "restart": [
+    "jap-ridetube-d.service"
+  ],
+  "internet": true,
+  "uids": "state/internet-uids",
+  "mguHmi": [
+    "ID7"
+  ],
+  "crashNames": [
+    "ytdec"
+  ],
+  "check": [
+    "check.sh"
+  ]
+}

@@ -1,0 +1,33 @@
+name: Validate YouTube
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build without proprietary SDK
+        run: python kit/tools/build.py --sdk-free oussem_youtube
+      - name: Test native app, renderer and simulated vehicle signals
+        run: |
+          node kit/tools/test_runtime.js
+          node kit/tools/test_life.js
+          node kit/tools/test_parked.js
+          node kit/tools/test_qr.js
+          node kit/tools/test_ridetube.js
+      - name: Test upstream service
+        run: |
+          cd native/jap-ridetube-d
+          node test/test_ytd.js
+          node test/test_thumb.js
+          python3.12 -I test/test_ytfetch.py

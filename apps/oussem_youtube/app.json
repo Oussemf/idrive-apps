@@ -1,29 +1,315 @@
 {
   "id": "oussem_youtube",
-  "title": "YouTube (experimental)",
-  "description": "Parked-only YouTube: original UI or YouTube TV. Uses the Store-installable browser companion.",
-  "version": "0.2.2",
-  "vendor": "Oussemf",
-  "loggingId": "OYTB",
+  "title": "YouTube",
+  "description": "Unofficial YouTube client: search, accounts, video and audio on iDrive 7.",
+  "version": "0.3.9",
+  "license": "GPL-3.0-or-later",
+  "vendor": "custom",
+  "loggingId": "OAA6",
   "iconGlyph": "YT",
-  "maxDiskUsage": 536870912,
   "signals": {
-    "de.bmw.infotainment.vehicle.Vehicle2": { "statusCarSpeed2": "rs" }
+    "de.bmw.infotainment.vehicle.Vehicle2": {
+      "statusCarSpeed2": "rs"
+    },
+    "de.bmw.infotainment.vehicle.CDS": {
+      "statusBattery2": "rs"
+    }
   },
   "screens": [
-    { "name": "MAIN", "kind": "menu", "title": "YouTube - parked only", "items": [
-      ["text", "STATUS", "Install YouTube browser companion from this source's Releases."],
-      ["button", "BTN_NATIVE", "Original interface"],
-      ["button", "BTN_TV", "YouTube TV"],
-      ["button", "BTN_GARAGE_NATIVE", "Garage test - original UI (vehicle parked)"],
-      ["button", "BTN_GARAGE_TV", "Garage test - YouTube TV (vehicle parked)"],
-      ["text", "DETAIL", "Garage test skips speed checks for this session only. Keep vehicle parked."]
-    ] },
-    { "name": "RUNTIME", "kind": "menu", "title": "YouTube", "items": [
-      ["text", "RUNTIME_STATUS", "Waiting for a fresh stationary signal and the browser runtime."],
-      ["text3", "RUNTIME_DETAIL", "Requires a separately installed MGU-compatible browser companion."],
-      ["button", "BTN_STOP", "Stop and return"]
-    ] }
+    {
+      "name": "VIEW",
+      "kind": "canvas",
+      "title": "YouTube",
+      "hmi": false,
+      "bg": "#0f0f0f",
+      "buttons": [
+        [
+          "BTN_PLAY",
+          "Play"
+        ],
+        [
+          "BTN_RW",
+          "-10 s"
+        ],
+        [
+          "BTN_FF",
+          "+10 s"
+        ],
+        [
+          "BTN_LIST",
+          "Player"
+        ],
+        [
+          "BTN_FIND",
+          "Search"
+        ]
+      ]
+    },
+    {
+      "name": "MAIN",
+      "kind": "menu",
+      "title": "YouTube search",
+      "settings": true,
+      "items": [
+        [
+          "button",
+          "BTN_SEARCH",
+          "Search"
+        ],
+        [
+          "text",
+          "MAIN_INFO",
+          ""
+        ],
+        [
+          "button",
+          "BTN_NOW",
+          "Now playing"
+        ],
+        [
+          "button",
+          "BTN_RESULTS",
+          "Results"
+        ],
+        [
+          "button",
+          "BTN_HOME",
+          "Home"
+        ],
+        [
+          "button",
+          "BTN_SUBS",
+          "Subscriptions"
+        ],
+        [
+          "button",
+          "BTN_WL",
+          "Watch later"
+        ],
+        [
+          "button",
+          "BTN_S1",
+          ""
+        ],
+        [
+          "button",
+          "BTN_S2",
+          ""
+        ],
+        [
+          "button",
+          "BTN_S3",
+          ""
+        ],
+        [
+          "button",
+          "BTN_S4",
+          ""
+        ],
+        [
+          "button",
+          "BTN_S5",
+          ""
+        ],
+        [
+          "button",
+          "BTN_S6",
+          ""
+        ],
+        [
+          "button",
+          "BTN_ACCOUNT",
+          "Sign in"
+        ],
+        [
+          "text",
+          "MAIN_SB",
+          "Skip data: SponsorBlock (sponsor.ajay.app), CC BY-NC-SA 4.0"
+        ]
+      ]
+    }
   ],
-  "settings": []
+  "settings": [
+    {
+      "key": "fill",
+      "label": "Fill the screen (crops the video; off: black side bars)",
+      "type": "bool",
+      "default": false,
+      "reset": 2
+    },
+    {
+      "key": "quality",
+      "label": "Video quality",
+      "type": "choice",
+      "default": "auto",
+      "options": [
+        [
+          "auto",
+          "Auto (720p on Wi-Fi, 480p on phone data)"
+        ],
+        [
+          "720",
+          "720p"
+        ],
+        [
+          "480",
+          "480p (less data)"
+        ],
+        [
+          "360",
+          "360p (least data)"
+        ]
+      ]
+    },
+    {
+      "key": "members",
+      "label": "Show members-only videos",
+      "type": "bool",
+      "default": false
+    },
+    {
+      "key": "sb_sponsor",
+      "label": "SponsorBlock: Sponsors",
+      "type": "choice",
+      "default": "skip",
+      "options": [
+        [
+          "skip",
+          "Skip"
+        ],
+        [
+          "ask",
+          "Show a Skip button"
+        ],
+        [
+          "off",
+          "Off"
+        ]
+      ]
+    },
+    {
+      "key": "sb_selfpromo",
+      "label": "SponsorBlock: Self-promotion",
+      "type": "choice",
+      "default": "skip",
+      "options": [
+        [
+          "skip",
+          "Skip"
+        ],
+        [
+          "ask",
+          "Show a Skip button"
+        ],
+        [
+          "off",
+          "Off"
+        ]
+      ]
+    },
+    {
+      "key": "sb_interaction",
+      "label": "SponsorBlock: Like & subscribe reminders",
+      "type": "choice",
+      "default": "skip",
+      "options": [
+        [
+          "skip",
+          "Skip"
+        ],
+        [
+          "ask",
+          "Show a Skip button"
+        ],
+        [
+          "off",
+          "Off"
+        ]
+      ]
+    },
+    {
+      "key": "sb_intro",
+      "label": "SponsorBlock: Intros",
+      "type": "choice",
+      "default": "skip",
+      "options": [
+        [
+          "skip",
+          "Skip"
+        ],
+        [
+          "ask",
+          "Show a Skip button"
+        ],
+        [
+          "off",
+          "Off"
+        ]
+      ]
+    },
+    {
+      "key": "sb_outro",
+      "label": "SponsorBlock: End cards and credits",
+      "type": "choice",
+      "default": "ask",
+      "options": [
+        [
+          "skip",
+          "Skip"
+        ],
+        [
+          "ask",
+          "Show a Skip button"
+        ],
+        [
+          "off",
+          "Off"
+        ]
+      ]
+    },
+    {
+      "key": "sb_music_offtopic",
+      "label": "SponsorBlock: Non-music parts of music videos",
+      "type": "choice",
+      "default": "off",
+      "options": [
+        [
+          "skip",
+          "Skip"
+        ],
+        [
+          "ask",
+          "Show a Skip button"
+        ],
+        [
+          "off",
+          "Off"
+        ]
+      ]
+    },
+    {
+      "key": "battery",
+      "label": "Parked: pause when the 12 V battery is under",
+      "type": "choice",
+      "default": "65",
+      "options": [
+        [
+          "60",
+          "60 %"
+        ],
+        [
+          "65",
+          "65 %"
+        ],
+        [
+          "70",
+          "70 %"
+        ],
+        [
+          "0",
+          "Never"
+        ]
+      ]
+    }
+  ]
 }

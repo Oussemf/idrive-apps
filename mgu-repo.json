@@ -3,35 +3,33 @@
   "apps": {
     "path": "apps/*",
     "manifest": "app.json",
-    "mguHmi": [
-      "ID7"
-    ],
+    "mguHmi": ["ID7"],
     "requires": {
-      "oussem-browser": "0.1.2",
-      "mgu-render": "0.6.19"
+      "jap-ridetube-d": "0.3.9",
+      "mgu-render": "0.6.11",
+      "mgu-inputgate": "1.0.0"
     },
     "build": {
-      "python": "tools/build_mgu.py",
-      "args": [
-        "{id}"
-      ],
+      "python": "kit/tools/build.py",
+      "args": ["{id}"],
       "sdk": "oap-sdk",
       "output": "dist/{id}@{version}.tgz",
-      "shared": [
-        "tools/build_mgu.py",
-        "shared",
-        "LICENSE",
-        "NOTICE",
-        "THIRD_PARTY_NOTICES.md",
-        "vendor/mgu-kit",
-        "oap-sdk"
-      ]
+      "shared": ["kit", "LICENSE", "THIRD_PARTY_LICENSES", "oap-sdk"]
     }
   },
   "tools": [
     {
-      "id": "oussem-browser",
-      "path": "store/oussem-browser",
+      "id": "jap-ridetube-d",
+      "path": "store/jap-ridetube-d",
+      "title": "YouTube service",
+      "description": "Video, audio and search service for YouTube.",
+      "mguHmi": ["ID7"],
+      "requires": {
+        "mgu-deploy": "0.7.0",
+        "mgu-python": "1.0.2",
+        "jap-node22": "22.23.4",
+        "mgu-render": "0.6.11"
+      },
       "uninstallable": true
     }
   ]
