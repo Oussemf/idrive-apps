@@ -180,11 +180,12 @@ var AA_CARD_FILE = path.join(STATE_DIR, 'aa-card');
 /* With the turn card hidden, the crop waze-on-cluster.service passes to the
  * render (EnvironmentFile): the card's rows grow with the density. The
  * shipped waze-on-cluster.conf holds the crop for the card shown. With the
- * wide layout, the crop, target and rect of the wide map; cluster-render's
- * own settings for it (its slot) go in CR_ENV, which this tool's drop-in
- * for cluster-render.service reads. */
+ * wide layout, the crop, target and rect of the wide map (wide_mask.js
+ * shapes it from the running render's command line). CR_ENV_OLD: the slot
+ * 0x200 waze-on-cluster 0.10.0 passed to cluster-render, removed at each
+ * start and install so cluster-render keeps its own slot. */
 var AA_CROP_ENV = path.join(STATE_DIR, 'aa-crop.env');
-var CR_ENV = path.join(STATE_DIR, 'cluster-render.env');
+var CR_ENV_OLD = path.join(STATE_DIR, 'cluster-render.env');
 var REBOOTS_FILE = path.join(STATE_DIR, 'reboots.json');
 /* The targets the HIGH F reset is done with (highfReset): { carplay, aa },
  * each "applied", "left" or "user". */
@@ -876,7 +877,6 @@ function cropEnv(card, dpi) {
     if (card === 'wide') return 'WOC_SRC_CROP=-s src_crop=' + aapdConf.srcCrop(card, dpi) + ' ' + aapdConf.wideArgs().render + '\n';
     return card === 'hidden' ? 'WOC_SRC_CROP=-s src_crop=' + aapdConf.srcCrop(card, dpi) + '\n' : null;
 }
-function crEnv(card) { return card === 'wide' ? 'WOC_CLUSTER_RENDER_ARGS=' + aapdConf.wideArgs().clusterRender + '\n' : null; }
 
 function aaMsg(st) {
     var m = { state: busy === 'aa' ? 'busy' : st.state, density: st.density, card: st.card, densities: [aapdConf.DENSITY_MIN, aapdConf.DENSITY_MAX, aapdConf.DENSITY_STEP],
@@ -1520,19 +1520,12 @@ function revert(noRestart, dropBackup, done) {
 
 var AA_FILES = ['--target', AAPD, '--conf', AAPD_CONF];
 
-/* Writes or removes one start-settings file; true when it changed. */
-function setEnvFile(file, text) {
-    if (readText(file) === text) return false;
-    if (text === null) { unlinkQuiet(file); return true; }
-    saveFile(file, text);
+/* Writes or removes the crop override; true when it changed. */
+function setCrop(text) {
+    if (readText(AA_CROP_ENV) === text) return false;
+    if (text === null) { unlinkQuiet(AA_CROP_ENV); return true; }
+    saveFile(AA_CROP_ENV, text);
     return true;
-}
-
-/* Writes or removes the crop override and cluster-render's settings; true
- * when either changed. */
-function setCrop(crop, cr) {
-    var a = setEnvFile(AA_CROP_ENV, crop), b = setEnvFile(CR_ENV, cr);
-    return a || b;
 }
 
 /* What aapd runs, from a read that starts once the change's command has
@@ -1553,16 +1546,15 @@ function aaRunning(cb) {
  * never does. done(err, roErr, activation, why, run): run, what aapd runs,
  * for a marker the caller writes. */
 function aaApply(noRestart, unproven, done) {
-    var dpi = aaDensity(), card = aaCard(), crop = cropEnv(card, dpi), cr = crEnv(card),
-        cropChange = readText(AA_CROP_ENV) !== crop || readText(CR_ENV) !== cr;
+    var dpi = aaDensity(), card = aaCard(), crop = cropEnv(card, dpi), cropChange = readText(AA_CROP_ENV) !== crop;
     log('Android Auto: apply at ' + dpi + ' dpi, card ' + card);
     aaRunning(function (run) {
         runPatch(AA, ['apply', '--dpi', String(dpi), '--card', card, '--coding', CODING, '--yes'].concat(AA_FILES, unproven ? ['--unproven'] : []), 'apply', noRestart || cropChange,
             function (pErr, roErr, activation, why) {
                 if (!pErr) {
                     try {
-                        if (setCrop(crop, cr) && activation !== 'deferred') { writePending(AA, 'apply', run, AA.extra.map(sha).join()); activation = 'deferred'; }
-                    } catch (e) { pErr = new Error('writing ' + AA_CROP_ENV + ' or ' + CR_ENV + ': ' + e.message); }
+                        if (setCrop(crop) && activation !== 'deferred') { writePending(AA, 'apply', run, AA.extra.map(sha).join()); activation = 'deferred'; }
+                    } catch (e) { pErr = new Error('writing ' + AA_CROP_ENV + ': ' + e.message); }
                 }
                 done(pErr, roErr, activation, why, run);
             }, run);
@@ -1583,7 +1575,7 @@ function aaRevert(noRestart, dropBackup, done) {
     log('Android Auto: revert');
     aaRunning(function (run) {
         runPatch(AA, ['revert', '--yes'].concat(AA_FILES, dropBackup ? ['--drop-backup'] : []), 'revert', noRestart, function (pErr, roErr, activation, why) {
-            if (!pErr) { unlinkQuiet(AA_CROP_ENV); unlinkQuiet(CR_ENV); }
+            if (!pErr) unlinkQuiet(AA_CROP_ENV);
             done(pErr, roErr, activation, why, run);
         }, run);
     });
@@ -2063,6 +2055,7 @@ function oneShot(which) {
     }
     if (which === 'deactivate') markBy = 'removal';
     else moveMapSettings();
+    unlinkQuiet(CR_ENV_OLD);
     highfInstall = which === 'activate' && headUnit.variant() === 'HIGHF';
     try { ensureDir(path.dirname(SOCK)); } catch (e) { result.status = e.message; finish(1); return; }
     lock.acquire(20000, function (got) {
@@ -2102,6 +2095,7 @@ function main() {
     var dir = path.dirname(SOCK);
     ensureDir(dir);
     moveMapSettings();
+    unlinkQuiet(CR_ENV_OLD);
     loadProfiles();
     try { if (fs.lstatSync(SOCK)) fs.unlinkSync(SOCK); } catch (e) {}
 

@@ -141,8 +141,8 @@ function targets(o) {
             mark: path.join(dir, 'shutdown-aapd'), restart: restart, restartInfo: restartInfo,
             pending: path.join(shm, 'aa-pending'), killed: path.join(shm, 'aapd-killed'), running: o.aapd + '.woc-running',
             killedRun: function (i) { return (i.state === 'failed' || i.state === 'inactive') && i.result === 'signal' && i.code === CLD_KILLED && i.status === '9'; },
-            /* the wide map's start settings (fork), which go with the patched aapd.conf */
-            wide: { crop: path.join(dir, 'aa-crop.env'), clusterRender: path.join(dir, 'cluster-render.env') },
+            /* the wide map's crop (fork), which goes with the patched aapd.conf */
+            wide: { crop: path.join(dir, 'aa-crop.env') },
         },
     };
     t.carplay.other = t.aapd;
@@ -530,15 +530,13 @@ function restoreTarget(t, onlyIfRunning, fails, cb, waitMs) {
 /* Whether a restore holds the remount lock in this process. */
 var writing = false;
 
-/* With the original aapd.conf back, the wide map's start settings (fork)
- * no longer match the phone's picture: cluster-render's goes, and the
- * render's crop when it is the wide one (a hidden card's is left, as
- * upstream leaves it). Both are on /var/opt, outside the remount. */
+/* With the original aapd.conf back, the wide map's crop (fork) no longer
+ * matches the phone's picture: it goes when it is the wide one (a hidden
+ * card's is left, as upstream leaves it). On /var/opt, outside the remount. */
 function dropWide(t) {
     if (!t.wide) return;
-    try { fs.unlinkSync(t.wide.clusterRender); } catch (e) {}
     try {
-        if (/ -s target=panel /.test(fs.readFileSync(t.wide.crop, 'utf8'))) { fs.unlinkSync(t.wide.crop); log('the wide map\'s start settings removed with aapd.conf'); }
+        if (/ -s target=panel /.test(fs.readFileSync(t.wide.crop, 'utf8'))) { fs.unlinkSync(t.wide.crop); log('the wide map\'s crop removed with aapd.conf'); }
     } catch (e) {}
 }
 

@@ -289,7 +289,7 @@ async function main() {
         'wocHudRight Move right', 'wocHudUp Move up', 'wocHudDown Move down', 'wocHudCentre Centre',
         'wocHeadCarPlay CarPlay', 'wocStatus Status: Connecting…', 'wocEnable Patch', 'wocDisable Remove patch', 'wocWifi ', 'wocWifiHint ',
         'wocHeadAa Android Auto', 'wocAaStatus Status: Connecting…', 'wocAaEnable Patch', 'wocAaDisable Remove patch',
-        'wocAaZoom Zoom: —', 'wocAaZoomOut Zoom out', 'wocAaZoomIn Zoom in', "wocAaCard Hide phone's turn card", 'wocAaWide Wide map (under the gauges)',
+        'wocAaZoom Zoom: —', 'wocAaZoomOut Zoom out', 'wocAaZoomIn Zoom in', "wocAaCard Hide phone's turn card", 'wocAaWide Wide map',
         'wocRestart Restart head unit', 'wocRestartStatus '],
         'the main page: four sections, in order');
     assert.deepStrictEqual(xmlIds('1').map(([id, type]) => `${id} ${type}`).sort(),
@@ -382,7 +382,7 @@ async function main() {
         await until('Android Auto off, Patch enabled', () => byName.wocAaStatus.text === 'Status: Not patched' &&
             JSON.stringify(aaRow()) === JSON.stringify([true, false, false, false, false, false]) && byName.wocAaZoom.text === 'Zoom: —' &&
             byName.wocAaCard.text === "Hide phone's turn card" && byName.wocAaCard.selected === false &&
-            byName.wocAaWide.text === 'Wide map (under the gauges)' && byName.wocAaWide.selected === false);
+            byName.wocAaWide.text === 'Wide map' && byName.wocAaWide.selected === false);
         byName.wocAaEnable.emit('action');
         await until('Android Auto on', () => byName.wocAaStatus.text === 'Status: Patched' &&
             JSON.stringify(aaRow()) === JSON.stringify([false, true, true, true, true, true]));

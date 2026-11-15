@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.7.1
+
+Wide map is shaped (fork): a rounded window between the gauges, its edge
+fading to black, so BMW's speed, rpm, gear and the rest of the cluster
+stay in view around it, where before the map's rectangle covered them.
+"Wide map (under the gauges)" is now "Wide map": the map is drawn over the
+cluster, BMW's slot under the gauges having shown it over them too. Needs
+waze-on-cluster 0.10.1.
+
 ## 0.7.0
 
 Wide map (under the gauges), a checkbox in Android Auto (fork of

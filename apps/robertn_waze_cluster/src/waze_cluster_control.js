@@ -800,7 +800,7 @@ class WazeClusterControl extends EventEmitter {
      * card's checkbox and this one share patchd's one choice, so ticking
      * either unticks the other. */
     wideText() {
-        return t('Wide map (under the gauges)') + afterRestart(this._layoutWaits('wide'));
+        return t('Wide map') + afterRestart(this._layoutWaits('wide'));
     }
 
     wideOn() {

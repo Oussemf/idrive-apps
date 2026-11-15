@@ -992,7 +992,7 @@ test('wide map: one layout with the turn card, ticked from disk, "(after restart
         return [c.wideText(), c.wideOn(), c.cardText(), c.cardHidden()];
     };
     assert.deepStrictEqual(await show({ state: 'patched', dpi: 180, diskCard: 'shown', density: 180, card: 'shown', densities: D }),
-        ['Wide map (under the gauges)', false, "Hide phone's turn card", false]);
+        ['Wide map', false, "Hide phone's turn card", false]);
     c.toggleWide();
     await until('aa-card wide sent', () => patch.count('aa-card') === 1);
     assert.strictEqual(patch.received.filter((m) => m.cmd === 'aa-card').pop().value, 'wide');
@@ -1001,10 +1001,10 @@ test('wide map: one layout with the turn card, ticked from disk, "(after restart
     assert.deepStrictEqual([c.wideOn(), c.cardHidden()], [true, false], 'then from disk');
     assert.deepStrictEqual(await show({ state: 'unknown', pending: 'apply', aapd: 'deferred', dpi: 180, diskCard: 'wide', runDpi: 180,
         runCard: 'shown', density: 180, card: 'wide', densities: D }),
-        ['Wide map (under the gauges) (after restart)', true, "Hide phone's turn card", false]);
+        ['Wide map (after restart)', true, "Hide phone's turn card", false]);
     assert.deepStrictEqual(await show({ state: 'unknown', pending: 'apply', aapd: 'deferred', dpi: 180, diskCard: 'hidden', runDpi: 180,
         runCard: 'wide', density: 180, card: 'hidden', densities: D }),
-        ['Wide map (under the gauges) (after restart)', false, "Hide phone's turn card (after restart)", true]);
+        ['Wide map (after restart)', false, "Hide phone's turn card (after restart)", true]);
     await show({ state: 'patched', dpi: 180, diskCard: 'wide', density: 180, card: 'wide', densities: D });
     c.toggleWide();
     await until('aa-card shown sent', () => patch.count('aa-card') === 2);

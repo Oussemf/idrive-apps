@@ -7,7 +7,7 @@
       "path": "apps/robertn_waze_cluster",
       "build": "unit",
       "mguHmi": ["ID7"],
-      "requires": { "waze-on-cluster": "0.10.0" },
+      "requires": { "waze-on-cluster": "0.10.1" },
       "uninstallable": true
     }
   ],

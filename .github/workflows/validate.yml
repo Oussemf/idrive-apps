@@ -46,9 +46,11 @@ jobs:
           node apps/robertn_waze_cluster/tools/test_page.js
           node apps/robertn_waze_cluster/tools/test_profiles.js
           node apps/robertn_waze_cluster/tools/test_i18n.js
-      - name: Check the wide map probe script
-        run: sh -n native/waze-on-cluster/tools/wide-probe.sh
-      - name: Test the wide map layout
-        run: node native/waze-on-cluster/patch/test/wide_test.js
+      - name: Test the wide map layout and its mask
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y glslang-tools
+          node native/waze-on-cluster/patch/test/wide_test.js
+          node native/waze-on-cluster/patch/test/wide_mask_test.js
       - name: Check the staged waze-on-cluster tool
         run: node tools/stage_waze_on_cluster.js --check

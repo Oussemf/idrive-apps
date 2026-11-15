@@ -31,10 +31,13 @@
  *
  * The wide layout (fork) gives the phone a band of the WIDE rect's shape,
  * the top 1280x416 of the stream, which the render draws stretched back to
- * its shape in WIDE.rect of cluster-render's whole-panel target, moved to
- * the KOMBI slot WIDE.slot (wideArgs): the map spans the cluster between
- * the gauges, at the same 1088x480 texture. The safe area is the part of
- * the band between the two gauges, so the turn card stays readable.
+ * its shape in WIDE.rect of cluster-render's whole-panel target (wideArgs),
+ * at the same 1088x480 texture: across the middle of the cluster, between
+ * the two gauges' scales and above the speed and rpm readouts, over BMW's
+ * drawing (slot 0x203). wide_mask.js shapes it (WIDE.mask): a rounded
+ * rectangle fading to black at its edge, transparent outside it where the
+ * KOMBI composes the panel with its alpha. The safe area keeps the phone's
+ * turn card and its own controls clear of the faded edge.
  *
  * Node 8 on the unit, no dependencies. */
 'use strict';
@@ -50,29 +53,30 @@ var DIMS = BLOCK + 'DIMENSIONS/' + SIZE + '/';
 
 /* The stream, the part of it the phone draws its UI in, and the safe area,
  * for each turn-card setting. Hidden keeps the safe area's lower edge where
- * the shown layout has it on the cluster (672 = 84 + 432 + 156). */
+ * the shown layout has it on the cluster (672 = 84 + 432 + 156). Wide's
+ * safe area is the band less the mask's faded edge and rounded corners
+ * (WIDE.mask in band pixels: the rect is the band at 9/8). */
 var STREAM = { w: 1280, h: 720 };
 var GEOMETRY = {
     shown: { codec: STREAM, ui: { x: 0, y: 0, w: 1280, h: 564 }, safe: { x: 336, y: 84, w: 592, h: 432 } },
     hidden: { codec: STREAM, ui: { x: 0, y: 0, w: 1280, h: 720 }, safe: { x: 336, y: 0, w: 592, h: 672 } },
-    wide: { codec: STREAM, ui: { x: 0, y: 0, w: 1280, h: 416 }, safe: { x: 288, y: 0, w: 704, h: 416 } },
+    wide: { codec: STREAM, ui: { x: 0, y: 0, w: 1280, h: 416 }, safe: { x: 288, y: 58, w: 704, h: 300 } },
 };
 var SLOT = { w: 1088, h: 480 };
 
-/* Where the wide layout's map goes: the rect in the 1920x720 panel target
- * (1600:520 is the band's 1280:416), and the KOMBI slot that target is
- * moved to, the one BMW's own full-width content (0x01000500) is shown in,
- * taken over from it while the map shows. */
-var WIDE = { rect: { x: 160, y: 100, w: 1600, h: 520 }, slot: '0x200' };
+/* Where the wide layout's map goes: the rect in the 1920x720 panel target,
+ * the band's 1280:416 at 9/8, centred, from under the scales' top to above
+ * the readouts at the gauges' feet; and its shape (wide_mask.js): a
+ * rounded rectangle the size of the rect with corners of `radius`, the map
+ * fading to black over the `feather` pixels inside its edge. In the
+ * panel's pixels. Tuned from photos of a G21's cluster. */
+var WIDE = { rect: { x: 240, y: 96, w: 1440, h: 468 }, mask: { radius: 200, feather: 64 } };
 
-/* The command-line settings of the wide layout: waze-on-cluster's (the
- * panel target and the rect) and cluster-render's (the slot). */
+/* The command-line settings of the wide layout for waze-on-cluster: the
+ * panel target (slot 0x203) and the rect. */
 function wideArgs() {
     var r = WIDE.rect;
-    return {
-        render: '-s target=panel -s map_rect=' + [r.x, r.y, r.w, r.h].join(','),
-        clusterRender: '-s panel_slot=' + WIDE.slot + ' -s panel_take_over_stock=1',
-    };
+    return { render: '-s target=panel -s map_rect=' + [r.x, r.y, r.w, r.h].join(',') };
 }
 
 /* The rows the crop cuts off the top with the card hidden: the card's

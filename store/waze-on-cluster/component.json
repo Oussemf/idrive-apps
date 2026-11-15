@@ -1,10 +1,10 @@
 {
   "id": "waze-on-cluster",
   "kind": "tool",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "license": "GPL-3.0-or-later",
   "title": "Waze on cluster",
-  "description": "Runs the Waze on cluster map in the background, with the wide map under the gauges for Android Auto (fork of robertnisipeanu/idrive-apps). It is installed with the Waze on cluster app, which you use to control it.",
+  "description": "Runs the Waze on cluster map in the background, with the wide map between the gauges for Android Auto (fork of robertnisipeanu/idrive-apps). It is installed with the Waze on cluster app, which you use to control it.",
   "requires": {
     "mgu-deploy": "0.7.17",
     "cluster-render": "0.5.3"
@@ -69,19 +69,37 @@
     {
       "path": "aapd_conf.js",
       "mode": "0644",
-      "sha256": "fa3572e5f37a5b97ca38609865dc1b4a868b88e64052ce81a556c5a10815aab7",
+      "sha256": "90d3ead0b587d287af699eddea996bfb62bab96a68a5d5e71a8f94f0d2536434",
       "from": "files/aapd_conf.js"
+    },
+    {
+      "path": "wide_mask.js",
+      "mode": "0644",
+      "sha256": "38cb0c13c1afcef51a6a11ffe9ca71db254e883140e36d48959de8e6b5e1c19b",
+      "from": "files/wide_mask.js"
+    },
+    {
+      "path": "cluster_render_client.js",
+      "mode": "0644",
+      "sha256": "6725dc511ca323bbd89b0d78c8399cdd91cc9c8dd815389640cc56af64b2d459",
+      "from": "files/cluster_render_client.js"
+    },
+    {
+      "path": "LICENSE-MPL-2.0.txt",
+      "mode": "0644",
+      "sha256": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+      "from": "files/LICENSE-MPL-2.0.txt"
     },
     {
       "path": "patchd.js",
       "mode": "0644",
-      "sha256": "1c9500731ddfa00ee62ef202f0942e7da98c73c1ac14be95747d959b68ba4a5a",
+      "sha256": "80638a81e61acd15db4d4eb5e4f0f8008d4dd2ae5f378b7fca522c4449b466ab",
       "from": "files/patchd.js"
     },
     {
       "path": "recovery.js",
       "mode": "0644",
-      "sha256": "4ed0b025f5764be9eea250757ef84d9ff94988155d8503bcbaafc032dcfd9c3f",
+      "sha256": "9c27379fe1ebb8cdc535cb3e71082383082645536081b4eac1294eb511a77c2b",
       "from": "files/recovery.js"
     },
     {
@@ -238,6 +256,10 @@
     {
       "name": "waze-on-cluster-logs-fw.service",
       "from": "units/waze-on-cluster-logs-fw.service"
+    },
+    {
+      "name": "waze-on-cluster-mask.service",
+      "from": "units/waze-on-cluster-mask.service"
     }
   ],
   "enable": [
@@ -276,6 +298,10 @@
     {
       "unit": "waze-on-cluster-logs.socket",
       "target": "sockets.target"
+    },
+    {
+      "unit": "waze-on-cluster-mask.service",
+      "target": "multi-user.target"
     }
   ],
   "dropins": [
@@ -288,11 +314,6 @@
       "unit": "carplay.service",
       "name": "50-waze-on-cluster.conf",
       "from": "dropins/carplay.service.d/50-waze-on-cluster.conf"
-    },
-    {
-      "unit": "cluster-render.service",
-      "name": "50-waze-on-cluster.conf",
-      "from": "dropins/cluster-render.service.d/50-waze-on-cluster.conf"
     }
   ],
   "recmgr": [
@@ -306,7 +327,8 @@
     "waze-on-cluster-capture",
     "waze-on-cluster-journal",
     "waze-on-cluster-logs",
-    "waze-on-cluster-logs-fw"
+    "waze-on-cluster-logs-fw",
+    "waze-on-cluster-mask"
   ],
   "crashNames": [
     "aapd"
@@ -316,6 +338,7 @@
     "waze-on-cluster-patchd.service",
     "waze-on-cluster-recovery.service",
     "waze-on-cluster-capture.service",
-    "waze-on-cluster-journal.service"
+    "waze-on-cluster-journal.service",
+    "waze-on-cluster-mask.service"
   ]
 }

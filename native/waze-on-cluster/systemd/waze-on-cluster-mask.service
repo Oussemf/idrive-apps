@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+[Unit]
+Description=waze-on-cluster wide map mask: shapes the wide Android Auto map between the cluster's gauges (fork)
+RequiresMountsFor=/var/opt
+# cluster-render's socket starts the renderer at the mask's first connection,
+# which comes only once the wide map runs.
+Wants=cluster-render.socket
+After=local-fs.target cluster-render.socket waze-on-cluster.service
+
+[Service]
+# As the render: hmi_5000 reads its status file and its command line, and
+# tm_oap_app opens cluster-render's socket.
+User=hmi_5000
+Group=hmi_5000
+SupplementaryGroups=tm_oap_app
+ExecStart=/usr/bin/node /var/opt/waze-on-cluster/current/wide_mask.js
+# Listed in recmgr's restart lists by the install, so a crash restarts this
+# service alone, never the head unit; the map then shows unshaped.
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target

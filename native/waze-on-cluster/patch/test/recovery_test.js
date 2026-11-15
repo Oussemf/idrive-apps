@@ -977,17 +977,15 @@ test('the aapd restore under umask 077 writes aapd 0755 and aapd.conf 0644 over 
     assert(ro());
 });
 
-test('the aapd restore takes the wide map\'s start settings away with aapd.conf (fork), and leaves a hidden card\'s crop', async () => {
-    for (const [crop, kept] of [['WOC_SRC_CROP=-s src_crop=1280x720:0,0,1280,416 -s target=panel -s map_rect=160,100,1600,520\n', false],
+test('the aapd restore takes the wide map\'s crop away with aapd.conf (fork), and leaves a hidden card\'s crop', async () => {
+    for (const [crop, kept] of [['WOC_SRC_CROP=-s src_crop=1280x720:0,0,1280,416 -s target=panel -s map_rect=240,96,1440,468\n', false],
         ['WOC_SRC_CROP=-s src_crop=1280x720:0,156,1280,564\n', true]]) {
         const w = makeWorld();
         w.install('aapd', 'unproven');
         fs.writeFileSync(w.T.aapd.wide.crop, crop);
-        fs.writeFileSync(w.T.aapd.wide.clusterRender, 'WOC_CLUSTER_RENDER_ARGS=-s panel_slot=0x200 -s panel_take_over_stock=1\n');
         assert.strictEqual(path.dirname(w.T.aapd.wide.crop), path.join(w.dir, 'var'), 'beside the recovery state, as patchd\'s STATE_DIR');
         await new Promise((res) => recovery.restoreTarget(w.T.aapd, true, 1, (err, o) => { assert.ifError(err); assert.strictEqual(o, 'restored'); res(); }));
         assert.strictEqual(w.holds('aapd'), 'original');
-        assert(!fs.existsSync(w.T.aapd.wide.clusterRender), 'cluster-render\'s settings gone');
         assert.strictEqual(fs.existsSync(w.T.aapd.wide.crop), kept, kept ? 'a hidden card\'s crop stays' : 'the wide crop gone');
         assert(ro());
     }

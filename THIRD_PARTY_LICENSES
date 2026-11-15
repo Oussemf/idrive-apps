@@ -128,7 +128,9 @@ RideTube itself is GPL-3.0-or-later (LICENSE). The parts below come from others.
    (github.com/robertnisipeanu/idrive-apps, commit 7ad7a0bbea7a426c77580a07a4da64b644edc9bf),
    GPL-3.0-or-later (the LICENSE in each folder). apps/robertn_waze_cluster/src/qrcodegen.js is MIT
    (package/LICENSE-qrcodegen.txt); cluster-render's client library, kit/, abi/ and dcsm/abi files are
-   MPL-2.0 (native/cluster-render/LICENSES/MPL-2.0.txt), as each file's SPDX line says. Changes made
+   MPL-2.0 (native/cluster-render/LICENSES/MPL-2.0.txt), as each file's SPDX line says; the
+   waze-on-cluster tool ships an unmodified copy of that client (cluster_render_client.js) with the
+   MPL-2.0 text beside it (LICENSE-MPL-2.0.txt). Changes made
    here are noted in each folder's CHANGELOG or README.
 
 8. SponsorBlock - skip segments come from the SponsorBlock API (sponsor.ajay.app) at run time; its data is
